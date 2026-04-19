@@ -94,7 +94,7 @@ const PROJECTS = [
   { id: 1, title: "Atelier Prestige Couture", descFr: "Site vitrine pour un couturier — galerie, commandes WhatsApp, identité rouge & or.", descEn: "Showcase site for a tailor — gallery, WhatsApp orders, red & gold identity.", tags: ["HTML", "CSS", "JS"], type: "real", github: "https://github.com/chanis-hg", emoji: "✂️", color: "#b8860b" },
   { id: 2, title: "Salon Élégance", descFr: "Site vitrine salon de coiffure — prestations, réservation WhatsApp, design noir & or.", descEn: "Hair salon showcase — services, WhatsApp booking, black & gold design.", tags: ["HTML", "CSS", "JS"], type: "real", github: "https://github.com/chanis-hg", emoji: "💇", color: "#2d2d2d" },
   { id: 3, title: "Africa Pulse", descFr: "Dashboard de données africaines — population, PIB et accès internet pour 15 pays, avec filtres régionaux, graphiques animés et fiches détail par pays.", descEn: "African data dashboard — population, GDP and internet access for 15 countries, with regional filters, animated charts and country detail panels.", tags: ["React", "Recharts", "Vite", "JS"], type: "personal", github: "https://github.com/chanis-hg/Africa-Pulse", demo: "https://africa-pulse.netlify.app", emoji: "🌍", color: "#D4A853" },
-  { id: 4, title: "Carte de visite numérique", descFr: "Carte de visite digitale interactive — identité, compétences et coordonnées.", descEn: "Interactive digital business card — identity, skills and contact details.", tags: ["HTML", "CSS", "JS"], type: "personal", github: "https://github.com/Chanis-ifri/carte_de_visite", emoji: "💳", color: "#2c5f8a" },
+  { id: 4, title: "CV Generator", descFr: "Outil de création de CV professionnel — formulaire multi-étapes, aperçu en temps réel, 4 thèmes couleur et export PDF. Bilingue FR/EN.", descEn: "Professional resume builder — multi-step form, real-time preview, 4 color themes and PDF export. Bilingual FR/EN.", tags: ["React", "Vite", "html2pdf", "JS"], type: "personal", github: "https://github.com/chanis-hg/cv-generator", demo: "https://cv-gen-hg.netlify.app", emoji: "📄", color: "#2E7D5E" },
   { id: 5, title: "Plateforme Agri-Vivrier", descFr: "E-commerce de produits vivriers — ergonomie, catalogue, panier. Projet d'ergonomie IFRI.", descEn: "Food products e-commerce — UX/ergonomics, catalogue, cart. IFRI project.", tags: ["Figma", "UX/UI"], type: "academic", github: "https://github.com/chanis-hg", emoji: "🌾", color: "#4a7c2f" },
   { id: 6, title: "IFRI Covoiturage", descFr: "Application de covoiturage pour les étudiants IFRI — mise en relation, trajets, communauté.", descEn: "Carpooling app for IFRI students — matching, routes, community.", tags: ["Figma", "UX/UI"], type: "academic", github: "https://github.com/chanis-hg", emoji: "🚗", color: "#5b3a8a" },
   { id: 7, title: "Alimentation Montcho", descFr: "Affiche pour épicerie de viandes et produits frais — positionnement premium.", descEn: "Poster for a meat and fresh products store — premium positioning.", tags: ["Canva"], type: "design", github: null, emoji: "🥩", color: "#8a2a2a" },
@@ -104,7 +104,7 @@ const PROJECTS = [
 const EDUCATION = [
   {
     year: "2024 — Présent / Present",
-    school: "IFRI — Institute of Computer Science Training and Research",
+    school: "IFRI — Institut de Formation et de Recherche en Informatique",
     degreeFr: "Licence 2 — Internet et Multimédia",
     degreeEn: "Bachelor's Degree Year 2 — Internet & Multimedia",
     place: "University of Abomey-Calavi (UAC), Bénin",
