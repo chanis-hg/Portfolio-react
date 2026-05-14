@@ -9,7 +9,7 @@ const FR = {
     bio: "Passionné de code et de design, je conçois des expériences numériques qui allient rigueur technique et sensibilité créative. Mon ambition : devenir indispensable dans mon domaine et résoudre des problèmes concrets liés au numérique.",
     cta1: "Voir mes projets",
     cta2: "↓ Télécharger CV",
-    passions: ["🎵 Maître de Chœur", "🏋️ Sport", "📚 Lecture", "💡 Battant", "🤝 Esprit d'équipe"],
+    passions: ["Maître de Chœur", " Sport", "Lecture", "Battant", "Esprit d'équipe"],
   },
   skills: {
     title: "Compétences & Savoir-faire",
@@ -18,7 +18,7 @@ const FR = {
     qualities: "Qualités personnelles",
     interests: "Centres d'intérêt",
     qualityList: ["Rigueur", "Créativité", "Curiosité", "Battant", "Souci du détail", "Leadership", "Esprit d'équipe"],
-    interestList: ["🎵 Musique — Maître de Chœur", "🏋️ Sport", "📚 Lecture", "💻 Veille technologique", "🎨 Design & Créativité"],
+    interestList: [" Musique — Maître de Chœur", "Sport", "Lecture", "Veille technologique", "Design & Créativité"],
   },
   projects: {
     title: "Projets & Créations",
@@ -47,7 +47,7 @@ const EN = {
     bio: "Passionate about code and design, I craft digital experiences that combine technical rigor with creative sensitivity. My ambition: to become indispensable in my field and solve real-world digital problems.",
     cta1: "See my projects",
     cta2: "↓ Download Resume",
-    passions: ["🎵 Choir Master", "🏋️ Sport", "📚 Reading", "💡 Fighter", "🤝 Team player"],
+    passions: ["Choir Master", "Sport", "Reading", "Fighter", "Team player"],
   },
   skills: {
     title: "Skills & Expertise",
@@ -55,7 +55,7 @@ const EN = {
     levels: ["Basics", "Beginner", "Intermediate", "Advanced", "Expert"],
     qualities: "Personal qualities", interests: "Interests",
     qualityList: ["Rigor", "Creativity", "Curiosity", "Fighter", "Attention to detail", "Leadership", "Teamwork"],
-    interestList: ["🎵 Music — Choir Master", "🏋️ Sport", "📚 Reading", "💻 Tech watch", "🎨 Design & Creativity"],
+    interestList: ["Music — Choir Master", "Sport", "Reading", "Tech watch", "Design & Creativity"],
   },
   projects: {
     title: "Projects & Creations",
@@ -85,7 +85,7 @@ const SKILLS = [
   { name: "C", icon: "⚙️", level: 2, category: "Back-end" },
   { name: "PHP", icon: "🐘", level: 2, category: "Back-end" },
   { name: "SQL", icon: "🗄️", level: 3, category: "Data" },
-  { name: "Figma", icon: "🖌️", level: 4, category: "Design" },
+  { name: "Figma", icon: "🖌️", level: 3, category: "Design" },
   { name: "Canva", icon: "🎨", level: 4, category: "Design" },
   { name: "UX/UI Design", icon: "📱", level: 3, category: "Design" },
 ];
@@ -261,7 +261,7 @@ export default function Portfolio() {
               {label}
             </button>
           ))}
-          <a href="CV2_GaiusChanis_HONTONWAKOU.pdf" download="CV_GaiusChanis_HONTONWAKOU.pdf" style={{ background: "#d4af37", color: "#0d0d0d", border: "none", cursor: "pointer", padding: "0.4rem 0.85rem", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 700, textDecoration: "none", marginLeft: "0.5rem" }}>
+          <a href="CV_GaiusChanis_HONTONWAKOU_EN" download="CV_GaiusChanis_HONTONWAKOU.pdf" style={{ background: "#d4af37", color: "#0d0d0d", border: "none", cursor: "pointer", padding: "0.4rem 0.85rem", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 700, textDecoration: "none", marginLeft: "0.5rem" }}>
             {t.nav.cv}
           </a>
           <button onClick={() => setLang(lang === "fr" ? "en" : "fr")} style={{ background: "none", border: `1px solid ${dark ? "rgba(212,175,55,0.25)" : "rgba(0,0,0,0.15)"}`, cursor: "pointer", padding: "0.3rem 0.6rem", borderRadius: "6px", fontSize: "0.75rem", color: dark ? "#d4af37" : fgMuted, marginLeft: "0.25rem" }}>
@@ -303,7 +303,7 @@ export default function Portfolio() {
           <Reveal delay={0.5}>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "2rem" }}>
               <button className="cta-btn" onClick={() => scrollTo("projects")} style={{ background: "#d4af37", color: "#0d0d0d", border: "none", cursor: "pointer", padding: "0.75rem 1.75rem", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 700, fontFamily: "'Syne',sans-serif" }}>{t.hero.cta1}</button>
-              <a className="cta-outline" href="CV2_GaiusChanis_HONTONWAKOU.pdf" download="CV_GaiusChanis_HONTONWAKOU.pdf" style={{ background: "none", color: fg, border: `1px solid ${dark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}`, padding: "0.75rem 1.75rem", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none", display: "inline-block" }}>{t.hero.cta2}</a>
+              <a className="cta-outline" href="CV_GaiusChanis_HONTONWAKOU_EN" download="CV_GaiusChanis_HONTONWAKOU.pdf" style={{ background: "none", color: fg, border: `1px solid ${dark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}`, padding: "0.75rem 1.75rem", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none", display: "inline-block" }}>{t.hero.cta2}</a>
             </div>
             <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap" }}>
               {[["🐙 GitHub", "https://github.com/chanis-hg"], ["💼 LinkedIn", "https://linkedin.com/in/gaïus-chanis-08a782365"], ["💬 WhatsApp", "https://wa.me/22901535055501"]].map(([label, url]) => (
