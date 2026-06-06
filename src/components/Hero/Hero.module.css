@@ -1,0 +1,322 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-height);
+  overflow: hidden;
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: 4rem var(--space-xl) 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3.5rem;
+  width: 100%;
+}
+
+/* ---- LEFT ---- */
+.left {
+  flex: 1 1 400px;
+  min-width: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--green-10);
+  border: 1px solid var(--green-28);
+  color: var(--green);
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+}
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulseDot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.greeting {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+  font-weight: 400;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.nameAccent {
+  color: var(--gold);
+}
+
+.role {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.location {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  margin-bottom: 1.5rem;
+}
+
+.bio {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+  max-width: 500px;
+  margin-bottom: 1.75rem;
+}
+
+/* Passions */
+.passions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.passionTag {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+  cursor: default;
+}
+
+.passionTag:hover {
+  border-color: var(--gold-30);
+  color: var(--gold);
+}
+
+/* CTAs */
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+.ctaPrimary {
+  background: var(--gold);
+  color: var(--text-on-gold);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-md);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.ctaPrimary:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.ctaOutline {
+  display: inline-block;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.ctaOutline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* Socials */
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.socialLink {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  transition: color var(--transition-fast);
+}
+
+.socialLink:hover {
+  color: var(--gold);
+}
+
+/* ---- RIGHT ---- */
+.right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.photoWrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  animation: floatY 3.5s ease-in-out infinite;
+}
+
+/* Contour liquide animé */
+.photoWrap::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #ffd700, var(--gold));
+  opacity: 0.7;
+  animation: liquidMove 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold);
+  box-shadow: var(--shadow-gold), 0 0 0 7px var(--gold-10);
+  position: relative;
+  z-index: 1;
+  animation: liquidShape 4s ease-in-out infinite;
+}
+
+.photoBadge {
+  position: absolute;
+  bottom: 8px;
+  right: 0;
+  background: var(--gold);
+  color: var(--text-on-gold);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+  z-index: 2;
+}
+
+/* Suppression des anciens anneaux */
+.ringOuter,
+.ringInner,
+.ringDots,
+.dotTop,
+.dotBottom {
+  display: none;
+}
+
+/* Citation */
+.quote {
+  background: var(--gold-10);
+  border: 1px solid var(--gold-20);
+  border-radius: var(--radius-lg);
+  padding: 0.9rem 1.25rem;
+  max-width: 268px;
+  text-align: center;
+}
+
+.quote p {
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.65;
+  margin-bottom: 0.35rem;
+}
+
+.quote footer {
+  font-size: 0.68rem;
+  color: var(--text-subtle);
+}
+
+/* NOUVELLES ANIMATIONS LIQUIDES */
+@keyframes liquidMove {
+  0% {
+    border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%;
+  }
+  50% {
+    border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;
+    transform: scale(1.05) rotate(2deg);
+  }
+  75% {
+    border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%;
+  }
+  100% {
+    border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes liquidShape {
+  0% {
+    border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  }
+  25% {
+    border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%;
+  }
+  50% {
+    border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;
+  }
+  75% {
+    border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%;
+  }
+  100% {
+    border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  }
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .inner {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding-top: 3rem;
+    gap: 2.5rem;
+  }
+  .bio { margin-inline: auto; }
+  .passions { justify-content: center; }
+  .ctas { justify-content: center; }
+  .socials { justify-content: center; }
+  .badge { margin-inline: auto; }
+}
+
+@media (max-width: 480px) {
+  .photoWrap { width: 210px; height: 210px; }
+  .inner { padding-inline: var(--space-lg); }
+}

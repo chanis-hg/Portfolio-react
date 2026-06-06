@@ -1,0 +1,114 @@
+.footer {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+  padding-block: var(--space-2xl);
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-xl);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+  animation: floatY 4s ease-in-out infinite;
+}
+
+.copy {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.stack {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+/* Citation */
+.quote {
+  max-width: 320px;
+  text-align: center;
+}
+
+.quote p {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-subtle);
+  line-height: 1.7;
+  margin-bottom: 0.4rem;
+}
+
+.quote footer {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--gold-30);
+}
+
+/* Back to top */
+.backTop {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-spring);
+}
+
+.backTop:hover {
+  border-color: var(--gold-30);
+  color: var(--gold);
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .left {
+    align-items: center;
+  }
+  .stack {
+    justify-content: center;
+  }
+}
