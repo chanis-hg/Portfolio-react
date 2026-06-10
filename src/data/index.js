@@ -328,16 +328,13 @@ export const CERTIFICATIONS = [
   },
 ];
 
-// ============================================================
-// CONTACTS
-// ============================================================
 
 export const CONTACT_LINKS = [
   { icon: "📞", label: "+229 01 53 50 55 01", href: "tel:+22901535055501" },
   { icon: "✉️", label: "gaiuschanis03@gmail.com", href: "mailto:gaiuschanis03@gmail.com" },
   { icon: "💼", label: "LinkedIn — Gaïus Chanis", href: "https://linkedin.com/in/gaïus-chanis-08a782365" },
   { icon: "🐙", label: "github.com/chanis-hg", href: "https://github.com/chanis-hg" },
-  { icon: "💬", label: "WhatsApp", href: "https://wa.me/22901535055501" },
+  { icon: "💬", label: "WhatsApp", href: "https://wa.me/229535055501" },
 ];
 
 export const FORMSPREE_ID = "xgobozjw";
