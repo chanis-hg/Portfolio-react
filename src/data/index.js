@@ -11,7 +11,7 @@ export const TRANSLATIONS = {
       skills: "Compétences",
       projects: "Projets",
       education: "Parcours",
-      certif: "Certifs",
+      certification: "Certifications",
       contact: "Contact",
       cv: "↓ CV",
     },
@@ -52,7 +52,7 @@ export const TRANSLATIONS = {
       sub: "Mon chemin académique et mes premières expériences concrètes.",
       current: "En cours",
     },
-    certif: {
+    certification: {
       sectionTag: "Reconnaissance",
       title: "Certifications",
       certified: "✓ Certifié",
@@ -67,7 +67,7 @@ export const TRANSLATIONS = {
       send: "Envoyer →",
       sending: "Envoi…",
       sent: "✓ Message envoyé ! Je vous répondrai très vite.",
-      error: "Erreur d'envoi. Contactez-moi directement par email.",
+      error: "Erreur d'envoi. Contactez-moi directement par whAttsApp.",
     },
     footer: "Conçu & développé par Gaïus Chanis HONTONWAKOU",
   },
@@ -78,7 +78,7 @@ export const TRANSLATIONS = {
       skills: "Skills",
       projects: "Projects",
       education: "Education",
-      certif: "Certifs",
+      certification: "Certification",
       contact: "Contact",
       cv: "↓ Resume",
     },
@@ -119,7 +119,7 @@ export const TRANSLATIONS = {
       sub: "My academic path and first concrete experiences.",
       current: "Ongoing",
     },
-    certif: {
+    certification: {
       sectionTag: "Recognition",
       title: "Certifications",
       certified: "✓ Certified",
@@ -134,7 +134,7 @@ export const TRANSLATIONS = {
       send: "Send →",
       sending: "Sending…",
       sent: "✓ Message sent! I'll get back to you very soon.",
-      error: "Send error. Contact me directly by email.",
+      error: "Send error. Contact me directly by whAttsApp.",
     },
     footer: "Designed & developed by Gaïus Chanis HONTONWAKOU",
   },
@@ -148,7 +148,7 @@ export const SKILLS = [
   { name: "HTML / CSS",   icon: "🌐", level: 4, category: "Front-end" },
   { name: "JavaScript",   icon: "⚡", level: 3, category: "Front-end" },
   { name: "React",        icon: "⚛️",  level: 2, category: "Front-end" },
-  { name: "PHP",          icon: "🐘", level: 2, category: "Back-end"  },
+  { name: "PHP",          icon: "🐘", level: 1, category: "Back-end"  },
   { name: "Java",         icon: "☕", level: 2, category: "Back-end"  },
   { name: "Python",       icon: "🐍", level: 3, category: "Back-end"  },
   { name: "C#",           icon: "🔷", level: 2, category: "Back-end"  },
@@ -325,6 +325,38 @@ export const CERTIFICATIONS = [
     descFr: "Requêtes SQL, jointures, agrégations et gestion de BDD.",
     descEn: "SQL queries, joins, aggregations and database management.",
     icon: "🗄️",
+  },
+  {
+    org: "Sololearn",
+    titleFr: "Java",
+    titleEn: "Java",
+    descFr: "Programmation orientée objet, structures de données et concepts fondamentaux Java.",
+    desEn: "Object-oriented programming, data structures and core Java concepts.",
+    icon: "☕",
+  },
+  {
+    org: "Sololearn",
+    titleFr: "Java",
+    titleEn: "Java",
+    descFr: "Programmation orientée objet, structures de données et concepts fondamentaux Java.",
+    desEn: "Object-oriented programming, data structures and core Java concepts.",
+    icon: "☕"
+  }
+  {
+    org: "Sololearn",
+    titleFr: "C#",
+    titleEn: "C#",
+    descFr: "Syntaxe C#, POO, tableaux, récursivité et manipulation de chaînes.",
+    desEn: "C# syntax, OOP, arrays, recursion and string manipulation.",
+    icon: "🔷",
+  },
+  {
+    org: "Sololearn",
+    titleFr: "C",
+    titleEn: "C",
+    descFr: "Bases du langage C, pointeurs, gestion mémoire et structures.",
+    desEn: "C language basics, pointers, memory management and structures.",
+    icon: "⚙️",
   },
 ];
 
