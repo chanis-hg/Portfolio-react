@@ -1,7 +1,3 @@
-// ============================================================
-// DATA CENTRALISÉE — contenu et traductions
-// ============================================================
-
 import { img_vivrier, img_maman, img_montcho } from './images.js';
 
 export const TRANSLATIONS = {
@@ -11,7 +7,7 @@ export const TRANSLATIONS = {
       skills: "Compétences",
       projects: "Projets",
       education: "Parcours",
-      certif: "Certifs",
+      certif: "Certifications",
       contact: "Contact",
       cv: "↓ CV",
     },
@@ -78,7 +74,7 @@ export const TRANSLATIONS = {
       skills: "Skills",
       projects: "Projects",
       education: "Education",
-      certif: "Certifs",
+      certif: "Certification",
       contact: "Contact",
       cv: "↓ Resume",
     },
