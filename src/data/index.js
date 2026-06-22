@@ -11,7 +11,7 @@ export const TRANSLATIONS = {
       skills: "Compétences",
       projects: "Projets",
       education: "Parcours",
-      certification: "Certifications",
+      certif: "Certifs",
       contact: "Contact",
       cv: "↓ CV",
     },
@@ -52,7 +52,7 @@ export const TRANSLATIONS = {
       sub: "Mon chemin académique et mes premières expériences concrètes.",
       current: "En cours",
     },
-    certification: {
+    certif: {
       sectionTag: "Reconnaissance",
       title: "Certifications",
       certified: "✓ Certifié",
@@ -67,7 +67,7 @@ export const TRANSLATIONS = {
       send: "Envoyer →",
       sending: "Envoi…",
       sent: "✓ Message envoyé ! Je vous répondrai très vite.",
-      error: "Erreur d'envoi. Contactez-moi directement par whAttsApp.",
+      error: "Erreur d'envoi. Contactez-moi directement par WhatsApp.",
     },
     footer: "Conçu & développé par Gaïus Chanis HONTONWAKOU",
   },
@@ -78,7 +78,7 @@ export const TRANSLATIONS = {
       skills: "Skills",
       projects: "Projects",
       education: "Education",
-      certification: "Certification",
+      certif: "Certifs",
       contact: "Contact",
       cv: "↓ Resume",
     },
@@ -119,7 +119,7 @@ export const TRANSLATIONS = {
       sub: "My academic path and first concrete experiences.",
       current: "Ongoing",
     },
-    certification: {
+    certif: {
       sectionTag: "Recognition",
       title: "Certifications",
       certified: "✓ Certified",
@@ -134,15 +134,11 @@ export const TRANSLATIONS = {
       send: "Send →",
       sending: "Sending…",
       sent: "✓ Message sent! I'll get back to you very soon.",
-      error: "Send error. Contact me directly by whAttsApp.",
+      error: "Send error. Contact me directly by WhatsApp.",
     },
     footer: "Designed & developed by Gaïus Chanis HONTONWAKOU",
   },
 };
-
-// ============================================================
-// COMPÉTENCES
-// ============================================================
 
 export const SKILLS = [
   { name: "HTML / CSS",   icon: "🌐", level: 4, category: "Front-end" },
@@ -159,10 +155,6 @@ export const SKILLS = [
   { name: "UX/UI Design", icon: "📱", level: 3, category: "Design"    },
 ];
 
-// ============================================================
-// PROJETS
-// ============================================================
-
 export const PROJECTS = [
   {
     id: 1,
@@ -176,7 +168,6 @@ export const PROJECTS = [
     emoji: "🌍",
     color: "#D4A853",
     featured: true,
-    // screenshot via iframe/image de la démo
     previewUrl: "https://africa-pulse.netlify.app",
   },
   {
@@ -276,10 +267,6 @@ export const PROJECTS = [
   },
 ];
 
-// ============================================================
-// FORMATION
-// ============================================================
-
 export const EDUCATION = [
   {
     year: "2024 — Présent",
@@ -305,10 +292,6 @@ export const EDUCATION = [
   },
 ];
 
-// ============================================================
-// CERTIFICATIONS
-// ============================================================
-
 export const CERTIFICATIONS = [
   {
     org: "Sololearn",
@@ -331,23 +314,15 @@ export const CERTIFICATIONS = [
     titleFr: "Java",
     titleEn: "Java",
     descFr: "Programmation orientée objet, structures de données et concepts fondamentaux Java.",
-    desEn: "Object-oriented programming, data structures and core Java concepts.",
+    descEn: "Object-oriented programming, data structures and core Java concepts.",
     icon: "☕",
-  },
-  {
-    org: "Sololearn",
-    titleFr: "Java",
-    titleEn: "Java",
-    descFr: "Programmation orientée objet, structures de données et concepts fondamentaux Java.",
-    desEn: "Object-oriented programming, data structures and core Java concepts.",
-    icon: "☕"
   },
   {
     org: "Sololearn",
     titleFr: "C#",
     titleEn: "C#",
     descFr: "Syntaxe C#, POO, tableaux, récursivité et manipulation de chaînes.",
-    desEn: "C# syntax, OOP, arrays, recursion and string manipulation.",
+    descEn: "C# syntax, OOP, arrays, recursion and string manipulation.",
     icon: "🔷",
   },
   {
@@ -355,17 +330,17 @@ export const CERTIFICATIONS = [
     titleFr: "C",
     titleEn: "C",
     descFr: "Bases du langage C, pointeurs, gestion mémoire et structures.",
-    desEn: "C language basics, pointers, memory management and structures.",
+    descEn: "C language basics, pointers, memory management and structures.",
     icon: "⚙️",
   },
 ];
 
 export const CONTACT_LINKS = [
-  { icon: "📞", label: "+229 01 53 50 55 01", href: "tel:+22901535055501" },
+  { icon: "📞", label: "+229 01 53 50 55 01", href: "tel:+2290153505501" },
   { icon: "✉️", label: "gaiuschanis03@gmail.com", href: "mailto:gaiuschanis03@gmail.com" },
   { icon: "💼", label: "LinkedIn — Gaïus Chanis", href: "https://linkedin.com/in/gaïus-chanis-08a782365" },
   { icon: "🐙", label: "github.com/chanis-hg", href: "https://github.com/chanis-hg" },
-  { icon: "💬", label: "WhatsApp", href: "https://wa.me/22953505501" },
+  { icon: "💬", label: "WhatsApp", href: "https://wa.me/+22953505501" },
 ];
 
 export const FORMSPREE_ID = "xgobozjw";
