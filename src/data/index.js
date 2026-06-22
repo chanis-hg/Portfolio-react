@@ -341,7 +341,7 @@ export const CERTIFICATIONS = [
     descFr: "Programmation orientée objet, structures de données et concepts fondamentaux Java.",
     desEn: "Object-oriented programming, data structures and core Java concepts.",
     icon: "☕"
-  }
+  },
   {
     org: "Sololearn",
     titleFr: "C#",
