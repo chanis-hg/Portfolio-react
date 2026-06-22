@@ -360,7 +360,6 @@ export const CERTIFICATIONS = [
   },
 ];
 
-
 export const CONTACT_LINKS = [
   { icon: "📞", label: "+229 01 53 50 55 01", href: "tel:+22901535055501" },
   { icon: "✉️", label: "gaiuschanis03@gmail.com", href: "mailto:gaiuschanis03@gmail.com" },
