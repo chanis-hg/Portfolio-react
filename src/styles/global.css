@@ -1,0 +1,191 @@
+/* RESET & BASE GLOBAUX — V3*/
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background-color 0.35s ease, color 0.35s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+button { font-family: var(--font-display); cursor: pointer; border: none; background: none; }
+input, textarea { font-family: var(--font-body); }
+
+/* LAYOUT UTILITAIRES */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-xl);
+}
+
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--alt {
+  background-color: var(--bg-alt);
+}
+
+/* ANIMATIONS SCROLL */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.65s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+.reveal.visible        { opacity: 1; transform: none; }
+.reveal.from-left      { transform: translateX(-30px); }
+.reveal.from-right     { transform: translateX(30px); }
+.reveal.from-scale     { transform: scale(0.93); }
+
+/* KEYFRAMES */
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.65); }
+}
+
+@keyframes liquidBorder {
+  0%   { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; }
+  25%  { border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%; }
+  50%  { border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%; }
+  75%  { border-radius: 40% 60% 45% 55% / 55% 45% 60% 40%; }
+  100% { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* SCROLLBAR*/
+   
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent-30); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/*SÉLECTION & FOCUS*/
+::selection { background: var(--accent-20); color: var(--text); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+
+@media (max-width: 768px) {
+  .container { padding-inline: var(--space-lg); }
+  .section   { padding-block: 3.5rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding-inline: var(--space-md); }
+}
+
+@keyframes glowPulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-20), 0 4px 15px var(--accent-glow); }
+  50%  { box-shadow: 0 0 0 6px transparent, 0 4px 28px var(--accent-glow); }
+  100% { box-shadow: 0 0 0 0 var(--accent-20), 0 4px 15px var(--accent-glow); }
+}
+
+a:hover,
+button:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+/* Tous les boutons */
+button:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+/* Tous les liens */
+a:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+/* Cards — skill, projet, certif, expérience, contact */
+[class*="card"]:hover,
+[class*="Card"]:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+/* Tags et badges */
+[class*="tag"]:hover,
+[class*="Tag"]:hover,
+[class*="badge"]:hover,
+[class*="Badge"]:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+/* Images thumbnails */
+[class*="imgThumb"]:hover,
+[class*="Thumb"]:hover {
+  animation: glowPulse 3.3s ease-in-out infinite;
+}
+
+@keyframes bgDark {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes bgLight {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+[data-theme="dark"] body {
+  background: linear-gradient(
+    135deg,
+    #070d1a,
+    #0a1628,
+    #0d1f3c,
+    #091223,
+    #060e1e,
+    #0a1628
+  );
+  background-size: 400% 400%;
+  animation: bgDark 8s ease infinite;
+}
+
+[data-theme="light"] body {
+  background: linear-gradient(
+    135deg,
+    #edeae4,
+    #e2ddd6,
+    #e8e4dc,
+    #dbd6ce,
+    #e5e0d8,
+    #ddd8d0
+  );
+  background-size: 400% 400%;
+  animation: bgLight 6s ease infinite;
+}
