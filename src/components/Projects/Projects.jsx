@@ -1,7 +1,4 @@
-import {
-  ArrowUpRight,
-  ExternalLink,
-} from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
 import Reveal from "../Reveal";
@@ -11,94 +8,80 @@ import ProjectVisual from "../ProjectVisual/ProjectVisual";
 
 import styles from "./Projects.module.css";
 
-export default function Projects({
-  t,
-  lang,
-  activeProjectId,
-}) {
+/* Bloc réutilisable : affiche un texte OU une liste (tableau) */
+function Block({ label, value, className }) {
+  const isEmpty = !value || (Array.isArray(value) && value.length === 0);
+  if (isEmpty) return null;
+
+  return (
+    <div className={className}>
+      <span className={styles.label}>{label}</span>
+
+      {Array.isArray(value) ? (
+        <ul style={{ display: "grid", gap: "0.35rem" }}>
+          {value.map((item) => (
+            <li key={item}>• {item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>{value}</p>
+      )}
+    </div>
+  );
+}
+
+export default function Projects({ t, lang, activeProjectId }) {
   const project =
-    PROJECTS.find(
-      (item) => item.id === activeProjectId,
-    ) || PROJECTS[0];
+    PROJECTS.find((item) => item.id === activeProjectId) || PROJECTS[0];
 
   if (!project) return null;
 
-  const desc =
-    lang === "fr"
-      ? project.descFr
-      : project.descEn;
+  const getText = (fr, en) => (lang === "fr" ? fr : en);
 
-  const role =
-    lang === "fr"
-      ? project.roleFr
-      : project.roleEn;
-
-  const proof =
-    lang === "fr"
-      ? project.proofFr
-      : project.proofEn;
-
+  const desc = getText(project.descFr, project.descEn);
+  const role = getText(project.roleFr, project.roleEn);
   const caseStudy = project.caseStudy;
 
-  const getText = (fr, en) =>
-    lang === "fr" ? fr : en;
+  // La preuve de l'étude de cas prime sur celle du projet
+  const proof = getText(
+    caseStudy?.proofFr || project.proofFr,
+    caseStudy?.proofEn || project.proofEn,
+  );
 
   const familyLabels = {
-    development:
-      lang === "fr"
-        ? "DÉVELOPPEMENT"
-        : "DEVELOPMENT",
-
+    development: getText("DÉVELOPPEMENT", "DEVELOPMENT"),
     design: "DESIGN",
-
-    ux:
-      lang === "fr"
-        ? "UX / CONCEPTION"
-        : "UX / DESIGN",
+    ux: getText("UX / CONCEPTION", "UX / DESIGN"),
   };
 
   return (
-    <section
-      id="projects"
-      className={styles.section}
-    >
+    <section id="projects" className={styles.section}>
       <div className="container">
         <Reveal>
           <SectionHeader
             tag={t.projects.sectionTag}
-            title={
-              lang === "fr"
-                ? "Comprendre le projet."
-                : "Understand the project."
-            }
-            sub={
-              lang === "fr"
-                ? "Au-delà du résultat, voici le problème, les choix et les contraintes."
-                : "Beyond the result: the problem, decisions and constraints."
-            }
+            title={getText("Comprendre le projet.", "Understand the project.")}
+            sub={getText(
+              "Au-delà du résultat, voici le problème, les choix et les contraintes.",
+              "Beyond the result: the problem, decisions and constraints.",
+            )}
           />
         </Reveal>
 
         <Reveal delay={0.08}>
           <article className={styles.caseStudy}>
-
             {/* COLONNE TEXTE */}
 
             <div className={styles.content}>
               <header className={styles.header}>
                 <div>
                   <span className={styles.family}>
-                    {familyLabels[project.family] ||
-                      project.family}
+                    {familyLabels[project.family] || project.family}
                   </span>
 
-                  <h2 className={styles.title}>
-                    {project.title}
-                  </h2>
+                  <h2 className={styles.title}>{project.title}</h2>
 
-                  <p className={styles.category}>
-                    {project.category}
-                  </p>
+                  <p className={styles.category}>{project.category}</p>
                 </div>
 
                 <span
@@ -109,23 +92,14 @@ export default function Projects({
                   }`}
                 >
                   {project.status === "finished"
-                    ? getText(
-                        "Terminé",
-                        "Completed",
-                      )
-                    : getText(
-                        "En cours",
-                        "In progress",
-                      )}
+                    ? getText("Terminé", "Completed")
+                    : getText("En cours", "In progress")}
                 </span>
               </header>
 
               <div className={styles.description}>
                 <span className={styles.label}>
-                  {getText(
-                    "Contexte",
-                    "Context",
-                  )}
+                  {getText("Contexte", "Context")}
                 </span>
 
                 <p>{desc}</p>
@@ -133,181 +107,79 @@ export default function Projects({
 
               {role && (
                 <div className={styles.role}>
-                  <span className={styles.label}>
-                    {getText("Rôle", "Role")}
-                  </span>
+                  <span className={styles.label}>{getText("Rôle", "Role")}</span>
 
                   <p>{role}</p>
                 </div>
               )}
 
               {caseStudy && (
-                <div className={styles.details}>
+                <>
+                  <div className={styles.details}>
+                    <Block
+                      className={styles.detailBlock}
+                      label={getText("Problème", "Problem")}
+                      value={getText(
+                        caseStudy.problemFr || caseStudy.contextFr,
+                        caseStudy.problemEn || caseStudy.contextEn,
+                      )}
+                    />
 
-                  {caseStudy.context && (
-                    <div
-                      className={
-                        styles.detailBlock
-                      }
-                    >
-                      <span
-                        className={
-                          styles.label
-                        }
-                      >
-                        {getText(
-                          "Problème",
-                          "Problem",
-                        )}
-                      </span>
+                    <Block
+                      className={styles.detailBlock}
+                      label={getText("Contraintes", "Constraints")}
+                      value={getText(
+                        caseStudy.constraintsFr,
+                        caseStudy.constraintsEn,
+                      )}
+                    />
 
-                      <p>
-                        {getText(
-                          caseStudy.problemFr ||
-                            caseStudy.contextFr,
-                          caseStudy.problemEn ||
-                            caseStudy.contextEn,
-                        )}
-                      </p>
-                    </div>
-                  )}
+                    <Block
+                      className={styles.detailBlock}
+                      label={getText("Décision", "Decision")}
+                      value={getText(
+                        caseStudy.decisionFr,
+                        caseStudy.decisionEn,
+                      )}
+                    />
 
-                  {caseStudy.constraints && (
-                    <div
-                      className={
-                        styles.detailBlock
-                      }
-                    >
-                      <span
-                        className={
-                          styles.label
-                        }
-                      >
-                        {getText(
-                          "Contraintes",
-                          "Constraints",
-                        )}
-                      </span>
+                    <Block
+                      className={styles.detailBlock}
+                      label={getText("Implémentation", "Implementation")}
+                      value={getText(
+                        caseStudy.implementationFr,
+                        caseStudy.implementationEn,
+                      )}
+                    />
+                  </div>
 
-                      <p>
-                        {getText(
-                          caseStudy.constraintsFr,
-                          caseStudy.constraintsEn,
-                        )}
-                      </p>
-                    </div>
-                  )}
+                  <Block
+                    className={styles.proof}
+                    label={getText("Preuve / validation", "Evidence / validation")}
+                    value={proof}
+                  />
 
-                  {caseStudy.decision && (
-                    <div
-                      className={
-                        styles.detailBlock
-                      }
-                    >
-                      <span
-                        className={
-                          styles.label
-                        }
-                      >
-                        {getText(
-                          "Décision",
-                          "Decision",
-                        )}
-                      </span>
+                  <Block
+                    className={styles.detailBlock}
+                    label={getText("Limites", "Limits")}
+                    value={getText(caseStudy.limitsFr, caseStudy.limitsEn)}
+                  />
 
-                      <p>
-                        {getText(
-                          caseStudy.decisionFr,
-                          caseStudy.decisionEn,
-                        )}
-                      </p>
-                    </div>
-                  )}
-
-                  {caseStudy.implementation && (
-                    <div
-                      className={
-                        styles.detailBlock
-                      }
-                    >
-                      <span
-                        className={
-                          styles.label
-                        }
-                      >
-                        {getText(
-                          "Implémentation",
-                          "Implementation",
-                        )}
-                      </span>
-
-                      <p>
-                        {getText(
-                          caseStudy.implementationFr,
-                          caseStudy.implementationEn,
-                        )}
-                      </p>
-                    </div>
-                  )}
-
-                </div>
+                  <Block
+                    className={styles.takeaway}
+                    label={getText("Ce que j'en retiens", "What I learned")}
+                    value={getText(caseStudy.takeawayFr, caseStudy.takeawayEn)}
+                  />
+                </>
               )}
 
-              {proof && (
-                <div className={styles.proof}>
-                  <span className={styles.label}>
-                    {getText(
-                      "Preuve / validation",
-                      "Evidence / validation",
-                    )}
-                  </span>
-
-                  <p>{proof}</p>
-                </div>
-              )}
-
-              {caseStudy?.limits && (
-                <div
-                  className={
-                    styles.detailBlock
-                  }
-                >
-                  <span className={styles.label}>
-                    {getText(
-                      "Limites",
-                      "Limits",
-                    )}
-                  </span>
-
-                  <p>
-                    {getText(
-                      caseStudy.limitsFr,
-                      caseStudy.limitsEn,
-                    )}
-                  </p>
-                </div>
-              )}
-
-              {caseStudy?.takeaway && (
-                <div
-                  className={
-                    styles.takeaway
-                  }
-                >
-                  <span className={styles.label}>
-                    {getText(
-                      "Ce que j'en retiens",
-                      "What I learned",
-                    )}
-                  </span>
-
-                  <p>
-                    {getText(
-                      caseStudy.takeawayFr,
-                      caseStudy.takeawayEn,
-                    )}
-                  </p>
-                </div>
+              {/* Cas sans étude de cas : on garde la preuve simple */}
+              {!caseStudy && (
+                <Block
+                  className={styles.proof}
+                  label={getText("Preuve / validation", "Evidence / validation")}
+                  value={proof}
+                />
               )}
 
               <div className={styles.links}>
@@ -319,13 +191,8 @@ export default function Projects({
                     className={styles.link}
                   >
                     <FaGithub size={17} />
-
                     <span>GitHub</span>
-
-                    <ArrowUpRight
-                      size={15}
-                      strokeWidth={1.7}
-                    />
+                    <ArrowUpRight size={15} strokeWidth={1.7} />
                   </a>
                 )}
 
@@ -336,22 +203,9 @@ export default function Projects({
                     rel="noreferrer"
                     className={styles.link}
                   >
-                    <ExternalLink
-                      size={16}
-                      strokeWidth={1.7}
-                    />
-
-                    <span>
-                      {getText(
-                        "Voir le projet",
-                        "View project",
-                      )}
-                    </span>
-
-                    <ArrowUpRight
-                      size={15}
-                      strokeWidth={1.7}
-                    />
+                    <ExternalLink size={16} strokeWidth={1.7} />
+                    <span>{getText("Voir le projet", "View project")}</span>
+                    <ArrowUpRight size={15} strokeWidth={1.7} />
                   </a>
                 )}
 
@@ -362,17 +216,9 @@ export default function Projects({
                     rel="noreferrer"
                     className={styles.link}
                   >
-                    <ExternalLink
-                      size={16}
-                      strokeWidth={1.7}
-                    />
-
+                    <ExternalLink size={16} strokeWidth={1.7} />
                     <span>Figma</span>
-
-                    <ArrowUpRight
-                      size={15}
-                      strokeWidth={1.7}
-                    />
+                    <ArrowUpRight size={15} strokeWidth={1.7} />
                   </a>
                 )}
               </div>
@@ -381,46 +227,22 @@ export default function Projects({
             {/* PREUVE VISUELLE */}
 
             <aside className={styles.visual}>
-              <div
-                className={
-                  styles.visualFrame
-                }
-              >
-                <div
-                  className={
-                    styles.visualBar
-                  }
-                >
-                  <span>
-                    {getText(
-                      "Preuve visuelle",
-                      "Visual evidence",
-                    )}
-                  </span>
+              <div className={styles.visualFrame}>
+                <div className={styles.visualBar}>
+                  <span>{getText("Preuve visuelle", "Visual evidence")}</span>
 
                   <span>
                     {String(
-                      PROJECTS.findIndex(
-                        (item) =>
-                          item.id === project.id,
-                      ) + 1,
+                      PROJECTS.findIndex((item) => item.id === project.id) + 1,
                     ).padStart(2, "0")}
                   </span>
                 </div>
 
-                <div
-                  className={
-                    styles.visualContent
-                  }
-                >
-                  <ProjectVisual
-                    project={project}
-                    lang={lang}
-                  />
+                <div className={styles.visualContent}>
+                  <ProjectVisual project={project} lang={lang} />
                 </div>
               </div>
             </aside>
-
           </article>
         </Reveal>
       </div>
