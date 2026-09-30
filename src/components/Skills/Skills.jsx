@@ -1,48 +1,101 @@
-// Skills.jsx
-import Reveal from '../Reveal';
-import SectionHeader from '../SectionHeader';
-import { SKILLS } from '../../data/index';
-import styles from './Skills.module.css';
+import Reveal from "../Reveal";
+import SectionHeader from "../SectionHeader";
+
+import { FaCss3Alt, FaPaintBrush } from "react-icons/fa";
+
+import {
+  SiHtml5,
+  SiJavascript,
+  SiReact,
+  SiLaravel,
+  SiPhp,
+  SiFigma,
+} from "react-icons/si";
+
+import { ArrowUpRight, Database, PanelsTopLeft, Cable } from "lucide-react";
+
+import { SKILLS } from "../../data/index";
+import styles from "./Skills.module.css";
+
+const ICONS = {
+  "html-css": (
+    <span className={styles.dualIcon}>
+      <SiHtml5 />
+      <FaCss3Alt />
+    </span>
+  ),
+
+  javascript: <SiJavascript />,
+  react: <SiReact />,
+  laravel: <SiLaravel />,
+  php: <SiPhp />,
+  sql: <Database />,
+  api: <Cable />,
+  figma: <SiFigma />,
+  canva: <FaPaintBrush />,
+  "ux-ui": <PanelsTopLeft />,
+};
 
 export default function Skills({ t }) {
   return (
     <section id="skills" className="section section--alt">
       <div className="container">
-        <Reveal><SectionHeader tag={t.skills.sectionTag} title={t.skills.title} sub={t.skills.sub} /></Reveal>
+        <Reveal>
+          <SectionHeader
+            tag={t.skills.sectionTag}
+            title={t.skills.title}
+            sub={t.skills.sub}
+          />
+        </Reveal>
+
         <div className={styles.grid}>
           {SKILLS.map((skill, i) => (
-            <Reveal key={skill.name} delay={i * 0.04}>
-              <div className={styles.card}>
+            <Reveal key={skill.name} delay={i * 0.05}>
+              <article
+                className={styles.card}
+                style={{ "--skill-color": SKILL_COLORS[skill.icon] }}
+              >
                 <div className={styles.cardTop}>
-                  <div className={styles.cardLeft}>
-                    <span className={styles.icon}>{skill.icon}</span>
-                    <span className={styles.skillName}>{skill.name}</span>
-                  </div>
+                  <span className={styles.index}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
                   <span className={styles.category}>{skill.category}</span>
                 </div>
-                <div className={styles.bars}>
-                  {[1,2,3,4,5].map(dot => <div key={dot} className={`${styles.bar} ${dot <= skill.level ? styles.barActive : ''}`} />)}
+
+                <div className={styles.iconWrap}>
+                  <div className={styles.icon}>{ICONS[skill.icon]}</div>
+
+                  <ArrowUpRight
+                    className={styles.arrow}
+                    size={17}
+                    strokeWidth={1.7}
+                  />
                 </div>
-                <span className={styles.levelLabel}>{t.skills.levels[skill.level - 1]}</span>
-              </div>
+
+                <div className={styles.cardBottom}>
+                  <h3 className={styles.name}>{skill.name}</h3>
+
+                  <span className={styles.line} />
+                </div>
+              </article>
             </Reveal>
           ))}
-        </div>
-        <div className={styles.extras}>
-          <Reveal direction="left">
-            <div className={styles.extraCard}>
-              <h3 className={styles.extraTitle}>{t.skills.qualities}</h3>
-              <ul className={styles.qualityList}>{t.skills.qualityList.map(q => <li key={q} className={styles.qualityTag}>✦ {q}</li>)}</ul>
-            </div>
-          </Reveal>
-          <Reveal direction="right">
-            <div className={styles.extraCard}>
-              <h3 className={styles.extraTitle}>{t.skills.interests}</h3>
-              <ul className={styles.interestList}>{t.skills.interestList.map(item => <li key={item} className={styles.interestItem}>{item}</li>)}</ul>
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>
   );
 }
+
+const SKILL_COLORS = {
+  "html-css": "#E34F26",
+  javascript: "#F7DF1E",
+  react: "#61DAFB",
+  laravel: "#FF2D20",
+  php: "#777BB4",
+  sql: "#4479A1",
+  api: "#8B5CF6",
+  figma: "#F24E1E",
+  canva: "#00C4CC",
+  "ux-ui": "#A259FF",
+};

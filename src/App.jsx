@@ -1,43 +1,109 @@
-import { useState, useEffect } from 'react';
-import { TRANSLATIONS } from './data/index';
+import { useEffect, useState } from "react";
+import {
+  TRANSLATIONS,
+  PROJECTS,
+} from "./data/index";
 
-import Navbar     from './components/Navbar/Navbar';
-import Hero       from './components/Hero/Hero';
-import Experience from './components/Experience/Experience';
-import Projects   from './components/Projects/Projects';
-import Skills     from './components/Skills/Skills';
-import Education  from './components/Education/Education';
-import Contact    from './components/Contact/Contact';
-import Footer     from './components/Footer/Footer';
+import Navbar from "./components/Navbar/Navbar";
+import Hero from "./components/Hero/Hero";
+import ProjectsCarousel from "./components/ProjectsCarousel/ProjectsCarousel";
+import Experience from "./components/Experience/Experience";
+import Projects from "./components/Projects/Projects";
+import Skills from "./components/Skills/Skills";
+import Education from "./components/Education/Education";
+import Contact from "./components/Contact/Contact";
+import Footer from "./components/Footer/Footer";
+import Preloader from "./components/Preloader/Preloader";
+import CustomCursor from "./components/CustomCursor/CustomCursor";
 
 export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
-  const [lang,  setLang]  = useState(() => localStorage.getItem('lang')  || 'fr');
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "dark",
+  );
+
+  const [lang, setLang] = useState(
+    () => localStorage.getItem("lang") || "fr",
+  );
+
+  const [activeProjectId, setActiveProjectId] = useState(
+    PROJECTS[0]?.id || null,
+  );
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute(
+      "data-theme",
+      theme,
+    );
+
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('lang', lang);
-    localStorage.setItem('lang', lang);
+    document.documentElement.setAttribute(
+      "lang",
+      lang,
+    );
+
+    localStorage.setItem("lang", lang);
   }, [lang]);
 
   const t = TRANSLATIONS[lang];
 
   return (
     <>
-      <Navbar t={t} lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} />
+      <CustomCursor />
+
+      <Preloader />
+
+      <Navbar
+        t={t}
+        lang={lang}
+        setLang={setLang}
+        theme={theme}
+        setTheme={setTheme}
+      />
+
       <main>
-        <Hero       t={t} lang={lang} />
-        <Experience t={t} lang={lang} />
-        <Projects   t={t} lang={lang} />
-        <Skills     t={t} />
-        <Education  t={t} lang={lang} />
-        <Contact    t={t} />
+        <Hero t={t} lang={lang} />
+
+        <section
+          id="journey"
+          className="journey-section"
+        >
+          <Experience
+            t={t}
+            lang={lang}
+          />
+
+          <Skills t={t} />
+
+          <Education
+            t={t}
+            lang={lang}
+          />
+        </section>
+
+        <section className="projects-section">
+          <ProjectsCarousel
+            t={t}
+            lang={lang}
+            onActiveChange={setActiveProjectId}
+          />
+
+          <Projects
+            t={t}
+            lang={lang}
+            activeProjectId={activeProjectId}
+          />
+        </section>
+
+        <Contact t={t} />
       </main>
-      <Footer t={t} />
+
+      <Footer
+        t={t}
+        lang={lang}
+      />
     </>
   );
 }

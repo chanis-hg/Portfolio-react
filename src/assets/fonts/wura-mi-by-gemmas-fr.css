@@ -1,0 +1,51 @@
+/* Wúrà mi by GemmaS, 5 graisses dessinees.
+   Le jeu francais seulement, pres de moitie plus leger.
+
+   Declarer les cinq ne coute rien : le navigateur ne telecharge que les
+   graisses que la page emploie vraiment. Une graisse absente de la feuille
+   serait en revanche fabriquee par le navigateur, qui repasse le contour au
+   trait dans toutes les directions et rend un gras mou, a peine plus lourd
+   que la Regular. */
+
+@font-face {
+  font-family: 'Wura mi by GemmaS';
+  src: url('woff2-fr/WuraMiByGemmaS-ExtraLight-fr.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Wura mi by GemmaS';
+  src: url('woff2-fr/WuraMiByGemmaS-Light-fr.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Wura mi by GemmaS';
+  src: url('woff2-fr/WuraMiByGemmaS-fr.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Wura mi by GemmaS';
+  src: url('woff2-fr/WuraMiByGemmaS-SemiBold-fr.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Wura mi by GemmaS';
+  src: url('woff2-fr/WuraMiByGemmaS-Bold-fr.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* La pile complete, a poser sur html ou body :
+   font-family: 'Wura mi by GemmaS', ui-sans-serif, system-ui, sans-serif; */

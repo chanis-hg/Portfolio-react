@@ -1,0 +1,43 @@
+.section {
+  opacity: 0;
+  will-change: transform, opacity;
+
+  transition:
+    transform 0.85s cubic-bezier(0.22, 0.68, 0, 1),
+    opacity 0.65s ease;
+}
+
+/* Positions de départ */
+
+.left {
+  transform: translateX(-90px);
+}
+
+.right {
+  transform: translateX(90px);
+}
+
+.bottom {
+  transform: translateY(90px);
+}
+
+.top {
+  transform: translateY(-90px);
+}
+
+/* État final */
+
+.visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Accessibilité */
+
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

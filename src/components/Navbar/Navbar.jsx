@@ -1,79 +1,237 @@
-import { useState, useEffect } from 'react';
-import styles from './Navbar.module.css';
+import { useEffect, useState } from "react";
+import {
+  Download,
+  Languages,
+  Menu,
+  Moon,
+  Sun,
+  X,
+  Home,
+  FolderKanban,
+  GraduationCap,
+  Mail,
+} from "lucide-react";
+
+import styles from "./Navbar.module.css";
 
 const NAV_SECTIONS = [
-  ['about',      'nav.about'],
-  ['experience', 'nav.experience'],
-  ['projects',   'nav.projects'],
-  ['skills',     'nav.skills'],
-  ['education',  'nav.education'],
-  ['contact',    'nav.contact'],
+  {
+    id: "home",
+    label: "Accueil",
+    icon: Home,
+  },
+  {
+    id: "projects",
+    label: "Projets",
+    icon: FolderKanban,
+  },
+  {
+    id: "journey",
+    label: "Parcours",
+    icon: GraduationCap,
+  },
+  {
+    id: "contact",
+    label: "Contact",
+    icon: Mail,
+  },
 ];
 
-export default function Navbar({ t, lang, setLang, theme, setTheme }) {
-  const [active,   setActive]   = useState('about');
+export default function Navbar({
+  t,
+  lang,
+  setLang,
+  theme,
+  setTheme,
+}) {
+  const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      for (const [id] of NAV_SECTIONS) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const { top, bottom } = el.getBoundingClientRect();
-        if (top <= 80 && bottom > 80) { setActive(id); break; }
+
+      const sections = NAV_SECTIONS
+        .map(({ id }) => document.getElementById(id))
+        .filter(Boolean);
+
+      const current = sections.find((section) => {
+        const { top, bottom } =
+          section.getBoundingClientRect();
+
+        return top <= 140 && bottom > 140;
+      });
+
+      if (current) {
+        setActive(current.id);
       }
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+
+    onScroll();
+
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false); };
-  const getLabel = (key) => { const [s, p] = key.split('.'); return t[s]?.[p] ?? key; };
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+    });
+
+    setActive(id);
+    setMenuOpen(false);
+  };
 
   return (
-    <>
-      <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-        <div className={styles.inner}>
-          <button className={styles.logo} onClick={() => scrollTo('about')}>G.Chanis</button>
+    <nav
+      className={`${styles.nav} ${
+        scrolled ? styles.scrolled : ""
+      }`}
+    >
+      <div className={styles.inner}>
+        {/* IDENTITÉ */}
+        <button
+          type="button"
+          className={styles.logo}
+          onClick={() => scrollTo("home")}
+          aria-label="Retour à l'accueil"
+        >
+          G.Chanis
+        </button>
 
-          <ul className={styles.links}>
-            {NAV_SECTIONS.map(([id, key]) => (
-              <li key={id}>
-                <button
-                  className={`${styles.link} ${active === id ? styles.linkActive : ''}`}
-                  onClick={() => scrollTo(id)}
-                >
-                  {getLabel(key)}
-                </button>
-              </li>
-            ))}
-          </ul>
+        {/* ACTIONS */}
+        <div className={styles.actions}>
+          {/* CV */}
+          <a
+            href="/Gaïus Chanis HONTONWAKOU CV_fr.pdf"
+            download
+            className={styles.btnCv}
+          >
+            <Download
+              size={15}
+              strokeWidth={1.8}
+            />
+            <span>{t.nav.cv}</span>
+          </a>
 
-          <div className={styles.actions}>
-            <a href="/Gaïus Chanis HONTONWAKOU CV_fr.pdf" download className={styles.btnCv}>{t.nav.cv}</a>
-            <button className={styles.btnIcon} onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} title="Langue">
-              {lang === 'fr' ? '🇬🇧' : '🇫🇷'}
+          {/* LANGUE */}
+          <button
+            type="button"
+            className={styles.btnIcon}
+            onClick={() =>
+              setLang(lang === "fr" ? "en" : "fr")
+            }
+            title="Changer de langue"
+            aria-label="Changer de langue"
+          >
+            <Languages
+              size={17}
+              strokeWidth={1.8}
+            />
+            <span>{lang.toUpperCase()}</span>
+          </button>
+
+          {/* THÈME */}
+          <button
+            type="button"
+            className={styles.btnIcon}
+            onClick={() =>
+              setTheme(
+                theme === "dark" ? "light" : "dark",
+              )
+            }
+            title="Changer de thème"
+            aria-label="Changer de thème"
+          >
+            {theme === "dark" ? (
+              <Sun
+                size={17}
+                strokeWidth={1.8}
+              />
+            ) : (
+              <Moon
+                size={17}
+                strokeWidth={1.8}
+              />
+            )}
+          </button>
+
+          {/* NAVIGATION */}
+          <div
+            className={styles.menuArea}
+            onMouseEnter={() => setMenuOpen(true)}
+            onMouseLeave={() => setMenuOpen(false)}
+          >
+            <button
+              type="button"
+              className={`${styles.menuButton} ${
+                menuOpen
+                  ? styles.menuButtonOpen
+                  : ""
+              }`}
+              onClick={() =>
+                setMenuOpen((value) => !value)
+              }
+              aria-label={
+                menuOpen
+                  ? "Fermer la navigation"
+                  : "Ouvrir la navigation"
+              }
+              aria-expanded={menuOpen}
+              aria-haspopup="true"
+            >
+              {menuOpen ? (
+                <X
+                  size={19}
+                  strokeWidth={1.8}
+                />
+              ) : (
+                <Menu
+                  size={19}
+                  strokeWidth={1.8}
+                />
+              )}
             </button>
-            <button className={styles.btnIcon} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} title="Thème">
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-            <button className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ''}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
-              <span /><span /><span />
-            </button>
+
+            {/* MENU */}
+            <div
+              className={`${styles.menuPanel} ${
+                menuOpen
+                  ? styles.menuPanelOpen
+                  : ""
+              }`}
+            >
+              {NAV_SECTIONS.map(
+                ({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    className={`${styles.menuItem} ${
+                      active === id
+                        ? styles.menuItemActive
+                        : ""
+                    }`}
+                    onClick={() => scrollTo(id)}
+                  >
+                    <Icon
+                      size={17}
+                      strokeWidth={1.8}
+                    />
+
+                    <span>{label}</span>
+                  </button>
+                ),
+              )}
+            </div>
           </div>
         </div>
-      </nav>
-
-      <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
-        {NAV_SECTIONS.map(([id, key]) => (
-          <button key={id} className={`${styles.mobileLink} ${active === id ? styles.mobileLinkActive : ''}`} onClick={() => scrollTo(id)}>
-            {getLabel(key)}
-          </button>
-        ))}
-        <a href="/Gaïus Chanis HONTONWAKOU CV_fr.pdf" download className={styles.mobileCv} onClick={() => setMenuOpen(false)}>{t.nav.cv}</a>
       </div>
-    </>
+    </nav>
   );
 }

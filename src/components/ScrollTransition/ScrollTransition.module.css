@@ -1,0 +1,25 @@
+.wrapper {
+  --transition-x: 0px;
+  --transition-y: 0px;
+  --transition-progress: 0;
+
+  transform:
+    translate3d(
+      var(--transition-x),
+      var(--transition-y),
+      0
+    )
+    scale(
+      calc(
+        0.97 +
+        (var(--transition-progress) * 0.03)
+      )
+    );
+
+  opacity: calc(
+    0.72 +
+    (var(--transition-progress) * 0.28)
+  );
+
+  will-change: transform, opacity;
+}

@@ -1,352 +1,405 @@
 .hero {
   min-height: 100vh;
+
   display: flex;
   align-items: center;
+
   padding-top: var(--nav-height);
+
   position: relative;
   overflow: hidden;
 }
 
 .inner {
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding: 4rem var(--space-xl);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3.5rem;
   width: 100%;
+  max-width: var(--max-width);
+
+  margin-inline: auto;
+
+  padding: 5rem var(--space-xl);
+
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
+
+  align-items: center;
+
+  gap: clamp(3rem, 7vw, 7rem);
+
   position: relative;
   z-index: 1;
 }
 
-/* LEFT */
-.left {
-  flex: 1 1 400px;
-  min-width: 0;
+/* 
+   PHOTO
+ */
+
+.photoColumn {
+  width: 100%;
+  max-width: 380px;
+
+  justify-self: center;
 }
 
-.badge {
+.photoFrame {
+  width: 100%;
+  position: relative;
+}
+
+.photoFrame::before {
+  display: none;
+}
+
+.photoInner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 10px 10px 34px 10px;
+  background: var(--bg-alt);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.28),
+    0 6px 16px rgba(0, 0, 0, 0.16);
+  transition:
+    border-radius var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.photo {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center top;
+
+  filter: saturate(0.96);
+
+  transition:
+    transform var(--transition-slow),
+    filter var(--transition-slow);
+}
+
+.photoFrame:hover .photoInner {
+  border-radius: 16px 16px 28px 16px;
+
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.32),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.photoFrame:hover .photo {
+  transform: scale(1.02);
+
+  filter: saturate(1);
+}
+
+.availability {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: var(--green-10);
-  border: 1px solid var(--green-28);
-  color: var(--green);
-  padding: 0.35rem 0.9rem;
+  gap: 0.55rem;
+  margin-top: 2rem;
+  padding: 0.55rem 0.8rem;
+  width: fit-content;
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 1.4rem;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
-.badgeDot {
+.availabilityDot {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--green);
-  animation: pulseDot 2s ease-in-out infinite;
-  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--green-10);
 }
 
-.greeting {
-  font-size: 1.2rem;
+/* MÉTADONNÉES PHOTO */
+
+.photoMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 1rem;
+
+  padding-inline: 0.15rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+
+  color: var(--text-subtle);
+}
+
+/* CONTENU */
+
+.content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.4rem;
+}
+
+.sectionTag {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.75rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+
+  letter-spacing: 0.14em;
+
+  color: var(--text-subtle);
+}
+
+.sectionTag::before {
+  content: '';
+
+  width: 42px;
+  height: 1px;
+
+  background: var(--text-subtle);
+}
+
+/* =================================
+   TITRE
+================================= */
+
+.heading {
+  max-width: 760px;
+}
+
+.intro {
+  margin: 0 0 0.2rem;
+
+  font-size: 1.05rem;
+
   color: var(--text-muted);
-  margin-bottom: 0.25rem;
 }
 
 .name {
+  margin: 0;
+
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: var(--text);
-  margin-bottom: 0.6rem;
-}
 
-.nameAccent {
-  color: var(--accent);
-}
-
-/* Role animé */
-.roleWrap {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.3rem;
-}
-
-.rolePrefix {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  color: var(--accent);
-}
-
-.roleAnimated {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
   font-weight: 600;
-  color: var(--text-muted);
-  animation: slideIn 0.4s ease forwards;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.045em;
+
+  color: var(--text);
 }
+
+.name span {
+  color: var(--accent);
+}
+
+/* =================================
+   LOCALISATION
+================================= */
 
 .location {
-  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+
   color: var(--text-subtle);
-  margin-bottom: 1.5rem;
 }
+
+/* TEXTE */
 
 .bio {
-  font-size: 1.05rem;
+  max-width: 680px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+
+  padding-top: 0.5rem;
+}
+
+.bio p {
+  margin: 0;
+
+  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
+
   line-height: 1.8;
+
   color: var(--text-muted);
-  max-width: 500px;
-  margin-bottom: 1.75rem;
 }
 
-.passions {
+.bio strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* =================================
+   SIGNATURE
+================================= */
+
+.signature {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  flex-direction: column;
+
+  gap: 0.15rem;
+
+  padding-top: 0.75rem;
+
+  border-top: 1px solid var(--border);
+
+  max-width: 680px;
 }
 
-.passionTag {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.28rem 0.75rem;
-  border-radius: var(--radius-full);
-  font-size: 0.9rem;
-  transition: border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
-  cursor: default;
-}
-
-.passionTag:hover {
-  border-color: var(--accent-30);
-  color: var(--accent);
-  animation: glowPulse 1.2s ease-in-out infinite;
-}
-
-.ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-bottom: 1.75rem;
-}
-
-.ctaPrimary {
-  background: var(--accent);
-  color: var(--text-on-blue);
+.signature strong {
   font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-md);
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
-}
 
-.ctaPrimary:hover {
-  opacity: 0.88;
-  transform: translateY(-2px);
-  animation: glowPulse 1.2s ease-in-out infinite;
-}
-
-.ctaOutline {
-  display: inline-block;
-  border: 1.5px solid var(--accent);
-  color: var(--accent);
-  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 600;
-  padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+
+  color: var(--text);
 }
 
-.ctaOutline:hover {
-  background: var(--accent-10);
-  transform: translateY(-2px);
-  animation: glowPulse 1.2s ease-in-out infinite;
+.signature span {
+  font-size: 0.82rem;
+
+  color: var(--text-subtle);
 }
+
+/* =================================
+   RÉSEAUX
+================================= */
 
 .socials {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
+
+  gap: 0.6rem;
+
+  padding-top: 0.35rem;
+  border-radius: 12px;
 }
 
 .socialLink {
-  font-size: 0.95rem;
-  color: var(--text-subtle);
-  transition: color var(--transition-fast);
+  min-height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  border-radius: 12px;
+
+  gap: 0.45rem;
+
+  padding: 0 0.75rem;
+
+  border: 1px solid var(--border);
+
+  color: var(--text-muted);
+
+  font-size: 0.72rem;
+
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .socialLink:hover {
-  color: var(--accent);
-  animation: glowPulse 1.2s ease-in-out infinite;
-}
+  color: var(--text);
 
-/* RIGHT */
-.right {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  position: relative;
-}
+  border-color: var(--border-hover);
 
-.photoWrap {
-  position: relative;
-  width: 240px;
-  height: 240px;
-}
+  background: var(--accent-10);
+  border-radius: 12px;
 
-.photo {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--accent);
-  box-shadow:
-    0 0 0 6px var(--accent-10),
-    0 8px 32px var(--accent-glow);
-  position: relative;
-  z-index: 1;
-  animation: borderPulse 6s ease-in-out infinite;
-}
-
-.photoBadge {
-  position: absolute;
-  bottom: 8px;
-  right: 0;
-  background: var(--accent);
-  color: var(--text-on-blue);
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.28rem 0.7rem;
-  border-radius: var(--radius-full);
-  box-shadow: var(--shadow-accent);
-  z-index: 2;
-  transition: transform var(--transition-fast);
-}
-
-.photoBadge:hover {
   transform: translateY(-2px);
-  animation: glowPulse 1.2s ease-in-out infinite;
 }
 
-/* Citation */
-.quote {
-  max-width: 280px;
-  text-align: center;
-  background: none;
-  border: none;
-  padding: 0.75rem 0.5rem;
-}
+/* =================================
+   RESPONSIVE
+================================= */
 
-.quote p {
-  font-size: 0.9rem;
-  color: var(--accent);
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.7;
-  margin-bottom: 0.3rem;
-}
-
-.quote footer {
-  font-size: 0.78rem;
-  color: var(--text-subtle);
-  font-weight: 500;
-}
-
-/* ===== ANIMATIONS ===== */
-
-@keyframes glowPulse {
-  0%   { box-shadow: 0 0 0 0 var(--accent-20), 0 4px 15px var(--accent-glow); }
-  50%  { box-shadow: 0 0 0 6px transparent, 0 4px 28px var(--accent-glow); }
-  100% { box-shadow: 0 0 0 0 var(--accent-20), 0 4px 15px var(--accent-glow); }
-}
-
-@keyframes borderPulse {
-  0% {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 6px var(--accent-10), 0 8px 32px var(--accent-glow);
-    transform: scale(1);
-  }
-  25% {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 12px var(--accent-10), 0 8px 48px var(--accent-glow);
-    transform: scale(1.015);
-  }
-  50% {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-10), 0 8px 20px var(--accent-glow);
-    transform: scale(0.985);
-  }
-  75% {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 10px var(--accent-10), 0 8px 40px var(--accent-glow);
-    transform: scale(1.01);
-  }
-  100% {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 6px var(--accent-10), 0 8px 32px var(--accent-glow);
-    transform: scale(1);
-  }
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.7); }
-}
-
-@keyframes slideIn {
-  0%   { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* RESPONSIVE */
 @media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+  }
+
   .inner {
-    flex-direction: column-reverse;
-    text-align: center;
-    padding-top: 3rem;
+    grid-template-columns: 1fr;
+
+    gap: 3rem;
+
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .photoColumn {
+    width: min(360px, 78vw);
+
+    justify-self: center;
+
+    order: 1;
+  }
+
+  .content {
+    order: 2;
+  }
+
+  .sectionTag,
+  .heading,
+  .location,
+  .bio,
+  .signature {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 520px) {
+  .inner {
+    padding-inline: var(--space-lg);
+
     gap: 2.5rem;
   }
-  .bio,
-  .passions,
-  .ctas,
-  .socials,
-  .badge {
-    margin-inline: auto;
-  }
-  .passions,
-  .ctas,
-  .socials {
-    justify-content: center;
-  }
-  .bio {
-    text-align: left;
-  }
+
+  .photoColumn {
+  width: min(300px, 82vw);
 }
 
-@media (max-width: 480px) {
-  .photoWrap { width: 200px; height: 200px; }
-  .inner { padding-inline: var(--space-lg); }
-  .quote p { font-size: 0.8rem; }
-  .quote footer { font-size: 0.7rem; }
-  .badge { font-size: 0.8rem; }
-  .greeting { font-size: 1rem; }
-  .rolePrefix { font-size: 1rem; }
-  .roleAnimated { font-size: 1.05rem; }
-  .location { font-size: 0.85rem; }
-  .bio { font-size: 0.95rem; }
-  .passionTag { font-size: 0.8rem; }
-  .ctaPrimary, .ctaOutline { font-size: 0.9rem; }
-  .socialLink { font-size: 0.85rem; }
-  .photoBadge { font-size: 0.7rem; }
+.photoInner {
+  border-radius: 8px 8px 2px 8px;
+  box-shadow:
+    0 16px 35px rgba(0, 0, 0, 0.25),
+    0 5px 14px rgba(0, 0, 0, 0.14);
+}
+
+  .name {
+    font-size: 2.5rem;
+  }
+
+  .bio p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .socialLink {
+    font-size: 0.68rem;
+  }
 }

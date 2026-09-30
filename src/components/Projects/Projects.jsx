@@ -1,90 +1,428 @@
-// Projects.jsx
-import { useState } from 'react';
-import Reveal from '../Reveal';
-import SectionHeader from '../SectionHeader';
-import { PROJECTS } from '../../data/index';
-import styles from './Projects.module.css';
+import {
+  ArrowUpRight,
+  ExternalLink,
+} from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 
-function BrowserMockup({ url, title }) {
-  return (
-    <div className={styles.mockup}>
-      <div className={styles.mockupBar}>
-        <span className={styles.dot} style={{ background: '#ff5f57' }} />
-        <span className={styles.dot} style={{ background: '#febc2e' }} />
-        <span className={styles.dot} style={{ background: '#28c840' }} />
-        <span className={styles.url}>{url.replace('https://', '')}</span>
-      </div>
-      <div className={styles.mockupContent}>
-        <iframe src={url} title={title} className={styles.iframe} loading="lazy" sandbox="allow-scripts allow-same-origin" />
-        <a href={url} target="_blank" rel="noreferrer" className={styles.overlay} aria-label={`Voir ${title}`} />
-      </div>
-    </div>
-  );
-}
+import Reveal from "../Reveal";
+import SectionHeader from "../SectionHeader";
+import { PROJECTS } from "../../data/index";
+import ProjectVisual from "../ProjectVisual/ProjectVisual";
 
-function ProjectCard({ project, t, lang }) {
-  const desc = lang === 'fr' ? project.descFr : project.descEn;
-  const isFeatured = project.featured;
-  const demoLabel = project.demo?.includes('figma') ? t.projects.figma : t.projects.demo;
+import styles from "./Projects.module.css";
 
-  const renderVisual = () => {
-    if (isFeatured && project.previewUrl) return <BrowserMockup url={project.previewUrl} title={project.title} />;
-    if (project.image) return <img src={project.image} alt={project.title} className={styles.cardImg} />;
-    return (
-      <div className={styles.cardEmoji} style={{ background: `linear-gradient(135deg, ${project.color}18, ${project.color}35)` }}>
-        <span className={styles.emoji}>{project.emoji}</span>
-      </div>
-    );
+export default function Projects({
+  t,
+  lang,
+  activeProjectId,
+}) {
+  const project =
+    PROJECTS.find(
+      (item) => item.id === activeProjectId,
+    ) || PROJECTS[0];
+
+  if (!project) return null;
+
+  const desc =
+    lang === "fr"
+      ? project.descFr
+      : project.descEn;
+
+  const role =
+    lang === "fr"
+      ? project.roleFr
+      : project.roleEn;
+
+  const proof =
+    lang === "fr"
+      ? project.proofFr
+      : project.proofEn;
+
+  const caseStudy = project.caseStudy;
+
+  const getText = (fr, en) =>
+    lang === "fr" ? fr : en;
+
+  const familyLabels = {
+    development:
+      lang === "fr"
+        ? "DÉVELOPPEMENT"
+        : "DEVELOPMENT",
+
+    design: "DESIGN",
+
+    ux:
+      lang === "fr"
+        ? "UX / CONCEPTION"
+        : "UX / DESIGN",
   };
 
   return (
-    <div className={`${styles.card} ${isFeatured ? styles.cardFeatured : ''}`}>
-      {renderVisual()}
-      <div className={styles.cardBody}>
-        <div className={styles.cardTop}>
-          <h3 className={styles.cardTitle}>{project.title}</h3>
-          <div className={styles.badges}>
-            {project.wip && <span className={styles.wipBadge}>{t.projects.wip}</span>}
-            {isFeatured && <span className={styles.featuredBadge}>{t.projects.featured}</span>}
-          </div>
-        </div>
-        <span className={styles.cardType}>{t.projects.filters[project.type]}</span>
-        <p className={styles.cardDesc}>{desc}</p>
-        <div className={styles.tags}>{project.tags.map(tag => <span key={tag} className={styles.tag}>{tag}</span>)}</div>
-        <div className={styles.links}>
-          {project.demo && <a href={project.demo} target="_blank" rel="noreferrer" className={styles.linkPrimary}>{demoLabel}</a>}
-          {project.github && <a href={project.github} target="_blank" rel="noreferrer" className={styles.linkGhost}>🐙 {t.projects.code}</a>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function Projects({ t, lang }) {
-  const [filter, setFilter] = useState('all');
-  const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.type === filter);
-  const filterKeys = ['all', 'real', 'academic', 'personal', 'design'];
-
-  return (
-    <section id="projects" className="section">
+    <section
+      id="projects"
+      className={styles.section}
+    >
       <div className="container">
-        <Reveal><SectionHeader tag={t.projects.sectionTag} title={t.projects.title} sub={t.projects.sub} /></Reveal>
-        <Reveal delay={0.1}>
-          <div className={styles.filters}>
-            {filterKeys.map(key => (
-              <button key={key} className={`${styles.filterBtn} ${filter === key ? styles.filterActive : ''}`} onClick={() => setFilter(key)}>
-                {t.projects.filters[key]}
-              </button>
-            ))}
-          </div>
+        <Reveal>
+          <SectionHeader
+            tag={t.projects.sectionTag}
+            title={
+              lang === "fr"
+                ? "Comprendre le projet."
+                : "Understand the project."
+            }
+            sub={
+              lang === "fr"
+                ? "Au-delà du résultat, voici le problème, les choix et les contraintes."
+                : "Beyond the result: the problem, decisions and constraints."
+            }
+          />
         </Reveal>
-        <div className={styles.grid}>
-          {filtered.map((project, i) => (
-            <Reveal key={project.id} delay={i * 0.06}>
-              <ProjectCard project={project} t={t} lang={lang} />
-            </Reveal>
-          ))}
-        </div>
+
+        <Reveal delay={0.08}>
+          <article className={styles.caseStudy}>
+
+            {/* COLONNE TEXTE */}
+
+            <div className={styles.content}>
+              <header className={styles.header}>
+                <div>
+                  <span className={styles.family}>
+                    {familyLabels[project.family] ||
+                      project.family}
+                  </span>
+
+                  <h2 className={styles.title}>
+                    {project.title}
+                  </h2>
+
+                  <p className={styles.category}>
+                    {project.category}
+                  </p>
+                </div>
+
+                <span
+                  className={`${styles.status} ${
+                    project.status === "finished"
+                      ? styles.statusFinished
+                      : styles.statusProgress
+                  }`}
+                >
+                  {project.status === "finished"
+                    ? getText(
+                        "Terminé",
+                        "Completed",
+                      )
+                    : getText(
+                        "En cours",
+                        "In progress",
+                      )}
+                </span>
+              </header>
+
+              <div className={styles.description}>
+                <span className={styles.label}>
+                  {getText(
+                    "Contexte",
+                    "Context",
+                  )}
+                </span>
+
+                <p>{desc}</p>
+              </div>
+
+              {role && (
+                <div className={styles.role}>
+                  <span className={styles.label}>
+                    {getText("Rôle", "Role")}
+                  </span>
+
+                  <p>{role}</p>
+                </div>
+              )}
+
+              {caseStudy && (
+                <div className={styles.details}>
+
+                  {caseStudy.context && (
+                    <div
+                      className={
+                        styles.detailBlock
+                      }
+                    >
+                      <span
+                        className={
+                          styles.label
+                        }
+                      >
+                        {getText(
+                          "Problème",
+                          "Problem",
+                        )}
+                      </span>
+
+                      <p>
+                        {getText(
+                          caseStudy.problemFr ||
+                            caseStudy.contextFr,
+                          caseStudy.problemEn ||
+                            caseStudy.contextEn,
+                        )}
+                      </p>
+                    </div>
+                  )}
+
+                  {caseStudy.constraints && (
+                    <div
+                      className={
+                        styles.detailBlock
+                      }
+                    >
+                      <span
+                        className={
+                          styles.label
+                        }
+                      >
+                        {getText(
+                          "Contraintes",
+                          "Constraints",
+                        )}
+                      </span>
+
+                      <p>
+                        {getText(
+                          caseStudy.constraintsFr,
+                          caseStudy.constraintsEn,
+                        )}
+                      </p>
+                    </div>
+                  )}
+
+                  {caseStudy.decision && (
+                    <div
+                      className={
+                        styles.detailBlock
+                      }
+                    >
+                      <span
+                        className={
+                          styles.label
+                        }
+                      >
+                        {getText(
+                          "Décision",
+                          "Decision",
+                        )}
+                      </span>
+
+                      <p>
+                        {getText(
+                          caseStudy.decisionFr,
+                          caseStudy.decisionEn,
+                        )}
+                      </p>
+                    </div>
+                  )}
+
+                  {caseStudy.implementation && (
+                    <div
+                      className={
+                        styles.detailBlock
+                      }
+                    >
+                      <span
+                        className={
+                          styles.label
+                        }
+                      >
+                        {getText(
+                          "Implémentation",
+                          "Implementation",
+                        )}
+                      </span>
+
+                      <p>
+                        {getText(
+                          caseStudy.implementationFr,
+                          caseStudy.implementationEn,
+                        )}
+                      </p>
+                    </div>
+                  )}
+
+                </div>
+              )}
+
+              {proof && (
+                <div className={styles.proof}>
+                  <span className={styles.label}>
+                    {getText(
+                      "Preuve / validation",
+                      "Evidence / validation",
+                    )}
+                  </span>
+
+                  <p>{proof}</p>
+                </div>
+              )}
+
+              {caseStudy?.limits && (
+                <div
+                  className={
+                    styles.detailBlock
+                  }
+                >
+                  <span className={styles.label}>
+                    {getText(
+                      "Limites",
+                      "Limits",
+                    )}
+                  </span>
+
+                  <p>
+                    {getText(
+                      caseStudy.limitsFr,
+                      caseStudy.limitsEn,
+                    )}
+                  </p>
+                </div>
+              )}
+
+              {caseStudy?.takeaway && (
+                <div
+                  className={
+                    styles.takeaway
+                  }
+                >
+                  <span className={styles.label}>
+                    {getText(
+                      "Ce que j'en retiens",
+                      "What I learned",
+                    )}
+                  </span>
+
+                  <p>
+                    {getText(
+                      caseStudy.takeawayFr,
+                      caseStudy.takeawayEn,
+                    )}
+                  </p>
+                </div>
+              )}
+
+              <div className={styles.links}>
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.link}
+                  >
+                    <FaGithub size={17} />
+
+                    <span>GitHub</span>
+
+                    <ArrowUpRight
+                      size={15}
+                      strokeWidth={1.7}
+                    />
+                  </a>
+                )}
+
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.link}
+                  >
+                    <ExternalLink
+                      size={16}
+                      strokeWidth={1.7}
+                    />
+
+                    <span>
+                      {getText(
+                        "Voir le projet",
+                        "View project",
+                      )}
+                    </span>
+
+                    <ArrowUpRight
+                      size={15}
+                      strokeWidth={1.7}
+                    />
+                  </a>
+                )}
+
+                {project.figma && (
+                  <a
+                    href={project.figma}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.link}
+                  >
+                    <ExternalLink
+                      size={16}
+                      strokeWidth={1.7}
+                    />
+
+                    <span>Figma</span>
+
+                    <ArrowUpRight
+                      size={15}
+                      strokeWidth={1.7}
+                    />
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* PREUVE VISUELLE */}
+
+            <aside className={styles.visual}>
+              <div
+                className={
+                  styles.visualFrame
+                }
+              >
+                <div
+                  className={
+                    styles.visualBar
+                  }
+                >
+                  <span>
+                    {getText(
+                      "Preuve visuelle",
+                      "Visual evidence",
+                    )}
+                  </span>
+
+                  <span>
+                    {String(
+                      PROJECTS.findIndex(
+                        (item) =>
+                          item.id === project.id,
+                      ) + 1,
+                    ).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div
+                  className={
+                    styles.visualContent
+                  }
+                >
+                  <ProjectVisual
+                    project={project}
+                    lang={lang}
+                  />
+                </div>
+              </div>
+            </aside>
+
+          </article>
+        </Reveal>
       </div>
     </section>
   );

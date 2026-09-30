@@ -1,15 +1,8 @@
-/* ============================================================
-   DESIGN TOKENS V3 — Palette Bleu Profond + Crème
-   Portfolio Gaïus Chanis HONTONWAKOU
-   ============================================================ */
-
 :root {
-  /* --- Typographie --- */
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Wura mi by GemmaS', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
-  /* --- Palette principale --- */
   --blue:        #1B3A6B;
   --blue-mid:    #2A5298;
   --blue-light:  #4A7FD4;
@@ -18,25 +11,21 @@
   --blue-30:     rgba(27, 58, 107, 0.30);
   --blue-glow:   rgba(74, 127, 212, 0.18);
 
-  /* --- Accent chaud --- */
   --amber:       #E8A020;
   --amber-10:    rgba(232, 160, 32, 0.10);
   --amber-20:    rgba(232, 160, 32, 0.20);
 
-  /* --- Statuts --- */
   --green:       #26bf6b;
   --green-10:    rgba(38, 191, 107, 0.10);
   --green-28:    rgba(38, 191, 107, 0.28);
   --red:         #e24b4a;
 
-  /* --- Radius --- */
   --radius-sm:   6px;
   --radius-md:   10px;
   --radius-lg:   14px;
   --radius-xl:   20px;
   --radius-full: 9999px;
 
-  /* --- Spacing --- */
   --space-xs:    0.25rem;
   --space-sm:    0.5rem;
   --space-md:    1rem;
@@ -45,37 +34,35 @@
   --space-2xl:   3rem;
   --space-3xl:   5rem;
 
-  /* --- Transitions --- */
   --transition-fast:   0.18s ease;
   --transition-base:   0.28s ease;
   --transition-slow:   0.5s ease;
   --transition-spring: 0.4s cubic-bezier(0.22, 0.68, 0, 1.2);
 
-  /* --- Layout --- */
   --max-width:   1100px;
   --nav-height:  64px;
 }
 
-/* ============================================================
-   THÈME CLAIR (défaut)
-   ============================================================ */
 [data-theme="light"] {
-  --bg:            #F7F4EF;
-  --bg-alt:        #EEEAE3;
+  --bg:            #F1ECE3;
+  --bg-alt:        #E8E1D5;
   --bg-card:       rgba(27, 58, 107, 0.04);
   --bg-card-hover: rgba(27, 58, 107, 0.07);
+
   --border:        rgba(27, 58, 107, 0.10);
   --border-hover:  rgba(27, 58, 107, 0.35);
-  --nav-bg:        rgba(247, 244, 239, 0.92);
+
+  --nav-bg:        rgba(241, 236, 227, 0.92);
 
   --text:          #0F1C2E;
   --text-muted:    #4A5568;
-  --text-subtle:   #8A96A8;
+  --text-subtle:   #6B778A;
   --text-on-blue:  #FFFFFF;
 
   --accent:        var(--blue);
   --accent-mid:    var(--blue-mid);
   --accent-light:  var(--blue-light);
+
   --accent-10:     var(--blue-10);
   --accent-20:     var(--blue-20);
   --accent-30:     var(--blue-30);
@@ -87,26 +74,26 @@
   --shadow-accent: 0 8px 28px rgba(74, 127, 212, 0.20);
 }
 
-/* ============================================================
-   THÈME SOMBRE
-   ============================================================ */
 [data-theme="dark"] {
-  --bg:            #0A0F1E;
-  --bg-alt:        #0F1628;
+  --bg:            #121212;
+  --bg-alt:        #171717;
   --bg-card:       rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.07);
+
   --border:        rgba(255, 255, 255, 0.08);
   --border-hover:  rgba(74, 127, 212, 0.45);
-  --nav-bg:        rgba(10, 15, 30, 0.92);
+
+  --nav-bg:        rgba(18, 18, 18, 0.92);
 
   --text:          #E8EDF5;
-  --text-muted:    #8A96A8;
-  --text-subtle:   #4A5568;
+  --text-muted:    #A7B0BF;
+  --text-subtle:   #7F8A9C;
   --text-on-blue:  #FFFFFF;
 
   --accent:        var(--blue-light);
   --accent-mid:    var(--blue-mid);
   --accent-light:  var(--blue-light);
+
   --accent-10:     rgba(74, 127, 212, 0.10);
   --accent-20:     rgba(74, 127, 212, 0.20);
   --accent-30:     rgba(74, 127, 212, 0.30);

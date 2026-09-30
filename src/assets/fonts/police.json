@@ -1,0 +1,54 @@
+{
+  "slug": "wura-mi-by-gemmas",
+  "nom": "Wura mi by GemmaS",
+  "nomDessine": "Wúrà mi by GemmaS",
+  "role": "titres et wordmark",
+  "defaut": true,
+  "origine": "Outfit, redessinée et renommée pour GemmaS, sous licence SIL OFL 1.1",
+  "pile": "ui-sans-serif, system-ui, sans-serif",
+  "css": "wura-mi-by-gemmas.css",
+  "cssFrancais": "wura-mi-by-gemmas-fr.css",
+  "graisses": [
+    {
+      "nom": "ExtraLight",
+      "poids": 200,
+      "entier": 19952,
+      "francais": 11384,
+      "ttf": 55404,
+      "signes": 361
+    },
+    {
+      "nom": "Light",
+      "poids": 300,
+      "entier": 20860,
+      "francais": 11868,
+      "ttf": 55648,
+      "signes": 361
+    },
+    {
+      "nom": "Regular",
+      "poids": 400,
+      "entier": 20772,
+      "francais": 11864,
+      "ttf": 55664,
+      "signes": 361
+    },
+    {
+      "nom": "SemiBold",
+      "poids": 600,
+      "entier": 20808,
+      "francais": 11824,
+      "ttf": 55696,
+      "signes": 361
+    },
+    {
+      "nom": "Bold",
+      "poids": 700,
+      "entier": 20900,
+      "francais": 12020,
+      "ttf": 55768,
+      "signes": 361
+    }
+  ],
+  "fabriqueLe": "2026-09-03T00:00:38.327Z"
+}

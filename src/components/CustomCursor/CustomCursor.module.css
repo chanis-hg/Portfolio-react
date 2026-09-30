@@ -1,0 +1,62 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+  width: 9px;
+  height: 9px;
+
+  pointer-events: none;
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  transition:
+    opacity 0.2s ease,
+    width 0.25s cubic-bezier(0.22, 0.68, 0, 1),
+    height 0.25s cubic-bezier(0.22, 0.68, 0, 1),
+    background-color 0.25s ease;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.cursor::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+
+  border: 1px solid var(--accent-30);
+  border-radius: 50%;
+
+  transition:
+    inset 0.25s cubic-bezier(0.22, 0.68, 0, 1),
+    border-color 0.25s ease;
+}
+
+.interactive {
+  width: 6px;
+  height: 6px;
+}
+
+.interactive::after {
+  inset: -11px;
+  border-color: var(--accent);
+}
+
+@media (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .cursor::after {
+    transition: none;
+  }
+}
