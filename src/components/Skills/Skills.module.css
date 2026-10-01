@@ -1,325 +1,274 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.8rem;
+/* =================================
+   LA VIE D'UN PRODUIT : étapes + panneau
+================================= */
 
-  margin-top: var(--space-2xl);
+.flow {
+  --node: 46px;
+  position: relative;
+  margin-top: 2.5rem;
 }
 
-/* ─────────────────────────────────────────
-   CARD
-───────────────────────────────────────── */
+/* fil qui relie les étapes (centres des 5 colonnes : 10 % → 90 %) */
 
-.card {
+.rail {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: calc(var(--node) / 2 - 1px);
+  height: 2px;
+  background: var(--border-hover);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.railFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(var(--progress, 0));
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tabs {
   position: relative;
-  min-height: 190px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
 
+.tab {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-
-  padding: 1rem;
-
-  overflow: hidden;
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-
-  background: var(--bg-card);
-
-  transition:
-    transform var(--transition-spring),
-    border-color var(--transition-base),
-    box-shadow var(--transition-base),
-    background-color var(--transition-base);
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 0.25rem;
+  background: none;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
-.card::after {
-  content: '';
-
-  position: absolute;
-  right: -35px;
-  bottom: -35px;
-
-  width: 100px;
-  height: 100px;
-
+.node {
+  width: var(--node);
+  height: var(--node);
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--text-subtle);
   border-radius: 50%;
-
-  background: var(--accent-10);
-
-  opacity: 0;
-
-  transition:
-    opacity var(--transition-base),
-    transform var(--transition-spring);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-
-  border-color: var(--border-hover);
-
-  box-shadow: var(--shadow-accent);
-}
-
-.card:hover::after {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-/* ─────────────────────────────────────────
-   TOP
-───────────────────────────────────────── */
-
-.cardTop {
-  position: relative;
-  z-index: 2;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.index {
+  background: var(--bg-alt);
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-
-  color: var(--text-subtle);
-}
-
-.category {
-  padding: 0.2rem 0.45rem;
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-  line-height: 1.2;
-
-  color: var(--text-subtle);
-  background: var(--bg);
-}
-
-/* ─────────────────────────────────────────
-   ICON
-───────────────────────────────────────── */
-
-.iconWrap {
-  position: relative;
-  z-index: 2;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-top: 1rem;
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 48px;
-  height: 48px;
-
-  border-radius: 13px;
-
-  font-size: 1.7rem;
-
-  color: var(--text);
-  background: var(--accent-10);
-
+  color: var(--text-muted);
   transition:
-    transform var(--transition-spring),
-    background-color var(--transition-base),
-    color var(--transition-base);
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.icon svg {
-  width: 27px;
-  height: 27px;
-}
-
-.card:hover .icon {
-  transform: scale(1.08) rotate(-3deg);
-
-  color: var(--accent);
-  background: var(--accent-20);
-}
-
-.dualIcon {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.dualIcon svg {
-  width: 21px;
-  height: 21px;
-}
-
-.arrow {
-  color: var(--text-subtle);
-
-  opacity: 0.5;
-
-  transition:
-    transform var(--transition-spring),
-    color var(--transition-base),
-    opacity var(--transition-base);
-}
-
-.card:hover .arrow {
-  color: var(--accent);
-  opacity: 1;
-  transform: translate(2px, -2px);
-}
-
-/* ─────────────────────────────────────────
-   BOTTOM
-───────────────────────────────────────── */
-
-.cardBottom {
-  position: relative;
-  z-index: 2;
-}
-
-.name {
-  margin: 0;
-
-  font-family: var(--font-display);
+.tabLabel {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
 
+/* survol : uniquement sur les appareils qui survolent, et jamais sur l'étape active */
+@media (hover: hover) {
+  .tab:not(.current):hover .node {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tab:not(.current):hover .tabLabel {
+    color: var(--text);
+  }
+}
+
+.done .node {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.current .node {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-blue, #fff);
+  box-shadow: 0 0 0 6px var(--accent-10);
+}
+
+/* thème sombre : le bleu clair demande un texte foncé (contraste 4,7:1 au lieu de 4,0:1 en blanc) */
+[data-theme="dark"] .current .node {
+  color: var(--bg);
+}
+
+.current .tabLabel {
   color: var(--text);
 }
 
-.line {
-  display: block;
+/* =================================
+   PANNEAU
+================================= */
 
-  width: 24px;
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  min-height: 15rem;
+  margin-top: 2.2rem;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-card);
+  animation: panelIn 0.38s ease both;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panelStep {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.panelStep::before {
+  content: '';
+  width: 22px;
   height: 2px;
-
-  margin-top: 0.65rem;
-
   border-radius: 2px;
-
   background: var(--accent);
-
-  transition:
-    width var(--transition-spring);
 }
 
-.card:hover .line {
-  width: 42px;
+.panelText {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.1vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
 }
 
-/* ─────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────── */
+.panelMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  justify-content: center;
+}
 
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.metaLabel {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--bg-alt);
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.proofs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proofs li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.proofs li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* =================================
+   MOBILE : les étapes deviennent des pastilles numérotées,
+   le nom de l'étape est repris en tête du panneau
+================================= */
+
+@media (max-width: 720px) {
+  .flow {
+    --node: 44px;
+  }
+
+  .tabLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .panel {
+    grid-template-columns: 1fr;
+    min-height: 0;
   }
 }
 
-@media (max-width: 800px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+/* =================================
+   MOUVEMENT RÉDUIT
+================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .railFill,
+  .node,
+  .tabLabel {
+    transition: none;
   }
 
-  .card {
-    min-height: 175px;
+  .panel {
+    animation: none;
   }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
-  }
-
-  .card {
-    min-height: 165px;
-    padding: 0.85rem;
-  }
-
-  .icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .dualIcon svg {
-    width: 19px;
-    height: 19px;
-  }
-
-  .name {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .card {
-    min-height: 150px;
-  }
-
-  .category {
-    display: none;
-  }
-}
-
-.card {
-  --skill-color: var(--accent);
-
-  transition:
-    border-color .3s ease,
-    background-color .3s ease,
-    transform .3s ease,
-    box-shadow .3s ease;
-}
-
-.card:hover {
-  border-color: color-mix(in srgb, var(--skill-color) 45%, transparent);
-  background: color-mix(
-    in srgb,
-    var(--skill-color) 7%,
-    var(--bg-card)
-  );
-  box-shadow: 0 12px 30px color-mix(
-    in srgb,
-    var(--skill-color) 10%,
-    transparent
-  );
-  transform: translateY(-3px);
-}
-
-.icon {
-  color: var(--text-subtle);
-  transition:
-    color .3s ease,
-    transform .3s ease;
-}
-
-.card:hover .icon {
-  color: var(--skill-color);
-  transform: scale(1.08);
 }

@@ -1,11 +1,8 @@
 .hero {
   min-height: 100vh;
-
   display: flex;
   align-items: center;
-
   padding-top: var(--nav-height);
-
   position: relative;
   overflow: hidden;
 }
@@ -13,40 +10,138 @@
 .inner {
   width: 100%;
   max-width: var(--max-width);
-
   margin-inline: auto;
-
   padding: 5rem var(--space-xl);
-
   display: grid;
   grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
-
   align-items: center;
-
   gap: clamp(3rem, 7vw, 7rem);
-
   position: relative;
   z-index: 1;
 }
 
-/* 
-   PHOTO
- */
+/* =================================
+   APPARITION LIGNE PAR LIGNE
+   - .wait : avant la séquence, les lignes sont masquées
+   - .go   : chaque ligne se révèle (balayage doux de gauche à droite),
+             les paragraphes se révèlent de haut en bas
+   - sans classe : tout est visible (déjà vu, mouvement réduit, ou JS indisponible)
+   Le contenu n'est jamais masqué par défaut : seule la classe .wait le cache.
+================================= */
+
+.name .line {
+  display: block;
+}
+
+.wait .line {
+  opacity: 0;
+}
+
+.go {
+  /* début du texte : juste avant la fin du glissement de la photo */
+  --base: 1.75s;
+}
+
+.go .line {
+  animation: lineWipe 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--base) + var(--i, 0) * 0.14s);
+}
+
+.go .block {
+  animation-name: lineDrop;
+  animation-duration: 0.8s;
+}
+
+/* les marges négatives évitent de rogner les lettres du grand titre */
+@keyframes lineWipe {
+  from {
+    opacity: 0;
+    transform: translateX(-0.4rem);
+    clip-path: inset(-20% 100% -20% -5%);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(-20% -5% -20% -5%);
+  }
+}
+
+@keyframes lineDrop {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    clip-path: inset(-5% -5% 100% -5%);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(-5% -5% -5% -5%);
+  }
+}
+
+/* =================================
+   PHOTO : VISEUR D'APPAREIL
+   Point de mise au point : --fx / --fy (dans Hero.jsx)
+================================= */
 
 .photoColumn {
   width: 100%;
   max-width: 380px;
-
   justify-self: center;
 }
 
-.photoFrame {
-  width: 100%;
+/* couche qui voyage pendant la séquence d'ouverture */
+.flight {
   position: relative;
+  width: 100%;
+  isolation: isolate;
 }
 
-.photoFrame::before {
-  display: none;
+/* =================================
+   LUMIÈRE DE STUDIO
+   Une lueur douce, fixe, derrière la photo. Elle voyage avec elle.
+   Sa teinte suit l'heure de Cotonou (data-tone posé par Hero.jsx).
+================================= */
+
+.hero {
+  --studio-glow: rgba(255, 246, 232, 0.11);
+}
+
+[data-theme="light"] .hero {
+  --studio-glow: rgba(255, 253, 247, 0.9);
+}
+
+[data-theme="dark"] .hero[data-tone="dawn"] { --studio-glow: rgba(255, 214, 178, 0.12); }
+[data-theme="dark"] .hero[data-tone="dusk"] { --studio-glow: rgba(255, 186, 120, 0.12); }
+[data-theme="dark"] .hero[data-tone="night"] { --studio-glow: rgba(150, 185, 255, 0.10); }
+
+[data-theme="light"] .hero[data-tone="dawn"] { --studio-glow: rgba(255, 232, 214, 0.9); }
+[data-theme="light"] .hero[data-tone="dusk"] { --studio-glow: rgba(255, 224, 190, 0.9); }
+[data-theme="light"] .hero[data-tone="night"] { --studio-glow: rgba(232, 238, 252, 0.85); }
+
+.flight::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -22% -42% -14% -42%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, var(--studio-glow) 0%, transparent 100%);
+}
+
+.viewfinder {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viewfinder:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
 }
 
 .photoInner {
@@ -66,190 +161,375 @@
 
 .photo {
   display: block;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
   object-position: center top;
-
-  filter: saturate(0.96);
-
+  filter: saturate(0.94);
   transition:
     transform var(--transition-slow),
     filter var(--transition-slow);
 }
 
-.photoFrame:hover .photoInner {
+.locked .photoInner {
   border-radius: 16px 16px 28px 16px;
-
   box-shadow:
     0 24px 55px rgba(0, 0, 0, 0.32),
     0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
-.photoFrame:hover .photo {
+.locked .photo {
   transform: scale(1.02);
-
-  filter: saturate(1);
+  filter: saturate(1.05);
 }
 
-.availability {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin-top: 2rem;
-  padding: 0.55rem 0.8rem;
-  width: fit-content;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: var(--bg-card);
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  line-height: 1;
+/* cadre du viseur */
+
+.corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  z-index: 3;
+  pointer-events: none;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  transition:
+    top 0.4s ease,
+    left 0.4s ease,
+    right 0.4s ease,
+    bottom 0.4s ease,
+    border-color 0.3s ease;
 }
 
-.availabilityDot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
+.tl { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+.tr { top: 12px; right: 12px; border-left: 0; border-bottom: 0; }
+.bl { bottom: 12px; left: 12px; border-right: 0; border-top: 0; }
+.br { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+
+.locked .corner { border-color: var(--green); }
+.locked .tl { top: 22px; left: 22px; }
+.locked .tr { top: 22px; right: 22px; }
+.locked .bl { bottom: 22px; left: 22px; }
+.locked .br { bottom: 22px; right: 22px; }
+
+/* réticule de mise au point */
+
+.reticle {
+  position: absolute;
+  left: var(--fx, 50%);
+  top: var(--fy, 40%);
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  z-index: 3;
+  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  opacity: 0.55;
+  transform: scale(1.5);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2),
+    opacity 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.reticle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 3px var(--green-10);
+  background: currentColor;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-/* MÉTADONNÉES PHOTO */
+.locked .reticle {
+  transform: scale(1);
+  opacity: 1;
+  border-color: var(--green);
+}
+
+.locked .reticle::after {
+  color: var(--green);
+}
+
+/* fiche EXIF */
+
+.exif {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 2.6rem 1.1rem 1rem;
+  display: grid;
+  gap: 0.4rem;
+  background: linear-gradient(to top, rgba(8, 11, 16, 0.92), transparent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #e8edf5;
+  opacity: 0;
+  transform: translateY(40%);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s ease;
+  pointer-events: none;
+}
+
+.locked .exif {
+  opacity: 1;
+  transform: none;
+}
+
+.exifRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.exifRow dt {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.exifRow dd {
+  margin: 0;
+  text-align: right;
+}
+
+/* flash du déclencheur */
+
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: #fff;
+  opacity: 0;
+  animation: shutter 0.45s ease-out;
+}
+
+@keyframes shutter {
+  0% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* légende sous la photo */
 
 .photoMeta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-top: 1rem;
-
   padding-inline: 0.15rem;
-
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   font-weight: 600;
-
-  letter-spacing: 0.12em;
-
+  letter-spacing: 0.1em;
   color: var(--text-subtle);
 }
 
-/* CONTENU */
+.metaLocked {
+  color: var(--green);
+}
+
+/* =================================
+   CONTENU
+================================= */
 
 .content {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
-
-  gap: 1.4rem;
+  gap: 1.5rem;
 }
 
 .sectionTag {
   display: inline-flex;
   align-items: center;
-
   gap: 0.75rem;
-
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   font-weight: 600;
-
-  letter-spacing: 0.14em;
-
+  letter-spacing: 0.12em;
   color: var(--text-subtle);
 }
 
 .sectionTag::before {
   content: '';
-
   width: 42px;
   height: 1px;
-
   background: var(--text-subtle);
 }
-
-/* =================================
-   TITRE
-================================= */
 
 .heading {
   max-width: 760px;
 }
 
 .intro {
-  margin: 0 0 0.2rem;
-
-  font-size: 1.05rem;
-
+  margin: 0 0 0.3rem;
+  font-size: 1.2rem;
   color: var(--text-muted);
 }
 
 .name {
   margin: 0;
-
   font-family: var(--font-display);
-
-  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-size: clamp(2.6rem, 5.4vw, 4.8rem);
   font-weight: 600;
-
-  line-height: 0.98;
-
+  line-height: 1;
   letter-spacing: -0.045em;
-
   color: var(--text);
 }
 
-.name span {
+.nameAccent {
   color: var(--accent);
 }
 
-/* =================================
-   LOCALISATION
-================================= */
+/* rôle : ce que je fais, lisible en une seconde */
+
+.role {
+  margin-top: -0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.roleTitle {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.1vw, 1.65rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.roleStack {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--text-subtle);
+}
+
+/* localisation + horloge */
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.6rem;
+}
 
 .location {
   display: flex;
   align-items: center;
-
   gap: 0.5rem;
-
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-
+  font-size: 0.8rem;
   color: var(--text-subtle);
 }
 
-/* TEXTE */
+.clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+}
+
+.clockTime {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.colon {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.colonOff {
+  opacity: 0.25;
+  transition: opacity 0.2s ease;
+}
+
+/* =================================
+   BIO (paragraphe 1 visible, suite repliable)
+================================= */
 
 .bio {
   max-width: 680px;
-
   display: flex;
   flex-direction: column;
-
-  gap: 1rem;
-
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .bio p {
   margin: 0;
-
-  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
-
-  line-height: 1.8;
-
+  font-size: clamp(1rem, 1.35vw, 1.1rem);
+  line-height: 1.75;
   color: var(--text-muted);
 }
 
 .bio strong {
   font-weight: 600;
   color: var(--text);
+}
+
+.more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+}
+
+.moreOpen {
+  grid-template-rows: 1fr;
+}
+
+.moreInner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.moreInner > :first-child {
+  margin-top: 1rem;
+}
+
+.readMore {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.readMore:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.readMore svg {
+  transition: transform 0.3s ease;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
 }
 
 /* =================================
@@ -259,78 +539,82 @@
 .signature {
   display: flex;
   flex-direction: column;
-
-  gap: 0.15rem;
-
-  padding-top: 0.75rem;
-
+  gap: 0.2rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--border);
-
   max-width: 680px;
 }
 
 .signature strong {
   font-family: var(--font-display);
-
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 600;
-
   color: var(--text);
 }
 
 .signature span {
-  font-size: 0.82rem;
-
+  font-size: 0.95rem;
   color: var(--text-subtle);
 }
 
 /* =================================
-   RÉSEAUX
+   DISPONIBILITÉ + LIEN PROJETS
 ================================= */
 
-.socials {
+.footerRow {
   display: flex;
   flex-wrap: wrap;
-
-  gap: 0.6rem;
-
-  padding-top: 0.35rem;
-  border-radius: 12px;
+  align-items: center;
+  gap: 0.9rem 1.6rem;
 }
 
-.socialLink {
-  min-height: 38px;
-
+.availability {
   display: inline-flex;
   align-items: center;
-  border-radius: 12px;
-
-  gap: 0.45rem;
-
-  padding: 0 0.75rem;
-
+  gap: 0.6rem;
+  padding: 0.6rem 0.95rem;
+  width: fit-content;
   border: 1px solid var(--border);
-
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
   color: var(--text-muted);
-
-  font-size: 0.72rem;
-
-  transition:
-    color var(--transition-fast),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast),
-    transform var(--transition-fast);
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
-.socialLink:hover {
+.availabilityDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px var(--green-10);
+}
+
+.projectsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--text);
+  cursor: pointer;
+}
 
-  border-color: var(--border-hover);
+.projectsLink:hover {
+  color: var(--accent);
+}
 
-  background: var(--accent-10);
-  border-radius: 12px;
+.projectsLink svg {
+  transition: transform var(--transition-fast);
+}
 
-  transform: translateY(-2px);
+.projectsLink:hover svg {
+  transform: translateY(3px);
 }
 
 /* =================================
@@ -344,18 +628,14 @@
 
   .inner {
     grid-template-columns: 1fr;
-
     gap: 3rem;
-
     padding-top: 4rem;
     padding-bottom: 4rem;
   }
 
   .photoColumn {
     width: min(360px, 78vw);
-
     justify-self: center;
-
     order: 1;
   }
 
@@ -363,9 +643,8 @@
     order: 2;
   }
 
-  .sectionTag,
   .heading,
-  .location,
+  .metaRow,
   .bio,
   .signature {
     max-width: 680px;
@@ -375,31 +654,58 @@
 @media (max-width: 520px) {
   .inner {
     padding-inline: var(--space-lg);
-
     gap: 2.5rem;
   }
 
   .photoColumn {
-  width: min(300px, 82vw);
-}
+    width: min(300px, 82vw);
+  }
 
-.photoInner {
-  border-radius: 8px 8px 2px 8px;
-  box-shadow:
-    0 16px 35px rgba(0, 0, 0, 0.25),
-    0 5px 14px rgba(0, 0, 0, 0.14);
-}
+  .photoInner {
+    border-radius: 8px 8px 2px 8px;
+  }
+
+  .reticle {
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 -26px;
+  }
 
   .name {
-    font-size: 2.5rem;
+    font-size: 2.6rem;
   }
 
   .bio p {
-    font-size: 0.9rem;
     line-height: 1.7;
   }
+}
 
-  .socialLink {
-    font-size: 0.68rem;
+/* =================================
+   MOUVEMENT RÉDUIT
+================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .photo,
+  .photoInner,
+  .corner,
+  .reticle,
+  .exif,
+  .more,
+  .readMore svg,
+  .colon,
+  .colonOff {
+    transition: none;
+  }
+
+  .flash {
+    animation: none;
+  }
+
+  .wait .line {
+    opacity: 1;
+  }
+
+  .go .line {
+    animation: none;
   }
 }

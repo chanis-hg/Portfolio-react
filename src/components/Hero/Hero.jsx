@@ -1,209 +1,516 @@
-import { MapPin } from "lucide-react";
-import Reveal from "../Reveal";
-
-import {
-  FaGithub,
-  FaLinkedinIn,
-  FaWhatsapp,
-  FaFacebookF,
-} from "react-icons/fa";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ArrowDown, ChevronDown, Clock, MapPin } from "lucide-react";
 
 import styles from "./Hero.module.css";
 
-export default function Hero({ t, lang }) {
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
+/* ---- Réglages de la séquence d'ouverture ---- */
+const FLIGHT_MS = 2600; // photo : apparition + survol + atterrissage + glissement à gauche
+const FALLBACK_MS = 8000; // sécurité : la séquence démarre même si le preloader n'a pas signalé
 
-  const socials = [
-    {
-      label: "GitHub",
-      href: "https://github.com/chanis-hg",
-      icon: FaGithub,
-    },
-    {
-      label: "LinkedIn",
-      href: "https://linkedin.com/in/gaïus-chanis-08a782365",
-      icon: FaLinkedinIn,
-    },
-    {
-      label: "WhatsApp",
-      href: "https://wa.me/22953505501",
-      icon: FaWhatsapp,
-    },
-    {
-      label: "Facebook",
-      href: "https://web.facebook.com/profile.php?id=61577300496519",
-      icon: FaFacebookF,
-    },
-  ];
+/* Africa/Lagos = même fuseau que Cotonou (UTC+1, sans heure d'été) */
+const CLOCK = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Africa/Lagos",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+const canHover = () => window.matchMedia("(hover: hover)").matches;
+
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+/* Teinte de la « lumière de studio » selon l'heure à Cotonou (fuseau Africa/Lagos) */
+const HOUR = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Africa/Lagos",
+  hour: "2-digit",
+  hourCycle: "h23",
+});
+
+function getTone() {
+  const hour = Number(HOUR.format(new Date()));
+  if (hour >= 5 && hour < 8) return "dawn";
+  if (hour >= 8 && hour < 17) return "day";
+  if (hour >= 17 && hour < 20) return "dusk";
+  return "night";
+}
+
+/* =================================
+   HORLOGE COTONOU
+   (composant isolé : seul lui se re-rend chaque seconde)
+================================= */
+
+function CotonouClock({ lang }) {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const [hh, mm] = CLOCK.format(now).split(":");
+  const colonOn = now.getSeconds() % 2 === 0;
 
   return (
-    <section id="home" className={styles.hero}>
-      <div className={styles.inner}>
-        {/*PHOTO */}
+    <div className={styles.clock}>
+      <Clock size={15} strokeWidth={1.7} />
+      <span>{lang === "fr" ? "Il est" : "It's"}</span>
+      <strong className={styles.clockTime}>
+        {hh}
+        <span className={colonOn ? styles.colon : styles.colonOff}>:</span>
+        {mm}
+      </strong>
+      <span>{lang === "fr" ? "à Cotonou" : "in Cotonou"}</span>
+    </div>
+  );
+}
 
-        <Reveal direction="scale" delay={0.1}>
-          <div className={styles.photoColumn}>
-            <div className={styles.photoFrame}>
-              <div className={styles.photoInner}>
-                <img
-                  src="moi.jpeg"
-                  alt="Gaïus Chanis HONTONWAKOU"
-                  className={styles.photo}
-                />
+/* =================================
+   PHOTO EN VISEUR D'APPAREIL
+   - survol (souris) ou focus clavier : mise au point + fiche EXIF
+   - appui (tactile) : bascule la mise au point
+   - clic : déclenchement (flash)
+================================= */
+
+function Viewfinder({ lang, frameRef }) {
+  const [locked, setLocked] = useState(false);
+  const [shot, setShot] = useState(0);
+
+  const isFr = lang === "fr";
+
+  const handleClick = () => {
+    setShot((n) => n + 1);
+    if (!canHover()) setLocked((value) => !value);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setShot((n) => n + 1);
+    }
+  };
+
+  return (
+    <div className={styles.photoColumn}>
+      {/* .flight : la couche qui voyage (centre de l'écran → colonne de gauche) */}
+      <div ref={frameRef} className={styles.flight}>
+        <div
+          className={`${styles.viewfinder} ${locked ? styles.locked : ""}`}
+          style={{ "--fx": "46%", "--fy": "33%" }}
+          role="button"
+          tabIndex={0}
+          aria-pressed={locked}
+          aria-label={
+            isFr
+              ? "Mise au point sur la photo : afficher mon stack"
+              : "Focus on the photo: show my stack"
+          }
+          onMouseEnter={() => canHover() && setLocked(true)}
+          onMouseLeave={() => canHover() && setLocked(false)}
+          onFocus={(e) =>
+            e.currentTarget.matches(":focus-visible") && setLocked(true)
+          }
+          onBlur={() => setLocked(false)}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+        >
+          <div className={styles.photoInner}>
+            <img
+              src="/moi.jpeg"
+              alt="Gaïus Chanis HONTONWAKOU"
+              className={styles.photo}
+            />
+
+            <span className={`${styles.corner} ${styles.tl}`} />
+            <span className={`${styles.corner} ${styles.tr}`} />
+            <span className={`${styles.corner} ${styles.bl}`} />
+            <span className={`${styles.corner} ${styles.br}`} />
+            <span className={styles.reticle} />
+
+            <dl className={styles.exif}>
+              <div className={styles.exifRow}>
+                <dt>STACK</dt>
+                <dd>Laravel · React · Figma</dd>
               </div>
-            </div>
+              <div className={styles.exifRow}>
+                <dt>BASE</dt>
+                <dd>Cotonou · 6.37°N 2.39°E</dd>
+              </div>
+              <div className={styles.exifRow}>
+                <dt>{isFr ? "DISPO" : "OPEN TO"}</dt>
+                <dd>
+                  {isFr ? "Stage · Alternance" : "Internship · Apprenticeship"}
+                </dd>
+              </div>
+            </dl>
 
-            <div className={styles.photoMeta}>
-              <span>GAÏUS CHANIS</span>
-              <span>01 / 01</span>
-            </div>
+            {shot > 0 && <span key={shot} className={styles.flash} />}
           </div>
-        </Reveal>
+        </div>
+      </div>
 
-        {/*PRÉSENTATION */}
+      <div className={`${styles.photoMeta} ${styles.line}`} style={{ "--i": 9 }}>
+        <span>GAÏUS CHANIS</span>
+        <span className={locked ? styles.metaLocked : ""}>
+          {locked
+            ? isFr
+              ? "● NET"
+              : "● IN FOCUS"
+            : isFr
+              ? "SURVOLER · TOUCHER"
+              : "HOVER · TAP"}
+        </span>
+      </div>
+    </div>
+  );
+}
 
+/* =================================
+   HERO
+   `ready` passe à true quand le preloader commence à se retirer.
+
+   Séquence (≈ 2,6 s pour la photo, puis le texte) :
+   1. la photo apparaît en grand au centre et flotte au-dessus de la page
+   2. elle se pose (l'ombre se resserre)
+   3. elle glisse à sa place, à gauche
+   4. le texte se pose ligne par ligne
+
+   N'importe quelle interaction (clic, touche, molette, toucher) passe la séquence.
+================================= */
+
+export default function Hero({ t, lang, ready = true }) {
+  // wait : séquence pas encore lancée · go : en cours · done : terminée ou ignorée
+  const [phase, setPhase] = useState(() =>
+    prefersReducedMotion() ? "done" : "wait",
+  );
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [tone, setTone] = useState(getTone);
+
+  const frameRef = useRef(null);
+  const animsRef = useRef([]);
+
+  const isFr = lang === "fr";
+
+  /* Met à jour la teinte de la lumière toutes les 5 minutes */
+  useEffect(() => {
+    const id = window.setInterval(() => setTone(getTone()), 5 * 60 * 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  /* Cache la photo avant le premier affichage (évite un flash à sa place finale) */
+  useLayoutEffect(() => {
+    if (phase !== "wait") return;
+    const el = frameRef.current;
+    if (el) el.style.opacity = "0";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* Lance la séquence */
+  useEffect(() => {
+    if (phase !== "wait") return;
+
+    const start = () => {
+      const el = frameRef.current;
+      const inner = el?.querySelector(`.${styles.photoInner}`);
+
+      if (!el || !inner || typeof el.animate !== "function") {
+        if (el) el.style.opacity = "";
+        setPhase("done");
+        return;
+      }
+
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      /* Grande photo, centrée, sans passer sous la barre de navigation */
+      const s = clamp(
+        Math.min((vw * 0.9) / rect.width, (vh * 0.78) / rect.height),
+        1.05,
+        2.4,
+      );
+      const dx = vw / 2 - (rect.left + rect.width / 2);
+      const dy = vh / 2 - (rect.top + rect.height / 2);
+      const at = (y, scale) => `translate(${dx}px, ${dy + y}px) scale(${scale})`;
+
+      el.style.zIndex = "30";
+      el.style.willChange = "transform, opacity";
+      el.style.opacity = "";
+
+      const flight = el.animate(
+        [
+          // 1. apparition : elle monte légèrement et s'agrandit
+          { offset: 0, opacity: 0, transform: at(28, s * 0.9), easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          // 2. survol : elle flotte, presque immobile
+          { offset: 0.27, opacity: 1, transform: at(-12, s), easing: "cubic-bezier(0.4, 0, 0.2, 1)" },
+          { offset: 0.45, opacity: 1, transform: at(-4, s), easing: "cubic-bezier(0.65, 0, 0.35, 1)" },
+          // 3. atterrissage : elle se pose sur la page
+          { offset: 0.62, opacity: 1, transform: at(0, s * 0.95), easing: "cubic-bezier(0.65, 0, 0.35, 1)" },
+          // 4. elle glisse à sa place, à gauche
+          { offset: 1, opacity: 1, transform: "translate(0px, 0px) scale(1)" },
+        ],
+        { duration: FLIGHT_MS, fill: "both" },
+      );
+
+      /* L'ombre suit : large et diffuse en l'air, resserrée une fois posée */
+      const shadow = inner.animate(
+        [
+          { offset: 0, boxShadow: "0 40px 80px rgba(0,0,0,0.10), 0 16px 32px rgba(0,0,0,0.06)" },
+          { offset: 0.27, boxShadow: "0 60px 100px rgba(0,0,0,0.38), 0 26px 46px rgba(0,0,0,0.22)" },
+          { offset: 0.45, boxShadow: "0 56px 94px rgba(0,0,0,0.36), 0 24px 42px rgba(0,0,0,0.20)" },
+          { offset: 0.62, boxShadow: "0 14px 32px rgba(0,0,0,0.30), 0 5px 12px rgba(0,0,0,0.18)" },
+          { offset: 1, boxShadow: "0 18px 45px rgba(0,0,0,0.28), 0 6px 16px rgba(0,0,0,0.16)" },
+        ],
+        { duration: FLIGHT_MS, fill: "both" },
+      );
+
+      animsRef.current = [flight, shadow];
+
+      flight.onfinish = () => {
+        animsRef.current.forEach((a) => a.cancel());
+        el.style.zIndex = "";
+        el.style.willChange = "";
+      };
+
+      setPhase("go");
+    };
+
+    if (ready) {
+      start();
+      return undefined;
+    }
+
+    const id = window.setTimeout(start, FALLBACK_MS);
+    return () => window.clearTimeout(id);
+  }, [phase, ready]);
+
+  /* Passer la séquence au premier geste de l'utilisateur */
+  useEffect(() => {
+    if (phase !== "go") return undefined;
+
+    const skip = () => {
+      animsRef.current.forEach((a) => a.finish());
+      setPhase("done");
+    };
+
+    const events = ["pointerdown", "keydown", "wheel", "touchmove"];
+    events.forEach((name) =>
+      window.addEventListener(name, skip, { once: true, passive: true }),
+    );
+
+    return () =>
+      events.forEach((name) => window.removeEventListener(name, skip));
+  }, [phase]);
+
+  /* Nettoyage à la fermeture du composant */
+  useEffect(
+    () => () => animsRef.current.forEach((a) => a.cancel()),
+    [],
+  );
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const stateClass =
+    phase === "wait" ? styles.wait : phase === "go" ? styles.go : "";
+
+  return (
+    <section
+      id="home"
+      className={`${styles.hero} ${stateClass}`}
+      data-tone={tone}
+    >
+      <div className={styles.inner}>
+        {/* PHOTO */}
+        <Viewfinder lang={lang} frameRef={frameRef} />
+
+        {/* PRÉSENTATION */}
         <div className={styles.content}>
-          <Reveal delay={0.12}>
-            <span className={styles.sectionTag}>Hello</span>
-          </Reveal>
+          <span className={`${styles.sectionTag} ${styles.line}`} style={{ "--i": 0 }}>
+            Hello
+          </span>
 
-          <Reveal delay={0.18}>
-            <div className={styles.heading}>
-              {lang === "fr" ? (
-                <p className={styles.intro}>Je suis</p>
-              ) : (
-                <p className={styles.intro}>I am</p>
-              )}
+          <div className={styles.heading}>
+            <p className={`${styles.intro} ${styles.line}`} style={{ "--i": 1 }}>
+              {isFr ? "Je suis" : "I am"}
+            </p>
 
-              <h1 className={styles.name}>
-                Gaïus Chanis <span>HONTONWAKOU.</span>
-              </h1>
-            </div>
-          </Reveal>
+            <h1 className={styles.name}>
+              <span className={styles.line} style={{ "--i": 2 }}>
+                Gaïus Chanis
+              </span>
+              <span
+                className={`${styles.line} ${styles.nameAccent}`}
+                style={{ "--i": 3 }}
+              >
+                HONTONWAKOU.
+              </span>
+            </h1>
+          </div>
 
-          <Reveal delay={0.24}>
+          <div className={`${styles.role} ${styles.line}`} style={{ "--i": 4 }}>
+            <p className={styles.roleTitle}>
+              {isFr
+                ? "Développeur web orienté produit"
+                : "Product-focused web developer"}
+            </p>
+            <p className={styles.roleStack}>Laravel · React · Figma</p>
+          </div>
+
+          <div className={`${styles.metaRow} ${styles.line}`} style={{ "--i": 5 }}>
             <div className={styles.location}>
-              <MapPin size={15} strokeWidth={1.7} />
-              <span>Cotonou, Bénin · IFRI / UAC · Internet & Multimédia</span>
+              <MapPin size={16} strokeWidth={1.7} />
+              <span>
+                {isFr
+                  ? "Cotonou, Bénin · IFRI / UAC · Internet & Multimédia"
+                  : "Cotonou, Benin · IFRI / UAC · Internet & Multimedia"}
+              </span>
             </div>
-          </Reveal>
 
-          <Reveal delay={0.3}>
-            <div className={styles.bio}>
-              <div className={styles.bio}>
-                <div className={styles.bio}>
-                  {lang === "fr" ? (
-                    <>
-                      <p>
-                        Étudiant en{" "}
-                        <strong>Internet & Multimédia à l’IFRI</strong>, je
-                        conçois et développe des{" "}
-                        <strong>produits numériques</strong> en partant d’abord
-                        du problème à résoudre et des{" "}
-                        <strong>contraintes réelles</strong> auxquelles ils
-                        doivent répondre.
-                      </p>
+            <CotonouClock lang={lang} />
+          </div>
 
-                      <p>
-                        Je travaille principalement sur le{" "}
-                        <strong>développement web</strong>, du backend à
-                        l’interface, avec un intérêt particulier pour la{" "}
-                        <strong> logique des systèmes</strong>, l’
-                        <strong>expérience utilisateur</strong> et la qualité du
-                        produit final.
-                      </p>
+          {/* BIO : ton texte d'origine, 1er paragraphe visible, la suite repliable */}
+          <div
+            className={`${styles.bio} ${styles.line} ${styles.block}`}
+            style={{ "--i": 6 }}
+          >
+            {isFr ? (
+              <>
+                <p>
+                  Étudiant en <strong>Internet & Multimédia à l’IFRI</strong>, je
+                  conçois et développe des <strong>produits numériques</strong>{" "}
+                  en partant d’abord du problème à résoudre et des{" "}
+                  <strong>contraintes réelles</strong> auxquelles ils doivent
+                  répondre.
+                </p>
 
-                      <p>
-                        Mes projets m’amènent également à explorer l’
-                        <strong>UX/UI</strong>, la{" "}
-                        <strong>visualisation de données</strong> et le{" "}
-                        <strong>design graphique</strong>. J’aime comprendre un
-                        problème, structurer une solution, puis la transformer
-                        en quelque chose de{" "}
-                        <strong>réellement utilisable</strong>.
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p>
-                        I’m an{" "}
-                        <strong>Internet & Multimedia student at IFRI</strong>,
-                        designing and developing{" "}
-                        <strong>digital products</strong> by starting with the
-                        problem to solve and the{" "}
-                        <strong>real-world constraints</strong> the product must
-                        address.
-                      </p>
+                <div
+                  id="hero-bio-more"
+                  className={`${styles.more} ${moreOpen ? styles.moreOpen : ""}`}
+                >
+                  <div className={styles.moreInner}>
+                    <p>
+                      Je travaille principalement sur le{" "}
+                      <strong>développement web</strong>, du backend à
+                      l’interface, avec un intérêt particulier pour la{" "}
+                      <strong>logique des systèmes</strong>, l’
+                      <strong>expérience utilisateur</strong> et la qualité du
+                      produit final.
+                    </p>
 
-                      <p>
-                        I mainly work on <strong>web development</strong>, from
-                        backend systems to interfaces, with a particular
-                        interest in <strong>system logic</strong>,{" "}
-                        <strong> user experience</strong>, and the quality of
-                        the final product.
-                      </p>
-
-                      <p>
-                        My projects also lead me to explore{" "}
-                        <strong>UX/UI</strong>,{" "}
-                        <strong> data visualization</strong>, and{" "}
-                        <strong>graphic design</strong>. I like understanding a
-                        problem, structuring a solution, and turning it into
-                        something <strong>genuinely usable</strong>.
-                      </p>
-                    </>
-                  )}
+                    <p>
+                      Mes projets m’amènent également à explorer l’
+                      <strong>UX/UI</strong>, la{" "}
+                      <strong>visualisation de données</strong> et le{" "}
+                      <strong>design graphique</strong>. J’aime comprendre un
+                      problème, structurer une solution, puis la transformer en
+                      quelque chose de <strong>réellement utilisable</strong>.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </div>
-            
-          </Reveal>
+              </>
+            ) : (
+              <>
+                <p>
+                  I’m an <strong>Internet & Multimedia student at IFRI</strong>,
+                  designing and developing <strong>digital products</strong> by
+                  starting with the problem to solve and the{" "}
+                  <strong>real-world constraints</strong> the product must
+                  address.
+                </p>
 
-          <Reveal delay={0.36}>
-            <div className={styles.signature}>
-              {lang === "fr" ? (
-                <>
-                  <strong>Construire des produits qui ont du sens, </strong>
-                  <span>pas seulement des interfaces qui fonctionnent.</span>
-                </>
-              ) : (
-                <>
-                  <strong>Building products that make sense, </strong>
-                  <span>not just interfaces that work.</span>
-                </>
-              )}
-            </div>
+                <div
+                  id="hero-bio-more"
+                  className={`${styles.more} ${moreOpen ? styles.moreOpen : ""}`}
+                >
+                  <div className={styles.moreInner}>
+                    <p>
+                      I mainly work on <strong>web development</strong>, from
+                      backend systems to interfaces, with a particular interest
+                      in <strong>system logic</strong>,{" "}
+                      <strong>user experience</strong>, and the quality of the
+                      final product.
+                    </p>
+
+                    <p>
+                      My projects also lead me to explore <strong>UX/UI</strong>,{" "}
+                      <strong>data visualization</strong>, and{" "}
+                      <strong>graphic design</strong>. I like understanding a
+                      problem, structuring a solution, and turning it into
+                      something <strong>genuinely usable</strong>.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <button
+              type="button"
+              className={styles.readMore}
+              aria-expanded={moreOpen}
+              aria-controls="hero-bio-more"
+              onClick={() => setMoreOpen((value) => !value)}
+            >
+              <span>
+                {moreOpen
+                  ? isFr
+                    ? "Réduire"
+                    : "Show less"
+                  : isFr
+                    ? "Lire la suite"
+                    : "Read more"}
+              </span>
+              <ChevronDown
+                size={15}
+                strokeWidth={1.8}
+                className={moreOpen ? styles.chevronUp : ""}
+              />
+            </button>
+          </div>
+
+          <div
+            className={`${styles.signature} ${styles.line} ${styles.block}`}
+            style={{ "--i": 7 }}
+          >
+            {isFr ? (
+              <>
+                <strong>Construire des produits qui ont du sens, </strong>
+                <span>pas seulement des interfaces qui fonctionnent.</span>
+              </>
+            ) : (
+              <>
+                <strong>Building products that make sense, </strong>
+                <span>not just interfaces that work.</span>
+              </>
+            )}
+          </div>
+
+          <div
+            className={`${styles.footerRow} ${styles.line} ${styles.block}`}
+            style={{ "--i": 8 }}
+          >
             <div className={styles.availability}>
               <span className={styles.availabilityDot} />
               <span>
-                {lang === "fr"
+                {isFr
                   ? "Disponible pour stage / alternance"
                   : "Available for internship / apprenticeship"}
               </span>
             </div>
-          </Reveal>
 
-          <Reveal delay={0.42}>
-            <div className={styles.socials}>
-              {socials.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={styles.socialLink}
-                  aria-label={label}
-                >
-                  <Icon size={17} strokeWidth={1.7} />
-                  <span>{label}</span>
-                </a>
-              ))}
-            </div>
-          </Reveal>
+            <button
+              type="button"
+              className={styles.projectsLink}
+              onClick={() => scrollTo("project-selector")}
+            >
+              <span>{isFr ? "Voir les projets" : "See the projects"}</span>
+              <ArrowDown size={15} strokeWidth={1.8} />
+            </button>
+          </div>
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import {
   Download,
   Languages,
@@ -11,6 +12,7 @@ import {
   GraduationCap,
   Mail,
 } from "lucide-react";
+import { MdConstruction } from "react-icons/md";
 
 import styles from "./Navbar.module.css";
 
@@ -31,34 +33,46 @@ const NAV_SECTIONS = [
     icon: GraduationCap,
   },
   {
+    id: "capabilities",
+    label: "Contribution",
+    icon: MdConstruction,
+  },
+  {
     id: "contact",
     label: "Contact",
     icon: Mail,
   },
 ];
 
-export default function Navbar({
-  t,
-  lang,
-  setLang,
-  theme,
-  setTheme,
-}) {
+export default function Navbar({ t, lang, setLang, theme, setTheme }) {
   const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeTimer = useRef(null);
+
+  const openMenu = () => {
+    window.clearTimeout(closeTimer.current);
+    setMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    window.clearTimeout(closeTimer.current);
+
+    closeTimer.current = window.setTimeout(() => {
+      setMenuOpen(false);
+    }, 180);
+  };
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sections = NAV_SECTIONS
-        .map(({ id }) => document.getElementById(id))
-        .filter(Boolean);
+      const sections = NAV_SECTIONS.map(({ id }) =>
+        document.getElementById(id),
+      ).filter(Boolean);
 
       const current = sections.find((section) => {
-        const { top, bottom } =
-          section.getBoundingClientRect();
+        const { top, bottom } = section.getBoundingClientRect();
 
         return top <= 140 && bottom > 140;
       });
@@ -85,15 +99,19 @@ export default function Navbar({
     });
 
     setActive(id);
-    setMenuOpen(false);
+    const scrollTo = (id) => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: "smooth",
+      });
+
+      window.clearTimeout(closeTimer.current);
+      setActive(id);
+      setMenuOpen(false);
+    };
   };
 
   return (
-    <nav
-      className={`${styles.nav} ${
-        scrolled ? styles.scrolled : ""
-      }`}
-    >
+    <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.inner}>
         {/* IDENTITÉ */}
         <button
@@ -113,10 +131,7 @@ export default function Navbar({
             download
             className={styles.btnCv}
           >
-            <Download
-              size={15}
-              strokeWidth={1.8}
-            />
+            <Download size={15} strokeWidth={1.8} />
             <span>{t.nav.cv}</span>
           </a>
 
@@ -124,16 +139,11 @@ export default function Navbar({
           <button
             type="button"
             className={styles.btnIcon}
-            onClick={() =>
-              setLang(lang === "fr" ? "en" : "fr")
-            }
+            onClick={() => setLang(lang === "fr" ? "en" : "fr")}
             title="Changer de langue"
             aria-label="Changer de langue"
           >
-            <Languages
-              size={17}
-              strokeWidth={1.8}
-            />
+            <Languages size={17} strokeWidth={1.8} />
             <span>{lang.toUpperCase()}</span>
           </button>
 
@@ -141,93 +151,62 @@ export default function Navbar({
           <button
             type="button"
             className={styles.btnIcon}
-            onClick={() =>
-              setTheme(
-                theme === "dark" ? "light" : "dark",
-              )
-            }
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             title="Changer de thème"
             aria-label="Changer de thème"
           >
             {theme === "dark" ? (
-              <Sun
-                size={17}
-                strokeWidth={1.8}
-              />
+              <Sun size={17} strokeWidth={1.8} />
             ) : (
-              <Moon
-                size={17}
-                strokeWidth={1.8}
-              />
+              <Moon size={17} strokeWidth={1.8} />
             )}
           </button>
 
           {/* NAVIGATION */}
           <div
             className={styles.menuArea}
-            onMouseEnter={() => setMenuOpen(true)}
-            onMouseLeave={() => setMenuOpen(false)}
+            onMouseEnter={openMenu}
+            onMouseLeave={closeMenu}
           >
             <button
               type="button"
               className={`${styles.menuButton} ${
-                menuOpen
-                  ? styles.menuButtonOpen
-                  : ""
+                menuOpen ? styles.menuButtonOpen : ""
               }`}
-              onClick={() =>
-                setMenuOpen((value) => !value)
-              }
+              onClick={() => setMenuOpen((value) => !value)}
               aria-label={
-                menuOpen
-                  ? "Fermer la navigation"
-                  : "Ouvrir la navigation"
+                menuOpen ? "Fermer la navigation" : "Ouvrir la navigation"
               }
               aria-expanded={menuOpen}
               aria-haspopup="true"
             >
               {menuOpen ? (
-                <X
-                  size={19}
-                  strokeWidth={1.8}
-                />
+                <X size={19} strokeWidth={1.8} />
               ) : (
-                <Menu
-                  size={19}
-                  strokeWidth={1.8}
-                />
+                <Menu size={19} strokeWidth={1.8} />
               )}
             </button>
 
             {/* MENU */}
             <div
               className={`${styles.menuPanel} ${
-                menuOpen
-                  ? styles.menuPanelOpen
-                  : ""
+                menuOpen ? styles.menuPanelOpen : ""
               }`}
             >
-              {NAV_SECTIONS.map(
-                ({ id, label, icon: Icon }) => (
-                  <button
-                    key={id}
-                    type="button"
-                    className={`${styles.menuItem} ${
-                      active === id
-                        ? styles.menuItemActive
-                        : ""
-                    }`}
-                    onClick={() => scrollTo(id)}
-                  >
-                    <Icon
-                      size={17}
-                      strokeWidth={1.8}
-                    />
+              {NAV_SECTIONS.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`${styles.menuItem} ${
+                    active === id ? styles.menuItemActive : ""
+                  }`}
+                  onClick={() => scrollTo(id)}
+                >
+                  <Icon size={17} strokeWidth={1.8} />
 
-                    <span>{label}</span>
-                  </button>
-                ),
-              )}
+                  <span>{label}</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>

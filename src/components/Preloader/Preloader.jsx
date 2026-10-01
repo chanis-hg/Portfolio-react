@@ -10,16 +10,17 @@ export default function Preloader({ onComplete }) {
 
     const loadingTimer = setTimeout(() => {
       setPhase('loading');
-    }, 1800);
+    }, 1200);
 
+    // La fermeture commence : le Hero peut déjà démarrer sa séquence d'ouverture
     const closeTimer = setTimeout(() => {
       setClosing(true);
-    }, 4400);
+      onComplete?.();
+    }, 2300);
 
     const finishTimer = setTimeout(() => {
-      onComplete?.();
       document.body.style.overflow = '';
-    }, 5000);
+    }, 2900);
 
     return () => {
       clearTimeout(loadingTimer);

@@ -1,5 +1,30 @@
+import { Download } from 'lucide-react';
 import { FiArrowUp, FiArrowUpRight } from 'react-icons/fi';
+import {
+  FaGithub,
+  FaLinkedinIn,
+  FaWhatsapp,
+  FaFacebookF,
+} from 'react-icons/fa';
+
 import styles from './Footer.module.css';
+
+const CV_URL = '/Gaïus Chanis HONTONWAKOU CV_fr.pdf';
+
+const SOCIALS = [
+  { label: 'GitHub', href: 'https://github.com/chanis-hg', icon: FaGithub },
+  {
+    label: 'LinkedIn',
+    href: 'https://linkedin.com/in/gaïus-chanis-08a782365',
+    icon: FaLinkedinIn,
+  },
+  { label: 'WhatsApp', href: 'https://wa.me/22953505501', icon: FaWhatsapp },
+  {
+    label: 'Facebook',
+    href: 'https://web.facebook.com/profile.php?id=61577300496519',
+    icon: FaFacebookF,
+  },
+];
 
 export default function Footer({ t, lang }) {
   const year = new Date().getFullYear();
@@ -7,11 +32,6 @@ export default function Footer({ t, lang }) {
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const quote =
-    lang === 'fr'
-      ? '« Ce n’est pas un bug, c’est une fonctionnalité. »'
-      : '“It’s not a bug, it’s a feature.”';
 
   return (
     <footer className={styles.footer}>
@@ -36,9 +56,28 @@ export default function Footer({ t, lang }) {
           </p>
         </div>
 
-        <blockquote className={styles.quote}>
-          <p>{quote}</p>
-        </blockquote>
+        <div className={styles.links}>
+          <a href={CV_URL} download className={styles.cv}>
+            <Download size={16} strokeWidth={1.8} />
+            <span>{t.hero.cta2}</span>
+          </a>
+
+          <ul className={styles.socials}>
+            {SOCIALS.map(({ label, href, icon: Icon }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                >
+                  <Icon size={16} />
+                  <span>{label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <button
           type="button"
@@ -53,12 +92,10 @@ export default function Footer({ t, lang }) {
       </div>
 
       <div className={styles.bottomLine}>
-        <span>
-          {lang === 'fr' ? 'Portfolio · 2026' : 'Portfolio · 2026'}
-        </span>
+        <span>Portfolio · 2026</span>
 
         <span className={styles.bottomArrow}>
-          <FiArrowUpRight size={13} />
+          <FiArrowUpRight size={14} />
         </span>
       </div>
     </footer>

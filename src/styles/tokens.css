@@ -1,6 +1,6 @@
 :root {
   --font-display: 'Wura mi by GemmaS', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Google Sans Flex Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
   --blue:        #1B3A6B;

@@ -6,6 +6,10 @@ import {
   img_digimama_app,
   img_digimama_landing,
   img_digimama_admin,
+  img_capability_interface,
+  img_capability_backend,
+  img_capability_design,
+  img_capability_photography,
 } from "./images.js";
 
 export const TRANSLATIONS = {
@@ -45,6 +49,12 @@ export const TRANSLATIONS = {
       title: "Expériences",
       sub: "Deux stages simultanés. Un en communication, un en développement actif de produit.",
       present: "Présent",
+    },
+
+    capabilities: {
+      sectionTag: "Contribution",
+      title: "Ce que je peux construire",
+      sub: "Je contribue à concevoir et développer des produits numériques utiles, du problème initial jusqu’à une interface réellement utilisable.",
     },
 
     projects: {
@@ -155,6 +165,12 @@ export const TRANSLATIONS = {
       title: "Experience",
       sub: "Two simultaneous internships. One in communication, one in active product development.",
       present: "Present",
+    },
+
+    capabilities: {
+      sectionTag: "Contribution",
+      title: "What I can build",
+      sub: "I contribute to designing and developing useful digital products, from the initial problem to a genuinely usable interface.",
     },
 
     projects: {
@@ -373,6 +389,135 @@ export const SKILLS = [
     icon: "ux-ui",
     category: "Design",
   },
+];
+
+export const CAPABILITIES = [
+  {
+    id: "interfaces",
+    number: "01",
+    categoryFr: "INTERFACE",
+    categoryEn: "INTERFACE",
+    image: img_capability_interface,
+
+    altFr: "Illustration d’une interface web responsive sur ordinateur et mobile",
+    altEn: "Illustration of a responsive web interface on desktop and mobile",
+    titleFr: "Interfaces et sites web",
+    titleEn: "Websites and interfaces",
+    descriptionFr:
+      "Créer des interfaces web claires, responsive et cohérentes, du premier écran aux composants réutilisables.",
+    descriptionEn:
+      "Creating clear, responsive and coherent web interfaces, from the first screen to reusable components.",
+    pointsFr: [
+      "Composants réutilisables",
+      "Approche mobile-first",
+      "Accessibilité et performance",
+    ],
+    pointsEn: [
+      "Reusable components",
+      "Mobile-first approach",
+      "Accessibility and performance",
+    ],
+  },
+
+  {
+    id: "backend",
+    number: "02",
+    categoryFr: "SYSTÈME",
+    categoryEn: "SYSTEM",
+    image: img_capability_backend,
+
+    altFr:
+      "Illustration d’un tableau de bord fictif avec des données structurées",
+
+    altEn:
+      "Illustration of a fictional dashboard with structured data",
+
+    titleFr: "Backend, API et fonctionnalités métier",
+    titleEn: "Backend, APIs and business features",
+    descriptionFr:
+      "Construire la logique qui fait fonctionner un produit numérique et relie l’interface aux données.",
+    descriptionEn:
+      "Building the logic that powers a digital product and connects the interface to its data.",
+    pointsFr: [
+      "API REST avec Laravel",
+      "Authentification et autorisations",
+      "Logique métier et back-office",
+    ],
+    pointsEn: [
+      "REST APIs with Laravel",
+      "Authentication and permissions",
+      "Business logic and back-office",
+    ],
+  },
+
+
+  {
+    id: "product-design",
+    number: "03",
+    categoryFr: "CONCEPTION",
+    categoryEn: "DESIGN",
+    image: img_capability_design,
+
+    altFr:
+      "Illustration de wireframes et d’un parcours utilisateur en conception",
+
+    altEn:
+      "Illustration of wireframes and a user journey in progress",
+
+    titleFr: "UX/UI et conception de produits",
+    titleEn: "UX/UI and product design",
+    descriptionFr:
+      "Transformer un besoin réel en parcours et interfaces compréhensibles, testables et réellement utilisables.",
+    descriptionEn:
+      "Turning a real need into understandable, testable and genuinely usable journeys and interfaces.",
+    pointsFr: [
+      "Parcours et hiérarchie visuelle",
+      "Wireframes et prototypes Figma",
+      "États d’erreur, chargement et contenu vide",
+    ],
+    pointsEn: [
+      "User journeys and visual hierarchy",
+      "Figma wireframes and prototypes",
+      "Error, loading and empty states",
+    ],
+  },
+
+  {
+    id: "photography",
+    number: "04",
+    categoryFr: "CONTENU",
+    categoryEn: "CONTENT",
+
+    image: img_capability_photography,
+
+    altFr:
+      "Photographe couvrant un événement officiel",
+
+    altEn:
+      "Photographer covering an official event",
+
+    titleFr: "Photographie et contenu visuel",
+    titleEn: "Photography and visual content",
+
+    descriptionFr:
+      "Produire des contenus visuels cohérents pour documenter un événement, présenter une activité ou renforcer une communication numérique.",
+
+    descriptionEn:
+      "Creating coherent visual content to document an event, present an activity or support digital communication.",
+
+    pointsFr: [
+      "Couverture photographique d’événements",
+      "Production de contenus pour les réseaux sociaux",
+      "Sélection, cadrage et retouche de base",
+    ],
+
+    pointsEn: [
+      "Event photography coverage",
+      "Content production for social media",
+      "Selection, framing and basic editing",
+    ],
+  }
+
 ];
 
 export const PROJECTS = [
