@@ -15,17 +15,16 @@ import {
 export const TRANSLATIONS = {
   fr: {
     nav: {
-      about: "À propos",
-      experience: "Expériences",
+      home: "Accueil",
       projects: "Projets",
-      skills: "Compétences",
-      education: "Parcours",
+      journey: "Parcours",
+      capabilities: "Contribution",
       contact: "Contact",
       cv: "CV",
     },
 
     hero: {
-      badge: "Disponible — Stages & Freelance",
+      badge: "Disponible : Stages & Freelance",
       greeting: "Bonjour, je suis",
       location: "Cotonou, Bénin · IFRI / UAC",
       bio: "Je conçois des produits numériques à partir des contraintes réelles du terrain. Du système backend à l'expérience utilisateur, je transforme des problèmes concrets en produits fonctionnels.",
@@ -48,13 +47,12 @@ export const TRANSLATIONS = {
       sectionTag: "Terrain",
       title: "Expériences",
       sub: "Deux stages simultanés. Un en communication, un en développement actif de produit.",
-      present: "Présent",
     },
 
     capabilities: {
       sectionTag: "Contribution",
       title: "Ce que je peux construire",
-      sub: "Je contribue à concevoir et développer des produits numériques utiles, du problème initial jusqu’à une interface réellement utilisable.",
+      sub: "Je contribue à concevoir et développer des produits numériques utiles, du problème initial jusqu'à une interface réellement utilisable.",
     },
 
     projects: {
@@ -72,36 +70,18 @@ export const TRANSLATIONS = {
       figma: "Prototype",
       code: "Code",
       featured: "Phare",
-      wip: "En cours",
     },
 
     skills: {
       sectionTag: "Expertise",
       title: "Compétences",
-      sub: "Front-end, back-end, design — un profil complet en construction constante.",
+      sub: "Front-end, back-end, design, un profil complet en construction constante.",
       levels: [
         "Notions",
         "Débutant",
         "Intermédiaire",
         "Avancé",
         "Expert",
-      ],
-      qualities: "Qualités",
-      interests: "Intérêts",
-      qualityList: [
-        "Rigueur",
-        "Créativité",
-        "Curiosité",
-        "Autonomie",
-        "Esprit d'équipe",
-        "Leadership",
-      ],
-      interestList: [
-        "🎵 Musique — Maître de Chœur",
-        "🏋️ Sport",
-        "📚 Lecture",
-        "💻 Veille tech",
-        "🎨 Design",
       ],
     },
 
@@ -131,11 +111,10 @@ export const TRANSLATIONS = {
 
   en: {
     nav: {
-      about: "About",
-      experience: "Experience",
+      home: "Home",
       projects: "Projects",
-      skills: "Skills",
-      education: "Education",
+      journey: "Journey",
+      capabilities: "Contribution",
       contact: "Contact",
       cv: "Resume",
     },
@@ -164,7 +143,6 @@ export const TRANSLATIONS = {
       sectionTag: "Field",
       title: "Experience",
       sub: "Two simultaneous internships. One in communication, one in active product development.",
-      present: "Present",
     },
 
     capabilities: {
@@ -188,7 +166,6 @@ export const TRANSLATIONS = {
       figma: "Prototype",
       code: "Code",
       featured: "Featured",
-      wip: "In progress",
     },
 
     skills: {
@@ -201,23 +178,6 @@ export const TRANSLATIONS = {
         "Intermediate",
         "Advanced",
         "Expert",
-      ],
-      qualities: "Qualities",
-      interests: "Interests",
-      qualityList: [
-        "Rigor",
-        "Creativity",
-        "Curiosity",
-        "Autonomy",
-        "Teamwork",
-        "Leadership",
-      ],
-      interestList: [
-        "🎵 Music — Choir Master",
-        "🏋️ Sport",
-        "📚 Reading",
-        "💻 Tech watch",
-        "🎨 Design",
       ],
     },
 
@@ -236,9 +196,9 @@ export const TRANSLATIONS = {
       name: "Your name",
       email: "Your email",
       message: "Your message",
-      send: "Send →",
+      send: "Send",
       sending: "Sending…",
-      sent: "✓ Message sent!",
+      sent: "Message sent!",
       error: "Error. Contact me directly by WhatsApp.",
     },
 
@@ -249,8 +209,8 @@ export const TRANSLATIONS = {
 export const EXPERIENCES = [
   {
     id: 1,
-    period: "2025 — Présent",
-    periodEn: "2025 — Present",
+    period: "Juin 2026 — Septembre 2026",
+    periodEn: "June 2026 — September 2026",
     company: "Brillio / DigiMama",
     roleFr: "Stagiaire Développeur Backend",
     roleEn: "Backend Developer Intern",
@@ -303,8 +263,8 @@ export const EXPERIENCES = [
 
   {
     id: 2,
-    period: "2025 — Présent",
-    periodEn: "2025 — Present",
+    period: "Juin 2026 - Septembre 2026",
+    periodEn: "June 2026 - September 2026",
     company: "MISP — Ministère de l'Intérieur et de la Sécurité Publique",
     roleFr: "Stagiaire Community Manager & Photographe",
     roleEn: "Community Manager & Photographer Intern",
@@ -339,56 +299,16 @@ export const EXPERIENCES = [
 ];
 
 export const SKILLS = [
-  {
-    name: "HTML / CSS",
-    icon: "html-css",
-    category: "Front-end",
-  },
-  {
-    name: "JavaScript",
-    icon: "javascript",
-    category: "Front-end",
-  },
-  {
-    name: "React",
-    icon: "react",
-    category: "Front-end",
-  },
-  {
-    name: "Laravel",
-    icon: "laravel",
-    category: "Back-end",
-  },
-  {
-    name: "PHP",
-    icon: "php",
-    category: "Back-end",
-  },
-  {
-    name: "SQL",
-    icon: "sql",
-    category: "Data",
-  },
-  {
-    name: "API REST",
-    icon: "api",
-    category: "Back-end",
-  },
-  {
-    name: "Figma",
-    icon: "figma",
-    category: "Design",
-  },
-  {
-    name: "Canva",
-    icon: "canva",
-    category: "Design",
-  },
-  {
-    name: "UX/UI Design",
-    icon: "ux-ui",
-    category: "Design",
-  },
+  { name: "HTML / CSS", icon: "html-css", category: "Front-end" },
+  { name: "JavaScript", icon: "javascript", category: "Front-end" },
+  { name: "React", icon: "react", category: "Front-end" },
+  { name: "Laravel", icon: "laravel", category: "Back-end" },
+  { name: "PHP", icon: "php", category: "Back-end" },
+  { name: "SQL", icon: "sql", category: "Data" },
+  { name: "API REST", icon: "api", category: "Back-end" },
+  { name: "Figma", icon: "figma", category: "Design" },
+  { name: "Canva", icon: "canva", category: "Design" },
+  { name: "UX/UI Design", icon: "ux-ui", category: "Design" },
 ];
 
 export const CAPABILITIES = [
@@ -399,7 +319,7 @@ export const CAPABILITIES = [
     categoryEn: "INTERFACE",
     image: img_capability_interface,
 
-    altFr: "Illustration d’une interface web responsive sur ordinateur et mobile",
+    altFr: "Illustration d'une interface web responsive sur ordinateur et mobile",
     altEn: "Illustration of a responsive web interface on desktop and mobile",
     titleFr: "Interfaces et sites web",
     titleEn: "Websites and interfaces",
@@ -427,7 +347,7 @@ export const CAPABILITIES = [
     image: img_capability_backend,
 
     altFr:
-      "Illustration d’un tableau de bord fictif avec des données structurées",
+      "Illustration d'un tableau de bord fictif avec des données structurées",
 
     altEn:
       "Illustration of a fictional dashboard with structured data",
@@ -435,7 +355,7 @@ export const CAPABILITIES = [
     titleFr: "Backend, API et fonctionnalités métier",
     titleEn: "Backend, APIs and business features",
     descriptionFr:
-      "Construire la logique qui fait fonctionner un produit numérique et relie l’interface aux données.",
+      "Construire la logique qui fait fonctionner un produit numérique et relie l'interface aux données.",
     descriptionEn:
       "Building the logic that powers a digital product and connects the interface to its data.",
     pointsFr: [
@@ -450,7 +370,6 @@ export const CAPABILITIES = [
     ],
   },
 
-
   {
     id: "product-design",
     number: "03",
@@ -459,7 +378,7 @@ export const CAPABILITIES = [
     image: img_capability_design,
 
     altFr:
-      "Illustration de wireframes et d’un parcours utilisateur en conception",
+      "Illustration de wireframes et d'un parcours utilisateur en conception",
 
     altEn:
       "Illustration of wireframes and a user journey in progress",
@@ -473,7 +392,7 @@ export const CAPABILITIES = [
     pointsFr: [
       "Parcours et hiérarchie visuelle",
       "Wireframes et prototypes Figma",
-      "États d’erreur, chargement et contenu vide",
+      "États d'erreur, chargement et contenu vide",
     ],
     pointsEn: [
       "User journeys and visual hierarchy",
@@ -490,11 +409,8 @@ export const CAPABILITIES = [
 
     image: img_capability_photography,
 
-    altFr:
-      "Photographe couvrant un événement officiel",
-
-    altEn:
-      "Photographer covering an official event",
+    altFr: "Photographe couvrant un événement officiel",
+    altEn: "Photographer covering an official event",
 
     titleFr: "Photographie et contenu visuel",
     titleEn: "Photography and visual content",
@@ -506,7 +422,7 @@ export const CAPABILITIES = [
       "Creating coherent visual content to document an event, present an activity or support digital communication.",
 
     pointsFr: [
-      "Couverture photographique d’événements",
+      "Couverture photographique d'événements",
       "Production de contenus pour les réseaux sociaux",
       "Sélection, cadrage et retouche de base",
     ],
@@ -516,8 +432,7 @@ export const CAPABILITIES = [
       "Content production for social media",
       "Selection, framing and basic editing",
     ],
-  }
-
+  },
 ];
 
 export const PROJECTS = [
@@ -631,27 +546,20 @@ export const PROJECTS = [
     descEn:
       "Building backend features for an EdTech platform designed for Beninese market women: REST API, gamification and back-office.",
 
-    tags: [
-      "Laravel 12",
-      "Filament",
-      "MySQL",
-      "Sanctum",
-    ],
+    tags: ["Laravel 12", "Filament", "MySQL", "Sanctum"],
 
     type: "personal",
     family: "development",
 
-    roleFr:
-      "Développement backend au sein d'une équipe",
-
-    roleEn:
-      "Backend development as part of a team",
+    roleFr: "Développement backend au sein d'une équipe",
+    roleEn: "Backend development as part of a team",
 
     proofFr:
       "API REST, logique de gamification et fonctionnalités backend",
 
     proofEn:
       "REST API, gamification logic and backend features",
+
     caseStudy: {
       contextFr:
         "DigiMama est une plateforme EdTech destinée aux femmes commerçantes béninoises, avec des contenus de formation en langues locales et un système de progression gamifié.",
@@ -729,17 +637,15 @@ export const PROJECTS = [
     type: "personal",
     family: "development",
 
-    roleFr:
-      "Conception et développement frontend",
-
-    roleEn:
-      "Frontend design and development",
+    roleFr: "Conception et développement frontend",
+    roleEn: "Frontend design and development",
 
     proofFr:
       "Formulaire → aperçu temps réel → thèmes → export PDF A4",
 
     proofEn:
       "Form → real-time preview → themes → A4 PDF export",
+
     caseStudy: {
       contextFr:
         "CV Generator est une application web qui permet de créer un CV directement dans le navigateur, sans inscription ni installation.",
@@ -822,17 +728,15 @@ export const PROJECTS = [
     type: "personal",
     family: "development",
 
-    roleFr:
-      "Conception et développement frontend",
-
-    roleEn:
-      "Frontend design and development",
+    roleFr: "Conception et développement frontend",
+    roleEn: "Frontend design and development",
 
     proofFr:
       "Filtres régionaux, visualisations interactives et fiches pays",
 
     proofEn:
       "Regional filters, interactive visualizations and country views",
+
     caseStudy: {
       contextFr:
         "Africa Pulse est un dashboard web consacré à l'exploration de données démographiques, économiques et numériques de 15 pays africains.",
@@ -914,11 +818,9 @@ export const PROJECTS = [
     type: "real",
     family: "design",
 
-    roleFr:
-      "Conception de l'identité visuelle",
+    roleFr: "Conception de l'identité visuelle",
+    roleEn: "Visual identity design",
 
-    roleEn:
-      "Visual identity design",
     caseStudy: {
       contextFr:
         "KAUD est un projet d'identité visuelle destiné à construire une présence de marque cohérente autour d'un langage graphique identifiable.",
@@ -1263,7 +1165,6 @@ export const CERTIFICATIONS = [
     titleEn: "Python Developer",
     descFr: "POO, structures de données, scripting.",
     descEn: "OOP, data structures, scripting.",
-    icon: "🐍",
   },
 
   {
@@ -1272,7 +1173,6 @@ export const CERTIFICATIONS = [
     titleEn: "SQL Fundamentals",
     descFr: "Requêtes, jointures, agrégations.",
     descEn: "Queries, joins, aggregations.",
-    icon: "🗄️",
   },
 
   {
@@ -1281,7 +1181,6 @@ export const CERTIFICATIONS = [
     titleEn: "Java",
     descFr: "POO, structures, concepts fondamentaux.",
     descEn: "OOP, structures, core concepts.",
-    icon: "☕",
   },
 
   {
@@ -1290,7 +1189,6 @@ export const CERTIFICATIONS = [
     titleEn: "C#",
     descFr: "Syntaxe, POO, tableaux, récursivité.",
     descEn: "Syntax, OOP, arrays, recursion.",
-    icon: "🔷",
   },
 
   {
@@ -1299,37 +1197,31 @@ export const CERTIFICATIONS = [
     titleEn: "C",
     descFr: "Pointeurs, mémoire, structures.",
     descEn: "Pointers, memory, structures.",
-    icon: "⚙️",
   },
 ];
 
 export const CONTACT_LINKS = [
   {
-    icon: "📞",
     label: "+229 01 53 50 55 01",
     href: "tel:+2290153505501",
   },
 
   {
-    icon: "✉️",
     label: "gaiuschanis03@gmail.com",
     href: "mailto:gaiuschanis03@gmail.com",
   },
 
   {
-    icon: "💼",
     label: "LinkedIn — Gaïus Chanis",
     href: "https://linkedin.com/in/gaïus-chanis-08a782365",
   },
 
   {
-    icon: "🐙",
     label: "github.com/chanis-hg",
     href: "https://github.com/chanis-hg",
   },
 
   {
-    icon: "💬",
     label: "WhatsApp",
     href: "https://wa.me/22953505501",
   },

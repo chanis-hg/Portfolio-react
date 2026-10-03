@@ -8,17 +8,30 @@
   margin-top: 2.5rem;
 }
 
-/* fil qui relie les étapes (centres des 5 colonnes : 10 % → 90 %) */
-
 .rail {
   position: absolute;
   left: 10%;
   right: 10%;
   top: calc(var(--node) / 2 - 1px);
   height: 2px;
-  background: var(--border-hover);
-  border-radius: 2px;
   overflow: hidden;
+  border-radius: 2px;
+  background: var(--border-hover);
+}
+
+.rail::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -30%;
+  width: 30%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 55%, transparent),
+    transparent
+  );
+  animation: railShimmer 4.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .railFill {
@@ -29,6 +42,18 @@
   transform-origin: left center;
   transform: scaleX(var(--progress, 0));
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes railShimmer {
+  0%,
+  35% {
+    transform: translateX(0);
+  }
+
+  70%,
+  100% {
+    transform: translateX(430%);
+  }
 }
 
 .tabs {
@@ -43,8 +68,8 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0 0.25rem;
-  background: none;
   border: 0;
+  background: none;
   color: var(--text-muted);
   cursor: pointer;
 }
@@ -65,25 +90,33 @@
     background-color 0.3s ease,
     border-color 0.3s ease,
     color 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-lg);
 }
 
 .tabLabel {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.2;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* survol : uniquement sur les appareils qui survolent, et jamais sur l'étape active */
 @media (hover: hover) {
   .tab:not(.current):hover .node {
     border-color: var(--accent);
     color: var(--accent);
+    transform: translateY(-2px);
   }
 
   .tab:not(.current):hover .tabLabel {
     color: var(--text);
+    transform: translateY(-1px);
   }
 }
 
@@ -97,9 +130,20 @@
   border-color: var(--accent);
   color: var(--text-on-blue, #fff);
   box-shadow: 0 0 0 6px var(--accent-10);
+  animation: nodePulse 3.2s ease-in-out infinite;
 }
 
-/* thème sombre : le bleu clair demande un texte foncé (contraste 4,7:1 au lieu de 4,0:1 en blanc) */
+@keyframes nodePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 6px var(--accent-10);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
 [data-theme="dark"] .current .node {
   color: var(--bg);
 }
@@ -108,32 +152,116 @@
   color: var(--text);
 }
 
-/* =================================
-   PANNEAU
-================================= */
+.timerTrack {
+  position: relative;
+  width: min(18rem, 42%);
+  height: 2px;
+  margin: 1.25rem auto 0;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--border);
+}
+
+.timerFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: timerProgress 10s linear both;
+}
+
+.flowPaused .timerFill {
+  animation-play-state: paused;
+}
+
+@keyframes timerProgress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/*PANNEAU */
 
 .panel {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 3rem);
   min-height: 15rem;
   margin-top: 2.2rem;
   padding: clamp(1.4rem, 3vw, 2.4rem);
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   background: var(--bg-card);
-  animation: panelIn 0.38s ease both;
+  animation: panelIn 0.45s cubic-bezier(0.22, 0.68, 0, 1) both;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 18%, var(--accent-10) 48%, transparent 72%);
+  opacity: 0;
+  transform: translateX(-120%);
+  pointer-events: none;
+  animation: panelSweep 1.1s 0.12s ease-out both;
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 @keyframes panelIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px) scale(0.99);
   }
 
   to {
     opacity: 1;
-    transform: none;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes panelSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+
+.panelMain {
+  animation: contentIn 0.5s 0.05s ease both;
+}
+
+.panelMeta {
+  animation: contentIn 0.5s 0.12s ease both;
+}
+
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -150,7 +278,7 @@
 }
 
 .panelStep::before {
-  content: '';
+  content: "";
   width: 22px;
   height: 2px;
   border-radius: 2px;
@@ -168,8 +296,8 @@
 .panelMeta {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
   justify-content: center;
+  gap: 1.6rem;
 }
 
 .metaBlock {
@@ -187,23 +315,171 @@
   color: var(--text-muted);
 }
 
+/* =================================
+   OUTILS : tuiles icônes + chips texte
+================================= */
+
 .chips {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.chips li {
-  padding: 0.45rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: var(--bg-alt);
-  font-size: 0.95rem;
-  color: var(--text);
+/* ----- Tuile icône (logo) -----
+   Fond sombre UNIVERSEL, indépendant du thème.
+   Les logos colorés (dont le blanc CSS / CSS Modules / SQLite / GitHub)
+   ressortent de manière identique en thème clair et sombre. */
+.tile {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  color: #ffffff; /* pour les icônes en currentColor (FlaskConical) */
+
+  background: #1a1a1d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+
+  cursor: help;
+  animation: chipIn 0.4s cubic-bezier(0.22, 0.68, 0, 1) both;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.25s cubic-bezier(0.22, 0.68, 0, 1.2);
 }
+
+.tileIcon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.tileIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Le label n'est affiché que sur tactile (voir media queries plus bas) */
+.tileLabel {
+  display: none;
+}
+
+/* Ordre d'apparition des tuiles (stagger) */
+.tile:nth-child(1) { animation-delay: 0.16s; }
+.tile:nth-child(2) { animation-delay: 0.21s; }
+.tile:nth-child(3) { animation-delay: 0.26s; }
+.tile:nth-child(4) { animation-delay: 0.31s; }
+.tile:nth-child(5) { animation-delay: 0.36s; }
+.tile:nth-child(6) { animation-delay: 0.41s; }
+
+/* ----- Chip texte (outils sans logo) ----- */
+.chipText {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-alt);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  animation: chipIn 0.4s cubic-bezier(0.22, 0.68, 0, 1) both;
+}
+
+.chipText:nth-child(1) { animation-delay: 0.16s; }
+.chipText:nth-child(2) { animation-delay: 0.21s; }
+.chipText:nth-child(3) { animation-delay: 0.26s; }
+
+@keyframes chipIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ----- Hover : tuile active + tooltip ----- */
+@media (hover: hover) {
+  .tile:hover {
+    z-index: 5;
+    border-color: var(--accent);
+    background: #232326;
+    transform: translateY(-2px);
+  }
+
+  .tile::after {
+    content: attr(data-tooltip);
+
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 10;
+
+    padding: 0.35rem 0.7rem;
+
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-4px);
+
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease;
+  }
+
+  .tile:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ----- Mobile / tactile : label affiché à côté de l'icône ----- */
+@media (hover: none) {
+  .tile {
+    width: auto;
+    padding: 0 0.75rem;
+    gap: 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    cursor: default;
+    /* Fond sombre universel conservé */
+  }
+
+  .tileLabel {
+    display: inline;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #ffffff;
+  }
+}
+
+/* =================================
+   PREUVES
+================================= */
 
 .proofs {
   display: flex;
@@ -219,10 +495,26 @@
   padding-left: 1.1rem;
   font-size: 1rem;
   color: var(--text-muted);
+  animation: proofIn 0.4s 0.18s ease both;
+}
+
+.proofs li:nth-child(2) { animation-delay: 0.24s; }
+.proofs li:nth-child(3) { animation-delay: 0.30s; }
+
+@keyframes proofIn {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .proofs li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0.62em;
@@ -233,27 +525,60 @@
 }
 
 /* =================================
-   MOBILE : les étapes deviennent des pastilles numérotées,
-   le nom de l'étape est repris en tête du panneau
+   MOBILE : parcours vertical lisible
 ================================= */
 
 @media (max-width: 720px) {
   .flow {
     --node: 44px;
+    padding-left: 0.25rem;
+  }
+
+  .rail {
+    top: calc(var(--node) / 2);
+    bottom: calc(var(--node) / 2);
+    left: calc(var(--node) / 2 - 1px);
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .railFill {
+    width: 100%;
+    height: 100%;
+    transform: scaleY(var(--progress, 0));
+    transform-origin: top center;
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .tab {
+    min-height: var(--node);
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0;
+    text-align: left;
   }
 
   .tabLabel {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
 
   .panel {
     grid-template-columns: 1fr;
     min-height: 0;
+    margin-top: 1.5rem;
   }
 }
 
@@ -262,13 +587,23 @@
 ================================= */
 
 @media (prefers-reduced-motion: reduce) {
+  .rail::after,
   .railFill,
+  .timerFill,
   .node,
-  .tabLabel {
+  .tabLabel,
+  .panel,
+  .panel::before,
+  .panelMain,
+  .panelMeta,
+  .tile,
+  .chipText,
+  .proofs li {
+    animation: none;
     transition: none;
   }
 
-  .panel {
-    animation: none;
+  .tile:hover {
+    transform: none;
   }
 }

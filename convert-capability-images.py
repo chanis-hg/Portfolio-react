@@ -10,7 +10,7 @@ images = {
         "src/assets/capabilities/capability-backend.webp.jpg",
 
     "img_capability_design":
-        "src/assets/capabilities/capability-design.webp.gif",
+        "src/assets/capabilities/capability-design.webp.jpg",
 
     "img_capability_photography":
         "src/assets/capabilities/capability-photography.webp.jpg",

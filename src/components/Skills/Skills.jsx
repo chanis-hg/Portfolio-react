@@ -1,4 +1,24 @@
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import {
+  SiCss,
+  SiCssmodules,
+  SiFastapi,
+  SiFigma,
+  SiFilament,
+  SiGit,
+  SiGithub,
+  SiHtml5,
+  SiJavascript,
+  SiLaravel,
+  SiMysql,
+  SiNetlify,
+  SiPhp,
+  SiPython,
+  SiReact,
+  SiSqlite,
+  SiVite,
+} from "react-icons/si";
+import { FlaskConical } from "lucide-react";
 
 import Reveal from "../Reveal";
 import SectionHeader from "../SectionHeader";
@@ -85,11 +105,71 @@ const STEPS = [
   },
 ];
 
-const DEFAULT_STEP = 2; // « Système » : ton cœur de métier, visible dès l'arrivée
+/* =================================
+   LOGOS DES OUTILS
+   Logos des marques (jeu Simple Icons, déjà inclus dans react-icons).
+   Couleur officielle de la marque ; si elle manque de contraste sur la plaque
+   sombre (CSS, CSS Modules, SQLite, GitHub), repli en blanc.
 
-export default function Skills({ lang = "fr" }) {
+   PHPUnit : pas de logo simple-icons → on utilise FlaskConical (lucide-react),
+   qui symbolise les tests / le laboratoire.
+   Sans logo : SQL, API REST, Sanctum → affichés en chip texte.
+================================= */
+
+const LOGOS = {
+  Figma: { Icon: SiFigma, color: "#F24E1E" },
+  HTML: { Icon: SiHtml5, color: "#E34F26" },
+  CSS: { Icon: SiCss, color: "#FFFFFF" },
+  JavaScript: { Icon: SiJavascript, color: "#F7DF1E" },
+  React: { Icon: SiReact, color: "#61DAFB" },
+  Vite: { Icon: SiVite, color: "#9135FF" },
+  "CSS Modules": { Icon: SiCssmodules, color: "#FFFFFF" },
+  Laravel: { Icon: SiLaravel, color: "#FF2D20" },
+  PHP: { Icon: SiPhp, color: "#777BB4" },
+  Filament: { Icon: SiFilament, color: "#FDAE4B" },
+  MySQL: { Icon: SiMysql, color: "#4479A1" },
+  SQLite: { Icon: SiSqlite, color: "#FFFFFF" },
+  Python: { Icon: SiPython, color: "#3776AB" },
+  FastAPI: { Icon: SiFastapi, color: "#009688" },
+  Git: { Icon: SiGit, color: "#F03C2E" },
+  GitHub: { Icon: SiGithub, color: "#FFFFFF" },
+  Netlify: { Icon: SiNetlify, color: "#00C7B7" },
+  PHPUnit: { Icon: FlaskConical, color: null },
+};
+
+/* Langue : celle passée par App (prop `lang`), sinon celle de <html lang>,
+   que App tient à jour. Le texte suit donc le sélecteur FR/EN dans tous les cas. */
+function useLang(propLang) {
+  const read = () =>
+    typeof document === "undefined"
+      ? "fr"
+      : document.documentElement.getAttribute("lang") || "fr";
+
+  const [docLang, setDocLang] = useState(read);
+
+  useEffect(() => {
+    if (propLang) return undefined;
+
+    const observer = new MutationObserver(() => setDocLang(read()));
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["lang"],
+    });
+
+    return () => observer.disconnect();
+  }, [propLang]);
+
+  return propLang || docLang;
+}
+
+const DEFAULT_STEP = 2; // « Système » : ton cœur de métier, visible dès l'arrivée
+const AUTO_ADVANCE_MS = 15000;
+
+export default function Skills({ lang: langProp }) {
+  const lang = useLang(langProp);
   const isFr = lang === "fr";
   const [active, setActive] = useState(DEFAULT_STEP);
+  const [isPaused, setIsPaused] = useState(false);
 
   const baseId = useId();
   const tabRefs = useRef([]);
@@ -100,24 +180,54 @@ export default function Skills({ lang = "fr" }) {
   const proofs = isFr ? step.proofsFr : step.proofsEn;
   const number = (index) => String(index + 1).padStart(2, "0");
 
+  useEffect(() => {
+    if (isPaused) return undefined;
+
+    const mediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    if (mediaQuery.matches) return undefined;
+
+    const advance = () => {
+      if (document.visibilityState !== "visible") return;
+
+      setActive((current) => (current + 1) % STEPS.length);
+    };
+
+    const timer = window.setInterval(advance, AUTO_ADVANCE_MS);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused]);
+
   const select = (index) => {
     setActive(index);
     tabRefs.current[index]?.focus();
   };
 
-  /* Clavier : flèches, Début, Fin (motif ARIA « onglets ») */
+  /* Clavier : flèches circulaires, Début et Fin (motif ARIA « onglets »). */
   const handleKeyDown = (event, index) => {
-    const targets = {
-      ArrowRight: Math.min(index + 1, last),
-      ArrowLeft: Math.max(index - 1, 0),
-      Home: 0,
-      End: last,
-    };
+    let nextIndex;
 
-    if (!(event.key in targets)) return;
+    switch (event.key) {
+      case "ArrowRight":
+        nextIndex = (index + 1) % STEPS.length;
+        break;
+      case "ArrowLeft":
+        nextIndex = (index - 1 + STEPS.length) % STEPS.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = last;
+        break;
+      default:
+        return;
+    }
 
     event.preventDefault();
-    select(targets[event.key]);
+    select(nextIndex);
   };
 
   return (
@@ -136,7 +246,18 @@ export default function Skills({ lang = "fr" }) {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className={styles.flow} style={{ "--progress": active / last }}>
+          <div
+            className={`${styles.flow} ${isPaused ? styles.flowPaused : ""}`}
+            style={{ "--progress": active / last }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocusCapture={() => setIsPaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setIsPaused(false);
+              }
+            }}
+          >
             <div className={styles.rail} aria-hidden="true">
               <span className={styles.railFill} />
             </div>
@@ -149,6 +270,7 @@ export default function Skills({ lang = "fr" }) {
                   : "The stages of a product's life"
               }
               className={styles.tabs}
+              aria-orientation="horizontal"
             >
               {STEPS.map((item, index) => {
                 const label = isFr ? item.fr.name : item.en.name;
@@ -170,17 +292,23 @@ export default function Skills({ lang = "fr" }) {
                     id={`${baseId}-tab-${item.id}`}
                     aria-selected={index === active}
                     aria-label={`${index + 1}. ${label}`}
-                    aria-controls={index === active ? `${baseId}-panel` : undefined}
+                    aria-controls={`${baseId}-panel`}
                     tabIndex={index === active ? 0 : -1}
                     className={`${styles.tab} ${state}`}
                     onClick={() => setActive(index)}
                     onKeyDown={(event) => handleKeyDown(event, index)}
                   >
-                    <span className={styles.node}>{number(index)}</span>
+                    <span className={styles.node} aria-hidden="true">
+                      {number(index)}
+                    </span>
                     <span className={styles.tabLabel}>{label}</span>
                   </button>
                 );
               })}
+            </div>
+
+            <div className={styles.timerTrack} aria-hidden="true">
+              <span key={step.id} className={styles.timerFill} />
             </div>
 
             <div
@@ -202,9 +330,38 @@ export default function Skills({ lang = "fr" }) {
                 <div className={styles.metaBlock}>
                   <span className={styles.metaLabel}>{isFr ? "Avec" : "With"}</span>
                   <ul className={styles.chips}>
-                    {step.tools.map((tool) => (
-                      <li key={tool}>{tool}</li>
-                    ))}
+                    {step.tools.map((tool) => {
+                      const logo = LOGOS[tool];
+                      const Logo = logo?.Icon;
+
+                      /* Tuile icône (logo disponible) */
+                      if (Logo) {
+                        return (
+                          <li
+                            key={tool}
+                            className={styles.tile}
+                            aria-label={tool}
+                            data-tooltip={tool}
+                          >
+                            <span className={styles.tileIcon} aria-hidden="true">
+                              <Logo
+                                style={logo.color ? { color: logo.color } : undefined}
+                              />
+                            </span>
+                            <span className={styles.tileLabel} aria-hidden="true">
+                              {tool}
+                            </span>
+                          </li>
+                        );
+                      }
+
+                      /* Chip texte (pas de logo) */
+                      return (
+                        <li key={tool} className={styles.chipText}>
+                          {tool}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
