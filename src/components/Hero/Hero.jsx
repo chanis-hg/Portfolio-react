@@ -187,7 +187,7 @@ export default function Hero({ t, lang, ready = true }) {
   );
   const [moreOpen, setMoreOpen] = useState(false);
   const [tone, setTone] = useState(getTone);
-
+  const heroRef = useRef(null);
   const frameRef = useRef(null);
   const animsRef = useRef([]);
 
@@ -197,6 +197,38 @@ export default function Hero({ t, lang, ready = true }) {
   useEffect(() => {
     const id = window.setInterval(() => setTone(getTone()), 5 * 60 * 1000);
     return () => window.clearInterval(id);
+  }, []);
+
+  /* Accompagne progressivement la sortie du Hero pendant le défilement. */
+  useEffect(() => {
+    const hero = heroRef.current;
+
+    if (!hero || prefersReducedMotion()) return undefined;
+
+    let frame = 0;
+
+    const updateScrollProgress = () => {
+      frame = 0;
+
+      const rect = hero.getBoundingClientRect();
+      const progress = clamp(-rect.top / (rect.height * 0.58), 0, 1);
+
+      hero.style.setProperty("--hero-scroll-shift", `${progress * -42}px`);
+      hero.style.setProperty("--hero-scroll-opacity", `${1 - progress * 0.2}`);
+      hero.style.setProperty("--hero-scroll-glow", `${1 - progress * 0.42}`);
+    };
+
+    const handleScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateScrollProgress);
+    };
+
+    updateScrollProgress();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   /* Cache la photo avant le premier affichage (évite un flash à sa place finale) */
@@ -319,6 +351,7 @@ export default function Hero({ t, lang, ready = true }) {
 
   return (
     <section
+      ref={heroRef}
       id="home"
       className={`${styles.hero} ${stateClass}`}
       data-tone={tone}

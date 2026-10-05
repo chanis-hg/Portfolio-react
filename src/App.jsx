@@ -14,30 +14,46 @@ import Preloader from "./components/Preloader/Preloader";
 import CustomCursor from "./components/CustomCursor/CustomCursor";
 import Capabilities from "./components/Capabilities/Capabilities";
 
+function getInitialLanguage() {
+  const savedLanguage = localStorage.getItem("lang");
+
+  if (savedLanguage === "fr" || savedLanguage === "en") {
+    return savedLanguage;
+  }
+
+  const browserLanguages = navigator.languages?.length
+    ? navigator.languages
+    : [navigator.language];
+
+  const browserUsesEnglish = browserLanguages.some((language) =>
+    language?.toLowerCase().startsWith("en"),
+  );
+
+  return browserUsesEnglish ? "en" : "fr";
+}
+
 export default function App() {
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "dark",
   );
 
-  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "fr");
+  const [lang, setLang] = useState(getInitialLanguage);
 
   const [activeProjectId, setActiveProjectId] = useState(
     PROJECTS[0]?.id || null,
   );
 
-  // Passe à true quand le preloader a fini : lance l'animation d'ouverture du Hero
+  // Passe à true quand le preloader a fini : lance l’animation d’ouverture du Hero.
   const [ready, setReady] = useState(false);
   const handlePreloaderDone = useCallback(() => setReady(true), []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-
     localStorage.setItem("theme", theme);
   }, [theme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("lang", lang);
-
     localStorage.setItem("lang", lang);
   }, [lang]);
 
@@ -47,7 +63,10 @@ export default function App() {
     <>
       <CustomCursor />
 
-      <Preloader onComplete={handlePreloaderDone} />
+      <Preloader
+        lang={lang}
+        onComplete={handlePreloaderDone}
+      />
 
       <Navbar
         t={t}
@@ -58,32 +77,61 @@ export default function App() {
       />
 
       <main>
-        <Hero t={t} lang={lang} ready={ready} />
+        <Hero
+          t={t}
+          lang={lang}
+          ready={ready}
+        />
 
-        <section id="projects" className="projects-section">
+        <section
+          id="projects"
+          className="projects-section"
+        >
           <ProjectsCarousel
             t={t}
             lang={lang}
             onActiveChange={setActiveProjectId}
           />
 
-          <Projects t={t} lang={lang} activeProjectId={activeProjectId} />
+          <Projects
+            t={t}
+            lang={lang}
+            activeProjectId={activeProjectId}
+          />
         </section>
 
-        <section id="journey" className="journey-section">
-          <Experience t={t} lang={lang} />
+        <section
+          id="journey"
+          className="journey-section"
+        >
+          <Experience
+            t={t}
+            lang={lang}
+          />
         </section>
 
-        <Capabilities t={t} lang={lang} />
+        <Capabilities
+          t={t}
+          lang={lang}
+        />
 
-        <Skills t={t} />
+        <Skills
+          t={t}
+          lang={lang}
+        />
 
-        <Education t={t} lang={lang} />
+        <Education
+          t={t}
+          lang={lang}
+        />
 
         <Contact t={t} />
       </main>
 
-      <Footer t={t} lang={lang} />
+      <Footer
+        t={t}
+        lang={lang}
+      />
     </>
   );
 }
