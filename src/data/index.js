@@ -1200,6 +1200,59 @@ export const CERTIFICATIONS = [
   },
 ];
 
+export const LINKEDIN_COURSES = [
+  {
+    title: "HTML Essential Training",
+    descFr: "Structure sémantique, accessibilité et bonnes pratiques HTML.",
+    descEn: "Semantic structure, accessibility, and HTML best practices.",
+  },
+  {
+    title: "CSS Essential Training",
+    descFr: "Mise en page, styles, responsive design et organisation du CSS.",
+    descEn: "Layout, styling, responsive design, and CSS organization.",
+  },
+  {
+    title: "Web Programming Foundations",
+    descFr: "Compréhension des principes fondamentaux du fonctionnement du Web.",
+    descEn: "Understanding the fundamental principles of how the Web works.",
+  },
+  {
+    title: "JavaScript Essential Training",
+    descFr: "Syntaxe, logique, DOM, fonctions et programmation côté navigateur.",
+    descEn: "Syntax, logic, DOM, functions, and browser-side programming.",
+  },
+  {
+    title: "React Essential Training",
+    descFr: "Composants, état, props et construction d’interfaces React.",
+    descEn: "Components, state, props, and building React interfaces.",
+  },
+  {
+    title: "Devenir développeur / développeuse React",
+    descFr: "React, Node.js, Express, MongoDB et conception d’applications full-stack.",
+    descEn: "React, Node.js, Express, MongoDB, and full-stack application development.",
+  },
+  {
+    title: "L’essentiel de Laravel",
+    descFr: "Fondamentaux du framework Laravel pour construire des applications web.",
+    descEn: "Laravel fundamentals for building web applications.",
+  },
+  {
+    title: "L’essentiel de PHP et MySQL",
+    descFr: "Développement web côté serveur et intégration d’une base MySQL.",
+    descEn: "Server-side web development and MySQL database integration.",
+  },
+  {
+    title: "Figma for UX Design",
+    descFr: "Wireframes, interfaces, prototypes et collaboration dans Figma.",
+    descEn: "Wireframes, interfaces, prototypes, and collaboration in Figma.",
+  },
+  {
+    title: "Figma: From Design to CSS Implementation",
+    descFr: "Passage d’une conception Figma à une implémentation CSS fonctionnelle.",
+    descEn: "Turning a Figma design into a functional CSS implementation.",
+  },
+];
+
 export const CONTACT_LINKS = [
   {
     label: "+229 01 53 50 55 01",

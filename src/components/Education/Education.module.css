@@ -53,6 +53,18 @@
   box-shadow: 0 0 0 4px var(--accent-10);
 }
 
+.dotIcon {
+  display: block;
+  width: 0.58rem;
+  height: 0.58rem;
+  margin: 0.05rem auto 0;
+  color: var(--text-subtle);
+}
+
+.dotActive .dotIcon {
+  color: var(--text-on-blue);
+}
+
 .card {
   padding: 0.25rem 0 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -174,6 +186,14 @@
   color: var(--text);
 }
 
+.certCount {
+  flex-shrink: 0;
+  font-family: var(--font-mono) !important;
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  color: var(--accent) !important;
+}
+
 .certGrid {
   display: grid;
   grid-template-columns: repeat(
@@ -190,6 +210,21 @@
   padding: 1rem 0;
   border-bottom: 1px solid var(--border);
   background: transparent;
+}
+
+.certTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.certNumber {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-subtle);
 }
 
 .certCard:last-child {
