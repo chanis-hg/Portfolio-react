@@ -3,11 +3,9 @@ import { ArrowDown, ChevronDown, Clock, MapPin } from "lucide-react";
 
 import styles from "./Hero.module.css";
 
-/* ---- Réglages de la séquence d'ouverture ---- */
-const FLIGHT_MS = 2600; // photo : apparition + survol + atterrissage + glissement à gauche
-const FALLBACK_MS = 8000; // sécurité : la séquence démarre même si le preloader n'a pas signalé
+const FLIGHT_MS = 1600;
+const FALLBACK_MS = 3000;
 
-/* Africa/Lagos = même fuseau que Cotonou (UTC+1, sans heure d'été) */
 const CLOCK = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Africa/Lagos",
   hour: "2-digit",
@@ -22,7 +20,6 @@ const prefersReducedMotion = () =>
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-/* Teinte de la « lumière de studio » selon l'heure à Cotonou (fuseau Africa/Lagos) */
 const HOUR = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Africa/Lagos",
   hour: "2-digit",
@@ -37,10 +34,6 @@ function getTone() {
   return "night";
 }
 
-/* =================================
-   HORLOGE COTONOU
-   (composant isolé : seul lui se re-rend chaque seconde)
-================================= */
 
 function CotonouClock({ lang }) {
   const [now, setNow] = useState(() => new Date());
@@ -67,12 +60,6 @@ function CotonouClock({ lang }) {
   );
 }
 
-/* =================================
-   PHOTO EN VISEUR D'APPAREIL
-   - survol (souris) ou focus clavier : mise au point + fiche EXIF
-   - appui (tactile) : bascule la mise au point
-   - clic : déclenchement (flash)
-================================= */
 
 function Viewfinder({ lang, frameRef }) {
   const [locked, setLocked] = useState(false);
@@ -94,7 +81,6 @@ function Viewfinder({ lang, frameRef }) {
 
   return (
     <div className={styles.photoColumn}>
-      {/* .flight : la couche qui voyage (centre de l'écran → colonne de gauche) */}
       <div ref={frameRef} className={styles.flight}>
         <div
           className={`${styles.viewfinder} ${locked ? styles.locked : ""}`}
@@ -167,21 +153,8 @@ function Viewfinder({ lang, frameRef }) {
   );
 }
 
-/* =================================
-   HERO
-   `ready` passe à true quand le preloader commence à se retirer.
-
-   Séquence (≈ 2,6 s pour la photo, puis le texte) :
-   1. la photo apparaît en grand au centre et flotte au-dessus de la page
-   2. elle se pose (l'ombre se resserre)
-   3. elle glisse à sa place, à gauche
-   4. le texte se pose ligne par ligne
-
-   N'importe quelle interaction (clic, touche, molette, toucher) passe la séquence.
-================================= */
 
 export default function Hero({ t, lang, ready = true }) {
-  // wait : séquence pas encore lancée · go : en cours · done : terminée ou ignorée
   const [phase, setPhase] = useState(() =>
     prefersReducedMotion() ? "done" : "wait",
   );
@@ -193,13 +166,11 @@ export default function Hero({ t, lang, ready = true }) {
 
   const isFr = lang === "fr";
 
-  /* Met à jour la teinte de la lumière toutes les 5 minutes */
   useEffect(() => {
     const id = window.setInterval(() => setTone(getTone()), 5 * 60 * 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  /* Accompagne progressivement la sortie du Hero pendant le défilement. */
   useEffect(() => {
     const hero = heroRef.current;
 
@@ -231,15 +202,12 @@ export default function Hero({ t, lang, ready = true }) {
     };
   }, []);
 
-  /* Cache la photo avant le premier affichage (évite un flash à sa place finale) */
   useLayoutEffect(() => {
     if (phase !== "wait") return;
     const el = frameRef.current;
     if (el) el.style.opacity = "0";
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Lance la séquence */
   useEffect(() => {
     if (phase !== "wait") return;
 
@@ -257,7 +225,6 @@ export default function Hero({ t, lang, ready = true }) {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      /* Grande photo, centrée, sans passer sous la barre de navigation */
       const s = clamp(
         Math.min((vw * 0.9) / rect.width, (vh * 0.78) / rect.height),
         1.05,
@@ -273,20 +240,15 @@ export default function Hero({ t, lang, ready = true }) {
 
       const flight = el.animate(
         [
-          // 1. apparition : elle monte légèrement et s'agrandit
           { offset: 0, opacity: 0, transform: at(28, s * 0.9), easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
-          // 2. survol : elle flotte, presque immobile
           { offset: 0.27, opacity: 1, transform: at(-12, s), easing: "cubic-bezier(0.4, 0, 0.2, 1)" },
           { offset: 0.45, opacity: 1, transform: at(-4, s), easing: "cubic-bezier(0.65, 0, 0.35, 1)" },
-          // 3. atterrissage : elle se pose sur la page
           { offset: 0.62, opacity: 1, transform: at(0, s * 0.95), easing: "cubic-bezier(0.65, 0, 0.35, 1)" },
-          // 4. elle glisse à sa place, à gauche
           { offset: 1, opacity: 1, transform: "translate(0px, 0px) scale(1)" },
         ],
         { duration: FLIGHT_MS, fill: "both" },
       );
 
-      /* L'ombre suit : large et diffuse en l'air, resserrée une fois posée */
       const shadow = inner.animate(
         [
           { offset: 0, boxShadow: "0 40px 80px rgba(0,0,0,0.10), 0 16px 32px rgba(0,0,0,0.06)" },
@@ -318,7 +280,6 @@ export default function Hero({ t, lang, ready = true }) {
     return () => window.clearTimeout(id);
   }, [phase, ready]);
 
-  /* Passer la séquence au premier geste de l'utilisateur */
   useEffect(() => {
     if (phase !== "go") return undefined;
 
@@ -336,7 +297,6 @@ export default function Hero({ t, lang, ready = true }) {
       events.forEach((name) => window.removeEventListener(name, skip));
   }, [phase]);
 
-  /* Nettoyage à la fermeture du composant */
   useEffect(
     () => () => animsRef.current.forEach((a) => a.cancel()),
     [],
@@ -357,10 +317,8 @@ export default function Hero({ t, lang, ready = true }) {
       data-tone={tone}
     >
       <div className={styles.inner}>
-        {/* PHOTO */}
         <Viewfinder lang={lang} frameRef={frameRef} />
 
-        {/* PRÉSENTATION */}
         <div className={styles.content}>
           <span className={`${styles.sectionTag} ${styles.line}`} style={{ "--i": 0 }}>
             Hello
@@ -406,7 +364,6 @@ export default function Hero({ t, lang, ready = true }) {
             <CotonouClock lang={lang} />
           </div>
 
-          {/* BIO : ton texte d'origine, 1er paragraphe visible, la suite repliable */}
           <div
             className={`${styles.bio} ${styles.line} ${styles.block}`}
             style={{ "--i": 6 }}

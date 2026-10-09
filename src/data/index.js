@@ -1,16 +1,4 @@
-import {
-  img_vivrier,
-  img_maman,
-  img_montcho,
-  img_kaud,
-  img_digimama_app,
-  img_digimama_landing,
-  img_digimama_admin,
-  img_capability_interface,
-  img_capability_backend,
-  img_capability_design,
-  img_capability_photography,
-} from "./images.js";
+
 
 export const TRANSLATIONS = {
   fr: {
@@ -255,9 +243,9 @@ export const EXPERIENCES = [
     ],
 
     images: [
-      img_digimama_landing,
-      img_digimama_app,
-      img_digimama_admin,
+      "/images/digimama_landing.webp",
+      "/images/digimama_app.webp",
+      "/images/digimama_admin.webp",
     ],
   },
 
@@ -317,7 +305,7 @@ export const CAPABILITIES = [
     number: "01",
     categoryFr: "INTERFACE",
     categoryEn: "INTERFACE",
-    image: img_capability_interface,
+    image: "/images/capability_interface.webp",
 
     altFr: "Illustration d'une interface web responsive sur ordinateur et mobile",
     altEn: "Illustration of a responsive web interface on desktop and mobile",
@@ -344,7 +332,7 @@ export const CAPABILITIES = [
     number: "02",
     categoryFr: "SYSTÈME",
     categoryEn: "SYSTEM",
-    image: img_capability_backend,
+    image: "/images/capability_backend.webp",
 
     altFr:
       "Illustration d'un tableau de bord fictif avec des données structurées",
@@ -375,7 +363,7 @@ export const CAPABILITIES = [
     number: "03",
     categoryFr: "CONCEPTION",
     categoryEn: "DESIGN",
-    image: img_capability_design,
+    image: "/images/capability_design.webp",
 
     altFr:
       "Illustration de wireframes et d'un parcours utilisateur en conception",
@@ -407,7 +395,7 @@ export const CAPABILITIES = [
     categoryFr: "CONTENU",
     categoryEn: "CONTENT",
 
-    image: img_capability_photography,
+    image: "/images/capability_photography.webp",
 
     altFr: "Photographe couvrant un événement officiel",
     altEn: "Photographer covering an official event",
@@ -538,7 +526,7 @@ export const PROJECTS = [
     title: "DigiMama",
     category: "Backend · Laravel",
     visual: "digimama",
-    image: img_digimama_landing,
+    image: "/images/digimama_landing.webp",
 
     descFr:
       "Construire des fonctionnalités backend pour une plateforme EdTech destinée aux femmes commerçantes béninoises : API REST, gamification et back-office.",
@@ -805,7 +793,7 @@ export const PROJECTS = [
     id: "kaud",
     title: "KAUD",
     category: "Identité visuelle",
-    image: img_kaud,
+    image: "/images/kaud.webp",
 
     descFr:
       "Création du logo de KAUD pour traduire visuellement son expertise et renforcer la perception de la qualité de ses réalisations.",
@@ -883,7 +871,7 @@ export const PROJECTS = [
     id: "farmfresh-benin",
     title: "FarmFresh Benin",
     category: "UX / UI · Académique",
-    image: img_vivrier,
+    image: "/images/vivrier.webp",
 
     descFr:
       "Conception d'une plateforme reliant directement les producteurs agricoles béninois aux acheteurs, sans intermédiaire du marché. La solution intègre également un espace d'échange pour faciliter les discussions et les transactions.",
@@ -965,7 +953,7 @@ export const PROJECTS = [
     id: "alimentation-montcho",
     title: "Alimentation Montcho",
     category: "Design graphique",
-    image: img_montcho,
+    image: "/images/montcho.webp",
 
     descFr:
       "Création d'un visuel promotionnel pour faire connaître Alimentation Montcho et mettre en avant son activité de vente de produits congelés.",
@@ -1044,7 +1032,7 @@ export const PROJECTS = [
     id: "chez-maman-bignon",
     title: "Chez Maman Bignon",
     category: "Design graphique",
-    image: img_maman,
+    image: "/images/maman.webp",
 
     descFr:
       "Création d'un visuel pour faire connaître Chez Maman Bignon, une activité proposant des produits vivriers accessibles, notamment adaptés au budget des étudiants.",

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   Download,
+  GitBranch,
   Languages,
   Menu,
   Moon,
@@ -17,12 +18,33 @@ import {
 import styles from "./Navbar.module.css";
 
 const NAV_SECTIONS = [
-  { id: "home", label: "Accueil", icon: Home },
-  { id: "projects", label: "Projets", icon: FolderKanban },
-  { id: "journey", label: "Parcours", icon: GraduationCap },
-  { id: "capabilities", label: "Contribution", icon: GitPullRequest },
-  { id: "contact", label: "Contact", icon: Mail },
+  {
+    id: "home",
+    label: "Accueil",
+    icon: Home,
+  },
+  {
+    id: "projects",
+    label: "Projets",
+    icon: FolderKanban,
+  },
+  {
+    id: "journey",
+    label: "Parcours",
+    icon: GraduationCap,
+  },
+  {
+    id: "capabilities",
+    label: "Contribution",
+    icon: GitBranch,
+  },
+  {
+    id: "contact",
+    label: "Contact",
+    icon: Mail,
+  },
 ];
+
 
 export default function Navbar({ t, lang, setLang, theme, setTheme }) {
   const [active, setActive] = useState("home");
@@ -30,9 +52,6 @@ export default function Navbar({ t, lang, setLang, theme, setTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const closeTimer = useRef(null);
 
-  /* =================================
-     MENU MOBILE
-  ================================= */
   const openMenu = () => {
     window.clearTimeout(closeTimer.current);
     setMenuOpen(true);
@@ -69,9 +88,6 @@ export default function Navbar({ t, lang, setLang, theme, setTheme }) {
     return () => observer.disconnect();
   }, []);
 
-  /* =================================
-     SECTION ACTIVE AU SCROLL
-  ================================= */
   useEffect(() => {
     const onScroll = () => {
       const sections = NAV_SECTIONS.map(({ id }) =>
@@ -191,8 +207,6 @@ export default function Navbar({ t, lang, setLang, theme, setTheme }) {
         </div>
       </div>
 
-      {/* ============ UTILS (hors capsule) ============ */}
-      {/* ============ UTILS (tab vertical à droite) ============ */}
       <div className={styles.utils}>
         <a
           href="/Gaïus Chanis HONTONWAKOU CV_fr.pdf"

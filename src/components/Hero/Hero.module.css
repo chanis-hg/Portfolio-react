@@ -209,14 +209,6 @@
   pointer-events: none;
 }
 
-/* =================================
-   APPARITION LIGNE PAR LIGNE
-   - .wait : avant la séquence, les lignes sont masquées
-   - .go   : chaque ligne se révèle (balayage doux de gauche à droite),
-             les paragraphes se révèlent de haut en bas
-   - sans classe : tout est visible (déjà vu, mouvement réduit, ou JS indisponible)
-   Le contenu n'est jamais masqué par défaut : seule la classe .wait le cache.
-================================= */
 
 .name .line {
   display: block;
@@ -227,21 +219,19 @@
 }
 
 .go {
-  /* début du texte : juste avant la fin du glissement de la photo */
-  --base: 1.75s;
+  --base: 1.05s;
 }
 
 .go .line {
-  animation: lineWipe 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-  animation-delay: calc(var(--base) + var(--i, 0) * 0.14s);
+  animation: lineWipe 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--base) + var(--i, 0) * 0.10s);
 }
 
 .go .block {
   animation-name: lineDrop;
-  animation-duration: 0.8s;
+  animation-duration: 0.65s;
 }
 
-/* les marges négatives évitent de rogner les lettres du grand titre */
 @keyframes lineWipe {
   from {
     opacity: 0;
@@ -270,10 +260,6 @@
   }
 }
 
-/* =================================
-   PHOTO : VISEUR D'APPAREIL
-   Point de mise au point : --fx / --fy (dans Hero.jsx)
-================================= */
 
 .photoColumn {
   position: relative;
@@ -301,18 +287,12 @@
   transform: rotate(4deg) scale(1.02);
 }
 
-/* couche qui voyage pendant la séquence d'ouverture */
 .flight {
   position: relative;
   width: 100%;
   isolation: isolate;
 }
 
-/* =================================
-   LUMIÈRE DE STUDIO
-   Une lueur douce, fixe, derrière la photo. Elle voyage avec elle.
-   Sa teinte suit l'heure de Cotonou (data-tone posé par Hero.jsx).
-================================= */
 
 .hero {
   --studio-glow: rgba(255, 246, 232, 0.11);
@@ -392,7 +372,6 @@
   filter: saturate(1.05);
 }
 
-/* cadre du viseur */
 
 .corner {
   position: absolute;
@@ -420,7 +399,6 @@
 .locked .bl { bottom: 22px; left: 22px; }
 .locked .br { bottom: 22px; right: 22px; }
 
-/* réticule de mise au point */
 
 .reticle {
   position: absolute;
@@ -464,7 +442,6 @@
   color: var(--green);
 }
 
-/* fiche EXIF */
 
 .exif {
   position: absolute;
@@ -509,7 +486,6 @@
   text-align: right;
 }
 
-/* flash du déclencheur */
 
 .flash {
   position: absolute;
@@ -526,7 +502,6 @@
   100% { opacity: 0; }
 }
 
-/* légende sous la photo */
 
 .photoMeta {
   display: flex;
@@ -545,9 +520,6 @@
   color: var(--green);
 }
 
-/* =================================
-   CONTENU
-================================= */
 
 .content {
   position: relative;
@@ -630,7 +602,6 @@
   color: var(--accent);
 }
 
-/* rôle : ce que je fais, lisible en une seconde */
 
 .role {
   margin-top: -0.4rem;
@@ -655,7 +626,6 @@
   color: var(--text-subtle);
 }
 
-/* localisation + horloge */
 
 .metaRow {
   display: flex;
@@ -698,9 +668,6 @@
   transition: opacity 0.2s ease;
 }
 
-/* =================================
-   BIO (paragraphe 1 visible, suite repliable)
-================================= */
 
 .bio {
   max-width: 680px;
@@ -773,9 +740,6 @@
   transform: rotate(180deg);
 }
 
-/* =================================
-   SIGNATURE
-================================= */
 
 .signature {
   display: flex;
@@ -799,9 +763,6 @@
   color: var(--text-subtle);
 }
 
-/* =================================
-   DISPONIBILITÉ + LIEN PROJETS
-================================= */
 
 .footerRow {
   display: flex;
@@ -859,9 +820,6 @@
   transform: translateY(3px);
 }
 
-/* =================================
-   RESPONSIVE
-================================= */
 
 @media (max-width: 900px) {
   .hero {
@@ -945,9 +903,6 @@
   }
 }
 
-/* =================================
-   MOUVEMENT RÉDUIT
-================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .inner,
