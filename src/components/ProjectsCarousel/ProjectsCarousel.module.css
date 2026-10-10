@@ -44,6 +44,7 @@
 }
 
 .counter {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -65,19 +66,25 @@
 .viewport {
   position: relative;
   width: 100%;
-  height: 560px;
   overflow: hidden;
-  cursor: grab;
+  touch-action: pan-y; /* défilement vertical natif, glissement horizontal géré en JS */
 }
 
-.viewport:active {
-  cursor: grabbing;
+.viewport:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+  border-radius: 1.5rem;
 }
 
+/* Toutes les cartes partagent la même cellule de grille :
+   la hauteur du carrousel s'adapte à la carte la plus haute,
+   aucune carte n'est coupée, quelle que soit la longueur du texte. */
 .track {
-  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: center;
   width: 100%;
-  height: 100%;
+  padding-block: 1rem;
 }
 
 /* -------------------------
@@ -85,9 +92,8 @@
 ------------------------- */
 
 .card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  grid-area: 1 / 1;
+  position: relative;
 
   width: min(460px, calc(100vw - 3rem));
   min-height: 500px;
@@ -100,9 +106,9 @@
   border: 1px solid var(--border);
   border-radius: 1.35rem;
 
-  background: var(--bg-card);
-
-  backdrop-filter: blur(14px);
+  /* Fond opaque plutôt que backdrop-filter : 8 cartes floutées
+     coûtent cher sur les téléphones modestes */
+  background: var(--bg-alt);
 
   transform-origin: center center;
 
@@ -113,7 +119,10 @@
     border-color 0.3s ease,
     background-color 0.3s ease;
 
-  user-select: none;
+}
+
+/* Seules les cartes latérales sont cliquables (elles deviennent actives) */
+.card:not(.active) {
   cursor: pointer;
 }
 
@@ -176,14 +185,14 @@
 
 .category {
   margin: 0.35rem 0 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-subtle);
 }
 
 .description {
   margin: 0.8rem 0 0;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   line-height: 1.55;
   color: var(--text-muted);
 
@@ -198,7 +207,7 @@
 }
 
 .meta span {
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-subtle);
@@ -206,7 +215,7 @@
 
 .meta p {
   margin: 0.15rem 0 0;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   line-height: 1.4;
   color: var(--text-muted);
 }
@@ -219,15 +228,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  margin-top: 0.8rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.tags span {
-  padding: 0.3rem 0.5rem;
+.tags li {
+  padding: 0.3rem 0.6rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  font-size: 0.6rem;
-  color: var(--text-subtle);
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 /* -------------------------
@@ -244,33 +255,42 @@
 
   border-top: 1px solid var(--border);
 
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-subtle);
 }
 
 .projectLinks {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.25rem;
 }
 
+/* Zone de clic de 44 px (WCAG 2.5.5), même si l'icône est petite */
 .projectLinks a {
+  width: 44px;
+  height: 44px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  color: inherit;
-
-  opacity: 0.7;
+  border-radius: 50%;
+  color: var(--text-muted);
 
   transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .projectLinks a:hover {
-  opacity: 1;
-  transform: translateY(-1px);
+  color: var(--text);
+  background: var(--accent-10);
+}
+
+.projectLinks a:focus-visible,
+.controls button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* -------------------------
@@ -285,8 +305,8 @@
 }
 
 .controls button {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
 
   display: inline-flex;
   align-items: center;
@@ -312,6 +332,19 @@
   transform: translateY(-2px);
 }
 
+/* Texte réservé aux lecteurs d'écran */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* -------------------------
    TABLET
 ------------------------- */
@@ -328,10 +361,6 @@
 
   .title {
     font-size: clamp(1.8rem, 6vw, 2.7rem);
-  }
-
-  .viewport {
-    height: 510px;
   }
 
   .card {
@@ -381,14 +410,6 @@
     font-size: clamp(1.7rem, 8vw, 2.35rem);
   }
 
-  .counter {
-    display: flex;
-  }
-
-  .viewport {
-    height: 480px;
-  }
-
   .card {
     width: 84vw;
     min-height: 430px;
@@ -403,20 +424,12 @@
     pointer-events: none;
   }
 
-  .cardContent {
-    min-width: 0;
-  }
-
   .cardContent h3 {
     font-size: 1.4rem;
   }
 
   .description {
     -webkit-line-clamp: 3;
-  }
-
-  .tags {
-    flex-wrap: wrap;
   }
 
   .cardBottom {
@@ -438,12 +451,24 @@
     max-width: 100%;
   }
 
-  .viewport {
-    height: 465px;
-  }
-
   .card {
     width: calc(100vw - 1.5rem);
     min-height: 420px;
+  }
+}
+
+/* -------------------------
+   MOUVEMENT RÉDUIT
+------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .controls button,
+  .projectLinks a {
+    transition: none;
+  }
+
+  .controls button:hover {
+    transform: none;
   }
 }

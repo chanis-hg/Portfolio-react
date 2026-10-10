@@ -229,7 +229,7 @@ export default function Projects({ t, lang, activeProjectId }) {
             <aside className={styles.visual}>
               <div className={styles.visualFrame}>
                 <div className={styles.visualBar}>
-                  <span>{getText("Preuve visuelle", "Visual evidence")}</span>
+                  <span>{getText("Aperçu", "Preview")}</span>
 
                   <span>
                     {String(
@@ -239,7 +239,7 @@ export default function Projects({ t, lang, activeProjectId }) {
                 </div>
 
                 <div className={styles.visualContent}>
-                  <ProjectVisual project={project} lang={lang} />
+                  <ProjectVisual project={project} lang={lang} preferImage />
                 </div>
               </div>
             </aside>

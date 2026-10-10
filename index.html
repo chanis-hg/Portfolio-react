@@ -3,36 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#121212" />
+    <meta name="theme-color" content="#14110E" />
 
-    <title>Gaïus Chanis HONTONWAKOU — Développeur web & designer UX/UI, Cotonou</title>
-    <meta name="description" content="Je construis des produits numériques en partant des contraintes réelles du terrain. Laravel, React, Figma. Étudiant à l'IFRI, basé à Cotonou, Bénin." />
+    <title>Gaïus Chanis HONTONWAKOU — Développeur web orienté produit, Cotonou</title>
+    <meta name="description" content="Développeur web orienté produit, basé à Cotonou. Laravel, React, Figma. Des produits conçus à partir des contraintes réelles du terrain béninois. Étudiant en Licence 3 à l'IFRI (UAC)." />
     <meta name="author" content="Gaïus Chanis HONTONWAKOU" />
     <link rel="canonical" href="https://gaiuschanis.netlify.app/" />
 
-    <!-- Open Graph (LinkedIn, WhatsApp, Facebook) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Gaïus Chanis HONTONWAKOU" />
     <meta property="og:locale" content="fr_FR" />
-    <meta property="og:title" content="Gaïus Chanis HONTONWAKOU — Développeur web & designer UX/UI" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:title" content="Gaïus Chanis HONTONWAKOU — Développeur web orienté produit" />
     <meta property="og:description" content="Des produits numériques conçus à partir des contraintes réelles du terrain. Découvre CAVI-Alibori, DigiMama, CV Generator et Africa Pulse." />
     <meta property="og:url" content="https://gaiuschanis.netlify.app/" />
-    <meta property="og:image" content="https://gaiuschanis.netlify.app/moi.jpeg" />
-    <meta property="og:image:alt" content="Portrait de Gaïus Chanis HONTONWAKOU" />
+    <meta property="og:image" content="https://gaiuschanis.netlify.app/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Gaïus Chanis HONTONWAKOU, développeur web orienté produit à Cotonou" />
 
-    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Gaïus Chanis HONTONWAKOU — Développeur web & designer UX/UI" />
+    <meta name="twitter:title" content="Gaïus Chanis HONTONWAKOU — Développeur web orienté produit" />
     <meta name="twitter:description" content="Des produits numériques conçus à partir des contraintes réelles du terrain." />
-    <meta name="twitter:image" content="https://gaiuschanis.netlify.app/moi.jpeg" />
+    <meta name="twitter:image" content="https://gaiuschanis.netlify.app/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Gaïus Chanis HONTONWAKOU, développeur web orienté produit à Cotonou" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Gaïus Chanis HONTONWAKOU",
+        "jobTitle": "Développeur web orienté produit",
+        "url": "https://gaiuschanis.netlify.app/",
+        "image": "https://gaiuschanis.netlify.app/moi.jpeg",
+        "address": { "@type": "PostalAddress", "addressLocality": "Cotonou", "addressCountry": "BJ" },
+        "affiliation": { "@type": "CollegeOrUniversity", "name": "IFRI, Université d'Abomey-Calavi" },
+        "knowsAbout": ["Laravel", "React", "Figma", "UX design"],
+        "sameAs": [
+          "https://www.linkedin.com/in/ga%C3%AFus-chanis-08a782365",
+          "https://github.com/chanis-hg"
+        ]
+      }
+    </script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="preload" href="/moi.jpeg" as="image" />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Gaïus Chanis HONTONWAKOU</h1>
+      <p>Développeur web orienté produit, basé à Cotonou (Bénin). Laravel, React, Figma.</p>
+      <p>Projets : CAVI-Alibori, DigiMama, CV Generator, Africa Pulse.</p>
+      <p>
+        <a href="https://wa.me/2290153505501">WhatsApp</a> ·
+        <a href="https://www.linkedin.com/in/ga%C3%AFus-chanis-08a782365">LinkedIn</a> ·
+        <a href="https://github.com/chanis-hg">GitHub</a> ·
+        <a href="/cv-gaius-chanis-fr.pdf">CV (PDF)</a>
+      </p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

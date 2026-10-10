@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowDown, ChevronDown, Clock, MapPin } from "lucide-react";
+import { ArrowDown, ChevronDown, Clock, MapPin, MessageCircle } from "lucide-react";
 
 import styles from "./Hero.module.css";
 
 const FLIGHT_MS = 1600;
 const FALLBACK_MS = 3000;
+
+const WHATSAPP_URL = "https://wa.me/2290153505501";
 
 const CLOCK = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Africa/Lagos",
@@ -48,7 +50,7 @@ function CotonouClock({ lang }) {
 
   return (
     <div className={styles.clock}>
-      <Clock size={15} strokeWidth={1.7} />
+      <Clock size={15} strokeWidth={1.7} aria-hidden="true" />
       <span>{lang === "fr" ? "Il est" : "It's"}</span>
       <strong className={styles.clockTime}>
         {hh}
@@ -127,7 +129,7 @@ function Viewfinder({ lang, frameRef }) {
               <div className={styles.exifRow}>
                 <dt>{isFr ? "DISPO" : "OPEN TO"}</dt>
                 <dd>
-                  {isFr ? "Stage · Alternance" : "Internship · Apprenticeship"}
+                  {isFr ? "Stage · Freelance" : "Internship · Freelance"}
                 </dd>
               </div>
             </dl>
@@ -137,7 +139,11 @@ function Viewfinder({ lang, frameRef }) {
         </div>
       </div>
 
-      <div className={`${styles.photoMeta} ${styles.line}`} style={{ "--i": 9 }}>
+      <div
+        className={`${styles.photoMeta} ${styles.line}`}
+        style={{ "--i": 9 }}
+        aria-hidden="true"
+      >
         <span>GAÏUS CHANIS</span>
         <span className={locked ? styles.metaLocked : ""}>
           {locked
@@ -351,9 +357,9 @@ export default function Hero({ t, lang, ready = true }) {
             <p className={styles.roleStack}>Laravel · React · Figma</p>
           </div>
 
-          <div className={`${styles.metaRow} ${styles.line}`} style={{ "--i": 5 }}>
+          <div className={`${styles.metaRow} ${styles.line}`} style={{ "--i": 6 }}>
             <div className={styles.location}>
-              <MapPin size={16} strokeWidth={1.7} />
+              <MapPin size={16} strokeWidth={1.7} aria-hidden="true" />
               <span>
                 {isFr
                   ? "Cotonou, Bénin · IFRI / UAC · Internet & Multimédia"
@@ -366,7 +372,7 @@ export default function Hero({ t, lang, ready = true }) {
 
           <div
             className={`${styles.bio} ${styles.line} ${styles.block}`}
-            style={{ "--i": 6 }}
+            style={{ "--i": 7 }}
           >
             {isFr ? (
               <>
@@ -458,13 +464,14 @@ export default function Hero({ t, lang, ready = true }) {
                 size={15}
                 strokeWidth={1.8}
                 className={moreOpen ? styles.chevronUp : ""}
+                aria-hidden="true"
               />
             </button>
           </div>
 
           <div
             className={`${styles.signature} ${styles.line} ${styles.block}`}
-            style={{ "--i": 7 }}
+            style={{ "--i": 8 }}
           >
             {isFr ? (
               <>
@@ -481,25 +488,37 @@ export default function Hero({ t, lang, ready = true }) {
 
           <div
             className={`${styles.footerRow} ${styles.line} ${styles.block}`}
-            style={{ "--i": 8 }}
+            style={{ "--i": 5 }}
           >
-            <div className={styles.availability}>
-              <span className={styles.availabilityDot} />
+            <p className={styles.availability}>
+              <span className={styles.availabilityDot} aria-hidden="true" />
               <span>
                 {isFr
-                  ? "Disponible pour stage / alternance"
-                  : "Available for internship / apprenticeship"}
+                  ? "Disponible pour un stage ou une mission freelance"
+                  : "Available for an internship or freelance work"}
               </span>
-            </div>
+            </p>
 
-            <button
-              type="button"
-              className={styles.projectsLink}
-              onClick={() => scrollTo("project-selector")}
-            >
-              <span>{isFr ? "Voir les projets" : "See the projects"}</span>
-              <ArrowDown size={15} strokeWidth={1.8} />
-            </button>
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={styles.primaryCta}
+                onClick={() => scrollTo("projects")}
+              >
+                <span>{isFr ? "Voir les projets" : "See the projects"}</span>
+                <ArrowDown size={16} strokeWidth={1.8} aria-hidden="true" />
+              </button>
+
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.secondaryCta}
+              >
+                <MessageCircle size={16} strokeWidth={1.8} aria-hidden="true" />
+                <span>{isFr ? "Écrire sur WhatsApp" : "Message on WhatsApp"}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

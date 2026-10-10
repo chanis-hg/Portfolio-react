@@ -1,259 +1,204 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { SiFigma } from "react-icons/si";
 
 import { PROJECTS } from "../../data/index";
 import ProjectVisual from "../ProjectVisual/ProjectVisual";
 import styles from "./ProjectsCarousel.module.css";
 
-export default function ProjectsCarousel({ t, lang, onActiveChange }) {
-  const [active, setActive] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [cardOffset, setCardOffset] = useState(430);
+/* Distance horizontale entre deux cartes, selon la largeur d'écran */
+const getCardOffset = () => {
+  if (typeof window === "undefined") return 430;
+  if (window.innerWidth <= 520) return 235;
+  if (window.innerWidth <= 768) return 285;
+  return 430;
+};
 
+const SWIPE_THRESHOLD = 50; // px de glissement nécessaires pour changer de carte
+
+const pad = (n) => String(n).padStart(2, "0");
+
+export default function ProjectsCarousel({ lang = "fr", onActiveChange }) {
+  const isFr = lang === "fr";
   const projects = PROJECTS;
+  const total = projects.length;
+
+  const [active, setActive] = useState(0);
+  const [cardOffset, setCardOffset] = useState(getCardOffset);
+  const touchStartX = useRef(null);
 
   /* -------------------------
-     RESPONSIVE CARD OFFSET
+     RESPONSIVE
   ------------------------- */
-
   useEffect(() => {
-    const updateCardOffset = () => {
-      if (window.innerWidth <= 520) {
-        setCardOffset(235);
-      } else if (window.innerWidth <= 768) {
-        setCardOffset(285);
-      } else {
-        setCardOffset(430);
-      }
-    };
-
-    updateCardOffset();
-
-    window.addEventListener("resize", updateCardOffset);
-
-    return () => {
-      window.removeEventListener("resize", updateCardOffset);
-    };
+    const update = () => setCardOffset(getCardOffset());
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   /* -------------------------
-     ACTIVE PROJECT SYNC
+     SYNCHRONISATION AVEC L'ÉTUDE DE CAS
+     Pas de défilement automatique : le contenu ne change que sur action
+     du visiteur (sinon l'étude de cas en dessous change pendant la lecture).
   ------------------------- */
-
   useEffect(() => {
-    const activeProject = projects[active];
-
-    if (activeProject) {
-      onActiveChange?.(activeProject.id);
-    }
+    const project = projects[active];
+    if (project) onActiveChange?.(project.id);
   }, [active, onActiveChange, projects]);
 
   /* -------------------------
      NAVIGATION
   ------------------------- */
+  const goTo = (index) => setActive((index + total) % total);
+  const next = () => goTo(active + 1);
+  const previous = () => goTo(active - 1);
 
-  const next = () => {
-    setActive((current) => (current + 1) % projects.length);
-  };
-
-  const previous = () => {
-    setActive(
-      (current) => (current - 1 + projects.length) % projects.length
-    );
-  };
-
-  /* -------------------------
-     KEYBOARD NAVIGATION
-  ------------------------- */
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      const target = event.target;
-
-      const isTyping =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        target instanceof HTMLSelectElement ||
-        target?.isContentEditable;
-
-      if (isTyping) return;
-
-      if (event.key === "ArrowRight") {
-        next();
-      }
-
-      if (event.key === "ArrowLeft") {
-        previous();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  /* -------------------------
-     AUTO PLAY
-  ------------------------- */
-
-  useEffect(() => {
-    if (isPaused || projects.length <= 1) {
-      return;
+  /* Flèches du clavier : seulement quand le carrousel a le focus,
+     jamais sur toute la page. */
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      next();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      previous();
     }
+  };
 
-    const timer = setTimeout(() => {
-      setActive((current) => (current + 1) % projects.length);
-    }, 10000);
+  /* Glissement au doigt sur mobile */
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX;
+  };
 
-    return () => clearTimeout(timer);
-  }, [active, isPaused, projects.length]);
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+    const delta = event.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
 
-  /* -------------------------
-     CARD POSITION
-  ------------------------- */
+    if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+    if (delta < 0) next();
+    else previous();
+  };
 
+  /* Position relative au projet actif, en boucle */
   const getOffset = (index) => {
     let offset = index - active;
-
-    if (offset > projects.length / 2) {
-      offset -= projects.length;
-    }
-
-    if (offset < -projects.length / 2) {
-      offset += projects.length;
-    }
-
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
     return offset;
   };
 
-  /* -------------------------
-     FAMILY LABEL
-  ------------------------- */
-
-  const getFamilyLabel = (family) => {
-    const labels = {
-      development: lang === "fr" ? "DÉVELOPPEMENT" : "DEVELOPMENT",
-      design: "DESIGN",
-      ux: lang === "fr" ? "UX / CONCEPTION" : "UX / DESIGN",
-    };
-
-    return labels[family] || family;
+  const familyLabels = {
+    development: isFr ? "DÉVELOPPEMENT" : "DEVELOPMENT",
+    design: "DESIGN",
+    ux: isFr ? "UX / CONCEPTION" : "UX / DESIGN",
   };
+
+  const activeProject = projects[active];
 
   return (
     <section
       id="project-selector"
       className={styles.section}
-      aria-label="Projets"
+      aria-roledescription={isFr ? "carrousel" : "carousel"}
+      aria-label={isFr ? "Sélection de projets" : "Selected projects"}
     >
       <div className={styles.header}>
         <div className={styles.headerMain}>
           <span className={styles.eyebrow}>
-            {lang === "fr"
-              ? "Sélection de réalisations"
-              : "Selected work"}
+            {isFr ? "Sélection de réalisations" : "Selected work"}
           </span>
 
           <h2 className={styles.title}>
-            {lang === "fr"
+            {isFr
               ? "Des problèmes concrets. Des produits construits."
               : "Concrete problems. Built products."}
           </h2>
         </div>
 
-        <div className={styles.counter} aria-label="Position du projet">
-          <span>{String(active + 1).padStart(2, "0")}</span>
+        <p className={styles.counter} aria-hidden="true">
+          <span>{pad(active + 1)}</span>
           <span>/</span>
-          <span>{String(projects.length).padStart(2, "0")}</span>
-        </div>
+          <span>{pad(total)}</span>
+        </p>
       </div>
+
+      {/* Annonce pour les lecteurs d'écran à chaque changement de projet */}
+      <p className={styles.srOnly} aria-live="polite">
+        {isFr
+          ? `Projet ${active + 1} sur ${total} : ${activeProject?.title}`
+          : `Project ${active + 1} of ${total}: ${activeProject?.title}`}
+      </p>
 
       <div
         className={styles.viewport}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        aria-label={
+          isFr
+            ? "Projets : utilisez les flèches gauche et droite pour naviguer"
+            : "Projects: use the left and right arrow keys to navigate"
+        }
       >
         <div className={styles.track}>
           {projects.map((project, index) => {
             const offset = getOffset(index);
             const isActive = offset === 0;
+            const linkTabIndex = isActive ? 0 : -1;
 
             return (
               <article
                 key={project.id}
-                className={`${styles.card} ${
-                  isActive ? styles.active : ""
-                }`}
+                className={`${styles.card} ${isActive ? styles.active : ""}`}
                 style={{
-                  transform: `
-                    translateX(calc(-50% + ${
-                      offset * cardOffset
-                    }px))
-                    scale(${isActive ? 1 : 0.78})
-                  `,
+                  transform: `translateX(${offset * cardOffset}px) scale(${isActive ? 1 : 0.78})`,
                   opacity: isActive ? 1 : 0.42,
                   zIndex: isActive ? 3 : 1,
                 }}
-                onClick={() => setActive(index)}
+                aria-hidden={!isActive}
+                onClick={isActive ? undefined : () => goTo(index)}
               >
                 <div className={styles.cardTop}>
                   <span className={styles.family}>
-                    {getFamilyLabel(project.family)}
+                    {familyLabels[project.family] || project.family}
                   </span>
-
-                  <span className={styles.number}>
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <span className={styles.number}>{pad(index + 1)}</span>
                 </div>
 
                 <ProjectVisual project={project} lang={lang} />
 
                 <div className={styles.cardContent}>
                   <h3>{project.title}</h3>
-
-                  <p className={styles.category}>
-                    {project.category}
-                  </p>
+                  <p className={styles.category}>{project.category}</p>
 
                   <p className={styles.description}>
-                    {lang === "fr"
-                      ? project.descFr
-                      : project.descEn}
+                    {isFr ? project.descFr : project.descEn}
                   </p>
 
                   {project.roleFr && (
                     <div className={styles.meta}>
-                      <span>
-                        {lang === "fr" ? "Rôle" : "Role"}
-                      </span>
-
-                      <p>
-                        {lang === "fr"
-                          ? project.roleFr
-                          : project.roleEn}
-                      </p>
+                      <span>{isFr ? "Rôle" : "Role"}</span>
+                      <p>{isFr ? project.roleFr : project.roleEn}</p>
                     </div>
                   )}
 
-                  <div className={styles.tags}>
-                    {project.tags?.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
+                  {project.tags?.length > 0 && (
+                    <ul className={styles.tags}>
+                      {project.tags.map((tag) => (
+                        <li key={tag}>{tag}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 <div className={styles.cardBottom}>
                   <span>
                     {project.status === "finished"
-                      ? lang === "fr"
-                        ? "Terminé"
-                        : "Completed"
-                      : lang === "fr"
-                        ? "En cours"
-                        : "In progress"}
+                      ? isFr ? "Terminé" : "Completed"
+                      : isFr ? "En cours" : "In progress"}
                   </span>
 
                   <div className={styles.projectLinks}>
@@ -262,12 +207,14 @@ export default function ProjectsCarousel({ t, lang, onActiveChange }) {
                         href={project.github}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
+                        tabIndex={linkTabIndex}
+                        aria-label={
+                          isFr
+                            ? `Code source de ${project.title} sur GitHub (nouvel onglet)`
+                            : `${project.title} source code on GitHub (new tab)`
                         }
-                        aria-label={`GitHub — ${project.title}`}
                       >
-                        <FaGithub size={17} />
+                        <FaGithub size={18} aria-hidden="true" />
                       </a>
                     )}
 
@@ -276,15 +223,14 @@ export default function ProjectsCarousel({ t, lang, onActiveChange }) {
                         href={project.demo}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
+                        tabIndex={linkTabIndex}
+                        aria-label={
+                          isFr
+                            ? `Voir ${project.title} en ligne (nouvel onglet)`
+                            : `View ${project.title} live (new tab)`
                         }
-                        aria-label={`Voir ${project.title}`}
                       >
-                        <ExternalLink
-                          size={17}
-                          strokeWidth={1.7}
-                        />
+                        <ExternalLink size={18} strokeWidth={1.7} aria-hidden="true" />
                       </a>
                     )}
 
@@ -293,15 +239,14 @@ export default function ProjectsCarousel({ t, lang, onActiveChange }) {
                         href={project.figma}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
+                        tabIndex={linkTabIndex}
+                        aria-label={
+                          isFr
+                            ? `Prototype Figma de ${project.title} (nouvel onglet)`
+                            : `${project.title} Figma prototype (new tab)`
                         }
-                        aria-label={`Prototype Figma — ${project.title}`}
                       >
-                        <ExternalLink
-                          size={17}
-                          strokeWidth={1.7}
-                        />
+                        <SiFigma size={16} aria-hidden="true" />
                       </a>
                     )}
                   </div>
@@ -316,25 +261,17 @@ export default function ProjectsCarousel({ t, lang, onActiveChange }) {
         <button
           type="button"
           onClick={previous}
-          aria-label={
-            lang === "fr"
-              ? "Projet précédent"
-              : "Previous project"
-          }
+          aria-label={isFr ? "Projet précédent" : "Previous project"}
         >
-          <ArrowLeft size={18} strokeWidth={1.7} />
+          <ArrowLeft size={18} strokeWidth={1.7} aria-hidden="true" />
         </button>
 
         <button
           type="button"
           onClick={next}
-          aria-label={
-            lang === "fr"
-              ? "Projet suivant"
-              : "Next project"
-          }
+          aria-label={isFr ? "Projet suivant" : "Next project"}
         >
-          <ArrowRight size={18} strokeWidth={1.7} />
+          <ArrowRight size={18} strokeWidth={1.7} aria-hidden="true" />
         </button>
       </div>
     </section>

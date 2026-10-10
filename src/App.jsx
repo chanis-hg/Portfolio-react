@@ -1,49 +1,59 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TRANSLATIONS, PROJECTS } from "./data/index";
 
 import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero";
 import ProjectsCarousel from "./components/ProjectsCarousel/ProjectsCarousel";
-import Experience from "./components/Experience/Experience";
 import Projects from "./components/Projects/Projects";
-import Skills from "./components/Skills/Skills";
+import Experience from "./components/Experience/Experience";
 import Education from "./components/Education/Education";
+import Skills from "./components/Skills/Skills";
+import Capabilities from "./components/Capabilities/Capabilities";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import Preloader from "./components/Preloader/Preloader";
-import CustomCursor from "./components/CustomCursor/CustomCursor";
-import Capabilities from "./components/Capabilities/Capabilities";
+
+function readStorage(key, fallback) {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStorage(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* stockage indisponible (navigation privée) : sans conséquence */
+  }
+}
 
 export default function App() {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "dark",
-  );
+  const [theme, setTheme] = useState(() => readStorage("theme", "dark"));
+  const [lang, setLang] = useState(() => readStorage("lang", "fr"));
+  const [activeProjectId, setActiveProjectId] = useState(PROJECTS[0]?.id || null);
 
-  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "fr");
-
-  const [activeProjectId, setActiveProjectId] = useState(
-    PROJECTS[0]?.id || null,
-  );
+  /* La photo du Hero s'anime quand l'intro se retire */
+  const [ready, setReady] = useState(false);
+  const handleIntroDone = useCallback(() => setReady(true), []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-
-    localStorage.setItem("theme", theme);
+    writeStorage("theme", theme);
   }, [theme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("lang", lang);
-
-    localStorage.setItem("lang", lang);
+    writeStorage("lang", lang);
   }, [lang]);
 
   const t = TRANSLATIONS[lang];
 
   return (
     <>
-      <CustomCursor />
 
-      <Preloader lang={lang} />
+      <Preloader lang={lang} onComplete={handleIntroDone} />
 
       <Navbar
         t={t}
@@ -54,33 +64,26 @@ export default function App() {
       />
 
       <main>
-        <Hero t={t} lang={lang} />
+        <Hero t={t} lang={lang} ready={ready} />
 
-        <section id="projects" className="projects-section">
+        <div id="projects">
           <ProjectsCarousel
             t={t}
             lang={lang}
             onActiveChange={setActiveProjectId}
           />
-
           <Projects t={t} lang={lang} activeProjectId={activeProjectId} />
-        </section>
+        </div>
 
-        <section id="journey" className="journey-section">
+        <div id="journey">
           <Experience t={t} lang={lang} />
-
           <Education t={t} lang={lang} />
+          <Skills t={t} lang={lang} />
+        </div>
 
-          <Skills t={t} />
-        </section>
+        <Capabilities t={t} lang={lang} />
 
-        <section id="capabilities" className="section">
-          <Capabilities t={t} lang={lang} />
-
-          <skills t={t} />
-        </section>
-
-        <Contact t={t} />
+        <Contact t={t} lang={lang} />
       </main>
 
       <Footer t={t} lang={lang} />

@@ -152,37 +152,6 @@
   color: var(--text);
 }
 
-.timerTrack {
-  position: relative;
-  width: min(18rem, 42%);
-  height: 2px;
-  margin: 1.25rem auto 0;
-  overflow: hidden;
-  border-radius: var(--radius-full);
-  background: var(--border);
-}
-
-.timerFill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
-  border-radius: inherit;
-  background: var(--accent);
-  animation: timerProgress 10s linear both;
-}
-
-.flowPaused .timerFill {
-  animation-play-state: paused;
-}
-
-@keyframes timerProgress {
-  to {
-    transform: scaleX(1);
-  }
-}
-
 /*PANNEAU */
 
 .panel {
@@ -316,7 +285,8 @@
 }
 
 /* =================================
-   OUTILS : tuiles icônes + chips texte
+   OUTILS : logo sur plaque + nom toujours visible,
+   ou chip texte pour les outils sans logo
 ================================= */
 
 .chips {
@@ -329,30 +299,32 @@
   list-style: none;
 }
 
-/* ----- Tuile icône (logo) -----
-   Fond sombre UNIVERSEL, indépendant du thème.
-   Les logos colorés (dont le blanc CSS / CSS Modules / SQLite / GitHub)
-   ressortent de manière identique en thème clair et sombre. */
-.tile {
-  position: relative;
-  width: 40px;
+/* Outil avec logo */
+.tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   height: 40px;
+  padding: 0 0.85rem 0 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-alt);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Plaque sombre UNIVERSELLE, indépendante du thème :
+   les logos blancs (CSS, CSS Modules, SQLite, GitHub) restent visibles en thème clair. */
+.tile {
   display: grid;
   place-items: center;
-  padding: 0;
-
-  color: #ffffff; /* pour les icônes en currentColor (FlaskConical) */
-
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
   background: #1a1a1d;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-
-  cursor: help;
-  animation: chipIn 0.4s cubic-bezier(0.22, 0.68, 0, 1) both;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.25s cubic-bezier(0.22, 0.68, 0, 1.2);
+  color: #ffffff; /* icônes en currentColor (FlaskConical) */
 }
 
 .tileIcon {
@@ -369,20 +341,7 @@
   height: 100%;
 }
 
-/* Le label n'est affiché que sur tactile (voir media queries plus bas) */
-.tileLabel {
-  display: none;
-}
-
-/* Ordre d'apparition des tuiles (stagger) */
-.tile:nth-child(1) { animation-delay: 0.16s; }
-.tile:nth-child(2) { animation-delay: 0.21s; }
-.tile:nth-child(3) { animation-delay: 0.26s; }
-.tile:nth-child(4) { animation-delay: 0.31s; }
-.tile:nth-child(5) { animation-delay: 0.36s; }
-.tile:nth-child(6) { animation-delay: 0.41s; }
-
-/* ----- Chip texte (outils sans logo) ----- */
+/* Outil sans logo */
 .chipText {
   display: inline-flex;
   align-items: center;
@@ -395,12 +354,19 @@
   font-weight: 500;
   color: var(--text);
   white-space: nowrap;
+}
+
+/* Apparition en cascade des outils */
+.chips li {
   animation: chipIn 0.4s cubic-bezier(0.22, 0.68, 0, 1) both;
 }
 
-.chipText:nth-child(1) { animation-delay: 0.16s; }
-.chipText:nth-child(2) { animation-delay: 0.21s; }
-.chipText:nth-child(3) { animation-delay: 0.26s; }
+.chips li:nth-child(1) { animation-delay: 0.16s; }
+.chips li:nth-child(2) { animation-delay: 0.21s; }
+.chips li:nth-child(3) { animation-delay: 0.26s; }
+.chips li:nth-child(4) { animation-delay: 0.31s; }
+.chips li:nth-child(5) { animation-delay: 0.36s; }
+.chips li:nth-child(6) { animation-delay: 0.41s; }
 
 @keyframes chipIn {
   from {
@@ -411,69 +377,6 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-/* ----- Hover : tuile active + tooltip ----- */
-@media (hover: hover) {
-  .tile:hover {
-    z-index: 5;
-    border-color: var(--accent);
-    background: #232326;
-    transform: translateY(-2px);
-  }
-
-  .tile::after {
-    content: attr(data-tooltip);
-
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    z-index: 10;
-
-    padding: 0.35rem 0.7rem;
-
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text);
-    white-space: nowrap;
-
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-4px);
-
-    transition:
-      opacity 0.2s ease,
-      transform 0.25s ease;
-  }
-
-  .tile:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* ----- Mobile / tactile : label affiché à côté de l'icône ----- */
-@media (hover: none) {
-  .tile {
-    width: auto;
-    padding: 0 0.75rem;
-    gap: 0.45rem;
-    display: inline-flex;
-    align-items: center;
-    cursor: default;
-    /* Fond sombre universel conservé */
-  }
-
-  .tileLabel {
-    display: inline;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #ffffff;
   }
 }
 
@@ -534,13 +437,15 @@
     padding-left: 0.25rem;
   }
 
+  /* Le rail relie le 1er et le 5e cercle, sans traverser le panneau en dessous :
+     4 intervalles = 4 × (hauteur d'un cercle + écart entre étapes) */
   .rail {
     top: calc(var(--node) / 2);
-    bottom: calc(var(--node) / 2);
+    bottom: auto;
     left: calc(var(--node) / 2 - 1px);
     right: auto;
     width: 2px;
-    height: auto;
+    height: calc(4 * (var(--node) + 0.85rem));
   }
 
   .railFill {
@@ -589,21 +494,15 @@
 @media (prefers-reduced-motion: reduce) {
   .rail::after,
   .railFill,
-  .timerFill,
   .node,
   .tabLabel,
   .panel,
   .panel::before,
   .panelMain,
   .panelMeta,
-  .tile,
-  .chipText,
+  .chips li,
   .proofs li {
     animation: none;
     transition: none;
-  }
-
-  .tile:hover {
-    transform: none;
   }
 }

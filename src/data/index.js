@@ -1,5 +1,3 @@
-
-
 export const TRANSLATIONS = {
   fr: {
     nav: {
@@ -75,10 +73,10 @@ export const TRANSLATIONS = {
 
     education: {
       sectionTag: "Formation",
-      title: "Parcours & Certifications",
-      sub: "Ma formation académique et mes certifications obtenues.",
+      title: "Formation",
+      sub: "Mon parcours académique et les formations suivies en parallèle.",
       current: "En cours",
-      certified: "Certifié",
+      certified: "Certificat obtenu",
     },
 
     contact: {
@@ -171,10 +169,10 @@ export const TRANSLATIONS = {
 
     education: {
       sectionTag: "Education",
-      title: "Education & Certifications",
-      sub: "My academic background and earned certifications.",
+      title: "Education",
+      sub: "My academic path and the training I took alongside it.",
       current: "Ongoing",
-      certified: "Certified",
+      certified: "Certificate earned",
     },
 
     contact: {
@@ -204,42 +202,42 @@ export const EXPERIENCES = [
     roleEn: "Backend Developer Intern",
     typeFr: "Stage · Remote",
     typeEn: "Internship · Remote",
-    current: true,
+    current: false,
 
     descFr:
-      "DigiMama est une application EdTech conçue pour les femmes commerçantes béninoises — formation en langues locales (Fon, Adja, Yorùbá), gamification et suivi de progression. Au sein d'une équipe de 4 développeurs, j'interviens sur l'API REST et le back-office : plus de 10 cours, 31 leçons et 10 badges configurés à ce jour.",
+      "DigiMama est une plateforme EdTech pour les femmes commerçantes béninoises : formations en langues locales (fon, adja, yorùbá), communauté et progression, consommées par une application mobile. Dans une équipe de 4 développeurs, j'ai construit l'API des paramètres utilisatrice et écrit les tests du module Communauté et de sa modération.",
 
     descEn:
-      "DigiMama is an EdTech app built for Beninese market women — training in local languages (Fon, Adja, Yorùbá), gamification and progress tracking. Within a 4-developer team, I work on the REST API and back-office: 10+ courses, 31 lessons and 10 badges configured to date.",
+      "DigiMama is an EdTech platform for Beninese market women: training in local languages (Fon, Adja, Yorùbá), community and progress tracking, consumed by a mobile app. In a team of 4 developers, I built the user settings API and wrote the tests for the Community module and its moderation.",
 
     stackFr: [
       "Laravel 12",
-      "Filament",
+      "Pest",
       "MySQL",
       "Sanctum",
-      "PHPUnit",
+      "Filament",
     ],
 
     stackEn: [
       "Laravel 12",
-      "Filament",
+      "Pest",
       "MySQL",
       "Sanctum",
-      "PHPUnit",
+      "Filament",
     ],
 
     highlights: [
-      "GamificationService découplé — XP, niveaux, streaks, badges automatiques",
-      "Verrous SQL (lockForUpdate) pour éviter tout double-crédit",
-      "Tests d'intégration — zéro régression sur les flux critiques",
-      "Back-office Filament : Cours, Leçons, Badges, Utilisatrices",
+      "API des paramètres utilisatrice : mode hors ligne, seuil de téléchargement en Mo, langue, notifications",
+      "Test de bout en bout du parcours Communauté : rejoindre, publier, être signalée",
+      "11 tests du back-office de modération : permissions, traçabilité, contenu supprimé",
+      "Correction d'une migration bloquante liée au fon comme langue par défaut",
     ],
 
     highlightsEn: [
-      "Decoupled GamificationService — XP, levels, streaks, auto badges",
-      "SQL locks (lockForUpdate) preventing double-credit",
-      "Integration tests — zero regression on critical flows",
-      "Filament back-office: Courses, Lessons, Badges, Users",
+      "User settings API: offline mode, download limit in MB, language, notifications",
+      "End-to-end test of the Community journey: join, post, get reported",
+      "11 tests for the moderation back-office: permissions, traceability, deleted content",
+      "Fix for a blocking migration tied to Fon as the default language",
     ],
 
     images: [
@@ -251,14 +249,14 @@ export const EXPERIENCES = [
 
   {
     id: 2,
-    period: "Juin 2026 - Septembre 2026",
-    periodEn: "June 2026 - September 2026",
+    period: "Juin 2026 — Septembre 2026",
+    periodEn: "June 2026 — September 2026",
     company: "MISP — Ministère de l'Intérieur et de la Sécurité Publique",
     roleFr: "Stagiaire Community Manager & Photographe",
     roleEn: "Community Manager & Photographer Intern",
     typeFr: "Stage · Cotonou, Bénin",
     typeEn: "Internship · Cotonou, Benin",
-    current: true,
+    current: false,
 
     descFr:
       "Appui à la communication numérique du Point Focal Communication du ministère, en collaboration avec le tuteur. Participation à la production de contenus visuels sur Facebook et couverture photographique d'événements officiels.",
@@ -332,13 +330,13 @@ export const CAPABILITIES = [
     number: "02",
     categoryFr: "SYSTÈME",
     categoryEn: "SYSTEM",
-    image: "/images/capability_backend.webp",
+    image: "/images/digimama_admin.webp",
 
     altFr:
-      "Illustration d'un tableau de bord fictif avec des données structurées",
+      "Back-office Filament de DigiMama : gestion des cours, leçons et badges",
 
     altEn:
-      "Illustration of a fictional dashboard with structured data",
+      "DigiMama Filament back-office: managing courses, lessons and badges",
 
     titleFr: "Backend, API et fonctionnalités métier",
     titleEn: "Backend, APIs and business features",
@@ -427,91 +425,87 @@ export const PROJECTS = [
   {
     id: "cavi-alibori",
     title: "CAVI-Alibori",
-    category: "Système · Hackathon",
+    category: "Hackathon IndabaX Bénin 2026 · 72 h",
     visual: "cavi",
 
     descFr:
-      "Dans l'Alibori, où l'analphabétisme touche 82 % de la population, l'information météo ne peut pas supposer que tout le monde sait lire. J'ai conçu un pipeline transformant des bulletins météo en consignes agricoles vocales.",
+      "Les bulletins météo sont en français écrit, alors que les producteurs de l'Alibori parlent surtout bariba, peulh ou dendi. En équipe de 4, nous avons prototypé un pipeline qui transforme un bulletin en consigne agricole audio, assemblée à partir de segments pré-enregistrés.",
 
     descEn:
-      "In Alibori, where illiteracy affects 82% of the population, weather information cannot assume everyone can read. I designed a pipeline that transforms weather bulletins into spoken agricultural instructions.",
+      "Weather bulletins are written in French, while farmers in Alibori mostly speak Bariba, Fulfulde or Dendi. As a team of 4, we prototyped a pipeline that turns a bulletin into an audio farming instruction assembled from pre-recorded segments.",
 
-    tags: ["Laravel", "Pipeline", "IA", "Voix"],
+    tags: ["Laravel", "Filament", "FFmpeg", "Python"],
 
     type: "personal",
     family: "development",
 
-    roleFr: "Conception et développement end-to-end",
-    roleEn: "End-to-end design and development",
+    roleFr: "Tout le backend Laravel et le traitement des bulletins, au sein d'une équipe de 4",
+    roleEn: "The entire Laravel backend and bulletin processing, within a team of 4",
 
     proofFr:
-      "Pipeline validé manuellement : ingestion → extraction → décision → audio",
+      "Démo fonctionnelle : bulletin → extraction → règle → message audio assemblé, écoutable sur un SVI simulé",
 
     proofEn:
-      "Manually validated pipeline: ingestion → extraction → decision → audio",
+      "Working demo: bulletin → extraction → rule → assembled audio message, playable on a simulated IVR",
 
     caseStudy: {
       contextFr:
-        "Dans l'Alibori, où l'analphabétisme touche 82 % de la population, l'information météo ne peut pas supposer que tout le monde sait lire.",
-
+        "Dans l'Alibori, premier bassin cotonnier du Bénin, une sécheresse non anticipée peut ruiner une campagne. L'information météo existe, mais en français écrit et en jargon technique, hors de portée d'une grande partie des producteurs.",
       contextEn:
-        "In Alibori, where illiteracy affects 82% of the population, weather information cannot assume that everyone can read.",
+        "In Alibori, Benin's main cotton-growing area, an unanticipated drought can ruin a season. Weather information exists, but in written French and technical jargon, out of reach for many farmers.",
 
       problemFr:
-        "Comment transformer une information météo écrite en consignes agricoles compréhensibles et accessibles ?",
-
+        "Comment transformer un bulletin météo écrit en consigne agricole concrète, compréhensible à l'oral et sans smartphone ?",
       problemEn:
-        "How can written weather information be transformed into understandable and accessible agricultural instructions?",
+        "How can a written weather bulletin become a concrete farming instruction, understandable by ear and without a smartphone?",
 
       constraintsFr: [
-        "Forte contrainte de littératie",
-        "Prise en compte des langues locales",
-        "Prototype à concevoir en 48–72h",
+        "Public peu alphabétisé en français, souvent sans smartphone",
+        "Pas assez de données en bariba, peulh et dendi pour une synthèse vocale",
+        "Hackathon de 72 h, l'essentiel du code écrit sur la dernière journée",
+        "Hébergement gratuit uniquement",
       ],
-
       constraintsEn: [
-        "Strong literacy constraints",
-        "Local languages must be considered",
-        "Prototype built within 48–72 hours",
+        "Audience with limited French literacy, often without a smartphone",
+        "Not enough Bariba, Fulfulde and Dendi data for speech synthesis",
+        "72-hour hackathon, most of the code written on the last day",
+        "Free hosting tiers only",
       ],
 
       decisionFr:
-        "Construire un pipeline séparant l'extraction de l'information météo de la logique de décision, puis restituer la consigne sous forme vocale.",
-
+        "Séparer strictement extraction et décision : l'IA structure le bulletin, mais c'est une table de règles validée par des agronomes qui choisit la consigne. Pour la voix, assembler des segments pré-enregistrés plutôt que générer la parole.",
       decisionEn:
-        "Build a pipeline separating weather information extraction from decision logic, then deliver the resulting instruction as voice.",
+        "Strictly separate extraction from decision: AI structures the bulletin, but a rules table validated by agronomists picks the instruction. For voice, assemble pre-recorded segments instead of generating speech.",
 
       implementationFr:
-        "Bulletin météo → extraction → décision → génération de la consigne → audio.",
-
+        "Bulletin → extraction (microservice d'embeddings, repli regex automatique) → moteur de règles → assemblage audio FFmpeg → SVI simulé. Back-office Filament pour gérer les règles.",
       implementationEn:
-        "Weather bulletin → extraction → decision → instruction generation → audio.",
+        "Bulletin → extraction (embeddings microservice, automatic regex fallback) → rules engine → FFmpeg audio assembly → simulated IVR. Filament back-office to manage rules.",
 
       proofFr:
-        "Validation manuelle scénarisée du pipeline complet : ingestion → extraction → décision → audio → écoute.",
-
+        "Scénario de démo complet (Banikoara, sécheresse sévère sur 12 jours → paillage du sol) : la règle est trouvée et un message de 6 s est généré puis lu dans le navigateur. Chaque brique a un repli : regex si l'IA ne répond pas, réencodage si la concaténation échoue.",
       proofEn:
-        "Manual scenario-based validation of the complete pipeline: ingestion → extraction → decision → audio → listening.",
+        "Complete demo scenario (Banikoara, severe drought over 12 days → mulching): the rule is matched and a 6-second message is generated and played in the browser. Each step has a fallback: regex if the AI does not respond, re-encoding if concatenation fails.",
 
       limitsFr: [
-        "La granularité réelle des bulletins n'a pas été confirmée.",
-        "La couverture réseau n'a pas été quantifiée.",
-        "Aucun niveau de confiance météo n'est actuellement géré.",
-        "Le MVP ne dispose pas d'une suite de tests automatisés.",
+        "Les segments audio sont des tonalités de substitution : les enregistrements d'un locuteur bariba restent à faire.",
+        "Les phrases de référence du modèle d'IA restent à calibrer sur de vrais bulletins Météo-Bénin.",
+        "Une seule commune, un seul scénario, une seule langue.",
+        "Granularité des bulletins et couverture réseau non vérifiées ; aucun test auprès d'agriculteurs.",
+        "Tests automatisés partiels : pas encore de test de bout en bout.",
       ],
-
       limitsEn: [
-        "The actual granularity of weather bulletins was not confirmed.",
-        "Network coverage was not quantified.",
-        "No weather confidence level is currently managed.",
-        "The MVP does not have an automated test suite.",
+        "Audio segments are placeholder tones: recordings by a Bariba speaker are still needed.",
+        "The AI model's reference sentences still need calibrating on real Météo-Bénin bulletins.",
+        "One district, one scenario, one language.",
+        "Bulletin granularity and network coverage unverified; no testing with farmers.",
+        "Partial automated tests: no end-to-end test yet.",
       ],
 
       takeawayFr:
-        "Ce projet m'a appris à concevoir le système autour des contraintes réelles du terrain plutôt qu'autour des capacités techniques disponibles.",
-
+        "Une démo fiable vaut mieux qu'une démo impressionnante : chaque brique a un plan B. J'en retiens aussi qu'il faut répartir le travail dans le temps plutôt que tout écrire la dernière nuit.",
       takeawayEn:
-        "This project taught me to design the system around real-world constraints rather than around the technical capabilities available.",
+        "A reliable demo beats an impressive one: every step has a plan B. I also learned to spread the work over time instead of writing everything on the last night.",
     },
 
     github: "https://github.com/chanis-hg/cavi-alibori",
@@ -524,88 +518,90 @@ export const PROJECTS = [
   {
     id: "digimama",
     title: "DigiMama",
-    category: "Backend · Laravel",
+    category: "Backend · Laravel · Stage",
     visual: "digimama",
     image: "/images/digimama_landing.webp",
 
     descFr:
-      "Construire des fonctionnalités backend pour une plateforme EdTech destinée aux femmes commerçantes béninoises : API REST, gamification et back-office.",
+      "Contribuer au backend d'une plateforme EdTech pour les femmes commerçantes béninoises : API des paramètres utilisatrice, pensée pour les connexions lentes, et tests du module Communauté.",
 
     descEn:
-      "Building backend features for an EdTech platform designed for Beninese market women: REST API, gamification and back-office.",
+      "Contributing to the backend of an EdTech platform for Beninese market women: a user settings API designed for slow connections, and tests for the Community module.",
 
-    tags: ["Laravel 12", "Filament", "MySQL", "Sanctum"],
+    tags: ["Laravel 12", "Pest", "MySQL", "Sanctum"],
 
-    type: "personal",
+    type: "real",
     family: "development",
 
-    roleFr: "Développement backend au sein d'une équipe",
-    roleEn: "Backend development as part of a team",
+    roleFr: "Développeur backend stagiaire, équipe de 4",
+    roleEn: "Backend developer intern, team of 4",
 
     proofFr:
-      "API REST, logique de gamification et fonctionnalités backend",
+      "API des paramètres et 14 tests sur la communauté et sa modération",
 
     proofEn:
-      "REST API, gamification logic and backend features",
+      "Settings API and 14 tests covering the community and its moderation",
 
     caseStudy: {
       contextFr:
-        "DigiMama est une plateforme EdTech destinée aux femmes commerçantes béninoises, avec des contenus de formation en langues locales et un système de progression gamifié.",
+        "DigiMama forme des femmes commerçantes béninoises en langues locales, via une application mobile utilisée souvent avec peu de données mobiles et une connexion instable.",
       contextEn:
-        "DigiMama is an EdTech platform for Beninese women traders, with training content in local languages and a gamified progression system.",
+        "DigiMama trains Beninese market women in local languages through a mobile app, often used with limited mobile data and an unstable connection.",
 
       problemFr:
-        "Comment centraliser une logique de gamification qui reste fiable lorsque plusieurs actions de l'application peuvent modifier la progression d'une utilisatrice ?",
+        "Comment laisser chaque utilisatrice maîtriser sa consommation de données, et s'assurer que l'espace Communauté et sa modération restent fiables à chaque évolution du code ?",
       problemEn:
-        "How can gamification logic remain reliable when multiple application actions can modify a user's progress?",
+        "How can each user control her data usage, and how can the Community space and its moderation stay reliable as the code evolves?",
 
       constraintsFr: [
-        "Projet réalisé en équipe de 4 développeurs",
-        "API REST et back-office Filament",
-        "État de progression à maintenir de manière cohérente",
+        "Projet en équipe de 4 développeurs, avec revue par pull request",
+        "Utilisatrices souvent sur des connexions lentes et coûteuses",
+        "Modération : chaque signalement doit rester traçable",
       ],
       constraintsEn: [
-        "Project developed by a team of 4 developers",
-        "REST API and Filament back-office",
-        "Progression state must remain consistent",
+        "Team of 4 developers, with pull request reviews",
+        "Users often on slow, costly connections",
+        "Moderation: every report must stay traceable",
       ],
 
       decisionFr:
-        "Isoler les règles de gamification dans un service dédié et protéger les mises à jour sensibles au niveau de la base de données.",
+        "Créer des paramètres par utilisatrice, avec des valeurs par défaut prudentes (téléchargements automatiques désactivés, seuil de 15 Mo), et tester le parcours Communauté comme une vraie utilisatrice le vivrait.",
       decisionEn:
-        "Isolate gamification rules in a dedicated service and protect sensitive updates at the database level.",
+        "Create per-user settings with cautious defaults (automatic downloads off, 15 MB limit), and test the Community journey the way a real user would go through it.",
 
       implementationFr:
-        "Action utilisateur → GamificationService → XP / niveaux / streaks / badges → persistance sécurisée.",
+        "Migration et modèle des paramètres → validation des requêtes → routes de l'API → tests Pest. Tests de bout en bout : rejoindre une communauté → publier → être comptée → être signalée.",
       implementationEn:
-        "User action → GamificationService → XP / levels / streaks / badges → secured persistence.",
+        "Settings migration and model → request validation → API routes → Pest tests. End-to-end tests: join a community → post → get counted → get reported.",
 
       proofFr:
-        "La logique est centralisée dans GamificationService, avec notamment l'utilisation de lockForUpdate() pour éviter les doubles crédits lors des mises à jour sensibles. Des tests d'intégration couvrent les flux critiques.",
+        "Paramètres créés automatiquement à l'inscription et modifiables via l'API (langue, notifications, mode hors ligne, seuil de téléchargement). 3 tests de bout en bout sur la communauté et 11 tests du back-office de modération.",
       proofEn:
-        "The logic is centralized in GamificationService, including the use of lockForUpdate() to prevent double credits during sensitive updates. Integration tests cover critical flows.",
+        "Settings created automatically at sign-up and editable through the API (language, notifications, offline mode, download limit). 3 end-to-end tests on the community and 11 tests for the moderation back-office.",
 
       limitsFr: [
-        "Projet réalisé en équipe : je ne revendique pas l'ensemble du code.",
-        "Le dépôt étant privé, les éléments techniques sont présentés uniquement sur la base de ma contribution vérifiée.",
-        "Le projet est encore en cours de développement.",
+        "Projet en équipe : la gamification et l'essentiel du back-office ont été développés par d'autres membres.",
+        "Une partie de l'API des paramètres a ensuite été reprise et étendue par l'équipe.",
+        "Dépôt privé : le code n'est pas consultable publiquement.",
+        "Ma participation s'est terminée avec mon stage (septembre 2026) ; le produit continue d'évoluer.",
       ],
       limitsEn: [
-        "Team project: I do not claim ownership of the entire codebase.",
-        "The repository is private, so technical details are presented only from my verified contribution.",
-        "The project is still under development.",
+        "Team project: gamification and most of the back-office were built by other team members.",
+        "Part of the settings API was later reworked and extended by the team.",
+        "Private repository: the code is not publicly available.",
+        "My involvement ended with my internship (September 2026); the product continues to evolve.",
       ],
 
       takeawayFr:
-        "Ce projet m'a appris à isoler les règles métier et à protéger leur cohérence au niveau de la persistance, tout en travaillant dans une architecture existante.",
+        "Travailler dans une base de code partagée : une pull request propre, des tests qui décrivent le comportement attendu, et accepter que son code soit repris par l'équipe.",
       takeawayEn:
-        "This project taught me to isolate business rules and protect their consistency at the persistence level while working within an existing architecture.",
+        "Working in a shared codebase: a clean pull request, tests that describe the expected behaviour, and accepting that the team will rework your code.",
     },
     github: null,
     demo: null,
     featured: false,
-    wip: true,
-    status: "in_progress",
+    wip: false,
+    status: "finished",
   },
 
   {
@@ -620,7 +616,7 @@ export const PROJECTS = [
     descEn:
       "Create a personalized resume with a multi-step form, real-time preview, 4 themes and A4 PDF export directly in the browser.",
 
-    tags: ["React", "Vite", "html2pdf"],
+    tags: ["React", "Vite", "html2pdf.js"],
 
     type: "personal",
     family: "development",
@@ -664,9 +660,9 @@ export const PROJECTS = [
         "Build a guided multi-step experience with shared state between the form and preview, then handle export from the final rendered result.",
 
       implementationFr:
-        "Formulaire → validation → état du CV → aperçu temps réel → thème → export PDF A4.",
+        "Formulaire en 4 étapes → état partagé → aperçu temps réel → thème → export PDF A4.",
       implementationEn:
-        "Form → validation → CV state → live preview → theme → A4 PDF export.",
+        "4-step form → shared state → live preview → theme → A4 PDF export.",
 
       proofFr:
         "Le projet propose un formulaire guidé en 4 étapes, un aperçu temps réel, 4 thèmes, une gestion de photo et un export PDF A4 en français ou en anglais.",
@@ -676,12 +672,12 @@ export const PROJECTS = [
       limitsFr: [
         "Le rendu PDF dépend du comportement du navigateur et de la bibliothèque d'export.",
         "Le projet reste entièrement côté navigateur.",
-        "Aucun système de compte ou de sauvegarde serveur n'est prévu.",
+        "Aucune validation des champs ni sauvegarde : recharger la page efface la saisie.",
       ],
       limitsEn: [
         "PDF rendering depends on browser behavior and the export library.",
         "The project remains entirely browser-based.",
-        "No account or server-side persistence system is provided.",
+        "No field validation or saving: reloading the page clears the form.",
       ],
 
       takeawayFr:
@@ -765,14 +761,16 @@ export const PROJECTS = [
         "The application allows users to explore data from 15 countries through regional filters, GDP, demographic and internet-access charts, and country detail views.",
 
       limitsFr: [
-        "Le projet ne constitue pas une plateforme statistique officielle.",
+        "Données saisies à la main pour 15 pays, sans source affichée ; les chiffres 2025 sont des estimations.",
         "La qualité des visualisations dépend de la qualité des données disponibles.",
         "Le dashboard se concentre sur un ensemble limité d'indicateurs.",
+        "Interface en français uniquement.",
       ],
       limitsEn: [
-        "The project is not an official statistical platform.",
+        "Data entered by hand for 15 countries, with no source shown; 2025 figures are estimates.",
         "Visualization quality depends on the quality of the available data.",
         "The dashboard focuses on a limited set of indicators.",
+        "French-only interface.",
       ],
 
       takeawayFr:
@@ -1115,8 +1113,8 @@ export const EDUCATION = [
     school:
       "IFRI — Institut de Formation et de Recherche en Informatique",
 
-    degreeFr: "Licence 2 — Internet et Multimédia",
-    degreeEn: "Bachelor's Year 2 — Internet & Multimedia",
+    degreeFr: "Licence 3 — Internet et Multimédia",
+    degreeEn: "Bachelor's Year 3 — Internet & Multimedia",
 
     place: "Université d'Abomey-Calavi (UAC), Bénin",
 
@@ -1254,7 +1252,7 @@ export const CONTACT_LINKS = [
 
   {
     label: "LinkedIn — Gaïus Chanis",
-    href: "https://linkedin.com/in/gaïus-chanis-08a782365",
+    href: "https://www.linkedin.com/in/ga%C3%AFus-chanis-08a782365",
   },
 
   {
@@ -1264,7 +1262,7 @@ export const CONTACT_LINKS = [
 
   {
     label: "WhatsApp",
-    href: "https://wa.me/22953505501",
+    href: "https://wa.me/2290153505501",
   },
 ];
 

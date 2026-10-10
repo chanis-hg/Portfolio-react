@@ -2,50 +2,39 @@ import {
   FileText,
   Sparkles,
   GitBranch,
-  Volume2,
   ArrowRight,
   UserRound,
   Layers3,
+  Smartphone,
+  SlidersHorizontal,
   FileDown,
-  Database,
   BarChart3,
   Globe2,
-  Map,
+  Map as MapIcon,
 } from "lucide-react";
 
+import { useScrollReveal } from "../../hooks/useScrollReveal";
 import styles from "./ProjectVisual.module.css";
 
-/* =================================
-   CAVI-ALIBORI
-================================= */
+function FlowArrow({ className }) {
+  return (
+    <ArrowRight className={className} size={16} strokeWidth={1.5} aria-hidden="true" />
+  );
+}
 
 function CaviVisual({ lang }) {
-  const labels =
-    lang === "fr"
-      ? {
-          input: "Bulletin météo",
-          extraction: "Extraction",
-          decision: "Décision",
-          output: "Consigne vocale",
-          languages: "Bariba · Peulh · Dendi",
-        }
-      : {
-          input: "Weather bulletin",
-          extraction: "Extraction",
-          decision: "Decision",
-          output: "Voice instruction",
-          languages: "Bariba · Peulh · Dendi",
-        };
+  const isFr = lang === "fr";
+  const [ref, isOn] = useScrollReveal(0.4);
 
   const steps = [
-    { icon: FileText, label: labels.input },
-    { icon: Sparkles, label: labels.extraction },
-    { icon: GitBranch, label: labels.decision },
-    { icon: Volume2, label: labels.output },
+    { icon: FileText, label: "Bulletin" },
+    { icon: Sparkles, label: "Extraction" },
+    { icon: GitBranch, label: isFr ? "Règle" : "Rule" },
+    { icon: null, label: "Audio" },
   ];
 
   return (
-    <div className={styles.caviVisual}>
+    <div ref={ref} className={`${styles.caviVisual} ${isOn ? styles.isOn : ""}`}>
       <div className={styles.caviHeader}>
         <span>CAVI-ALIBORI</span>
         <span>PIPELINE</span>
@@ -53,37 +42,35 @@ function CaviVisual({ lang }) {
 
       <div className={styles.caviFlow}>
         {steps.map(({ icon: Icon, label }, index) => (
-          <div className={styles.caviStepWrap} key={label}>
+          <div className={styles.caviStepWrap} key={label} style={{ "--i": index }}>
             <div className={styles.caviStep}>
               <div className={styles.caviIcon}>
-                <Icon size={19} strokeWidth={1.7} />
+                {Icon ? (
+                  <Icon size={19} strokeWidth={1.7} aria-hidden="true" />
+                ) : (
+                  <span className={styles.wave} aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                )}
               </div>
-
               <span>{label}</span>
             </div>
 
-            {index < steps.length - 1 && (
-              <ArrowRight
-                className={styles.caviArrow}
-                size={16}
-                strokeWidth={1.5}
-              />
-            )}
+            {index < steps.length - 1 && <FlowArrow className={styles.caviArrow} />}
           </div>
         ))}
       </div>
 
       <div className={styles.caviFooter}>
-        <span>48–72H · MVP HACKATHON</span>
-        <span>{labels.languages}</span>
+        <span>HACKATHON · 72 H</span>
+        <span>{isFr ? "Démo : bariba" : "Demo: Bariba"}</span>
       </div>
     </div>
   );
 }
-
-/* =================================
-   DIGIMAMA
-================================= */
 
 function DigiMamaVisual({ lang }) {
   const isFr = lang === "fr";
@@ -92,71 +79,48 @@ function DigiMamaVisual({ lang }) {
     <div className={styles.systemVisual}>
       <div className={styles.visualHeader}>
         <span>DIGIMAMA</span>
-        <span>BACKEND</span>
+        <span>API · TESTS</span>
       </div>
 
       <div className={styles.systemFlow}>
         <div className={styles.flowNode}>
-          <UserRound size={20} strokeWidth={1.6} />
-          <span>{isFr ? "Action utilisateur" : "User action"}</span>
+          <Smartphone size={20} strokeWidth={1.6} aria-hidden="true" />
+          <span>{isFr ? "App mobile" : "Mobile app"}</span>
         </div>
 
-        <ArrowRight className={styles.flowArrow} />
+        <FlowArrow className={styles.flowArrow} />
 
         <div className={styles.flowNodeAccent}>
-          <Layers3 size={20} strokeWidth={1.6} />
-          <span>GamificationService</span>
+          <SlidersHorizontal size={20} strokeWidth={1.6} aria-hidden="true" />
+          <span>{isFr ? "Paramètres" : "Settings"}</span>
         </div>
 
-        <ArrowRight className={styles.flowArrow} />
+        <FlowArrow className={styles.flowArrow} />
 
         <div className={styles.flowNodeGroup}>
-          <span>XP</span>
-          <span>LEVEL</span>
-          <span>STREAK</span>
-          <span>BADGE</span>
-        </div>
-
-        <ArrowRight className={styles.flowArrow} />
-
-        <div className={styles.flowNode}>
-          <Database size={20} strokeWidth={1.6} />
-          <span>{isFr ? "Persistance" : "Persistence"}</span>
+          <span>{isFr ? "LANGUE" : "LANGUAGE"}</span>
+          <span>{isFr ? "ALERTES" : "ALERTS"}</span>
+          <span>{isFr ? "QUOTA Mo" : "MB LIMIT"}</span>
+          <span>OFFLINE</span>
         </div>
       </div>
 
       <div className={styles.visualFooter}>
-        <span>Laravel 12 · Filament · MySQL</span>
-        <span>lockForUpdate()</span>
+        <span>Laravel 12 · Pest</span>
+        <span>{isFr ? "14 tests communauté" : "14 community tests"}</span>
       </div>
     </div>
   );
 }
 
-/* =================================
-   CV GENERATOR
-================================= */
-
 function CvGeneratorVisual({ lang }) {
   const isFr = lang === "fr";
 
   const steps = [
-    {
-      icon: UserRound,
-      label: isFr ? "Formulaire" : "Form",
-    },
-    {
-      icon: Layers3,
-      label: isFr ? "Aperçu" : "Preview",
-    },
-    {
-      icon: Sparkles,
-      label: isFr ? "Thème" : "Theme",
-    },
-    {
-      icon: FileDown,
-      label: "PDF A4",
-    },
+    { icon: UserRound, label: isFr ? "Formulaire" : "Form" },
+    { icon: Layers3, label: isFr ? "Aperçu" : "Preview" },
+    { icon: Sparkles, label: isFr ? "Thème" : "Theme" },
+    { icon: FileDown, label: "PDF A4" },
   ];
 
   return (
@@ -170,35 +134,31 @@ function CvGeneratorVisual({ lang }) {
         {steps.map(({ icon: Icon, label }, index) => (
           <div className={styles.flowStepWrap} key={label}>
             <div className={styles.flowNode}>
-              <Icon size={19} strokeWidth={1.6} />
+              <Icon size={19} strokeWidth={1.6} aria-hidden="true" />
               <span>{label}</span>
             </div>
 
-            {index < steps.length - 1 && (
-              <ArrowRight
-                className={styles.flowArrow}
-                size={16}
-                strokeWidth={1.5}
-              />
-            )}
+            {index < steps.length - 1 && <FlowArrow className={styles.flowArrow} />}
           </div>
         ))}
       </div>
 
       <div className={styles.visualFooter}>
         <span>React · Vite · html2pdf</span>
-        <span>4 thèmes</span>
+        <span>{isFr ? "4 thèmes" : "4 themes"}</span>
       </div>
     </div>
   );
 }
 
-/* =================================
-   AFRICA PULSE
-================================= */
-
 function AfricaPulseVisual({ lang }) {
   const isFr = lang === "fr";
+
+  const metrics = [
+    { icon: Globe2, value: "15", label: isFr ? "Pays africains" : "African countries" },
+    { icon: BarChart3, value: isFr ? "PIB" : "GDP", label: isFr ? "Économie" : "Economy" },
+    { icon: MapIcon, value: isFr ? "RÉGIONS" : "REGIONS", label: isFr ? "Filtres régionaux" : "Regional filters" },
+  ];
 
   return (
     <div className={styles.pulseVisual}>
@@ -208,27 +168,13 @@ function AfricaPulseVisual({ lang }) {
       </div>
 
       <div className={styles.pulseGrid}>
-        <div className={styles.pulseMetric}>
-          <Globe2 size={20} strokeWidth={1.5} />
-          <strong>15</strong>
-          <span>
-            {isFr ? "Pays africains" : "African countries"}
-          </span>
-        </div>
-
-        <div className={styles.pulseMetric}>
-          <BarChart3 size={20} strokeWidth={1.5} />
-          <strong>GDP</strong>
-          <span>{isFr ? "Économie" : "Economy"}</span>
-        </div>
-
-        <div className={styles.pulseMetric}>
-          <Map size={20} strokeWidth={1.5} />
-          <strong>REGIONS</strong>
-          <span>
-            {isFr ? "Filtres régionaux" : "Regional filters"}
-          </span>
-        </div>
+        {metrics.map(({ icon: Icon, value, label }) => (
+          <div className={styles.pulseMetric} key={label}>
+            <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+            <strong>{value}</strong>
+            <span>{label}</span>
+          </div>
+        ))}
       </div>
 
       <div className={styles.visualFooter}>
@@ -239,10 +185,6 @@ function AfricaPulseVisual({ lang }) {
   );
 }
 
-/* =================================
-   VISUAL MAPPING
-================================= */
-
 const VISUALS = {
   cavi: CaviVisual,
   digimama: DigiMamaVisual,
@@ -250,58 +192,45 @@ const VISUALS = {
   "africa-pulse": AfricaPulseVisual,
 };
 
-/* =================================
-   IMAGE
-================================= */
-
-function ImageVisual({ project }) {
+function ImageVisual({ project, lang }) {
   const isKaud = project.id === "kaud";
+  const alt =
+    lang === "fr"
+      ? `Aperçu du projet ${project.title}`
+      : `Preview of the ${project.title} project`;
 
   return (
-    <div
-      className={`${styles.cardVisual} ${
-        isKaud ? styles.kaudVisual : ""
-      }`}
-    >
+    <div className={`${styles.cardVisual} ${isKaud ? styles.kaudVisual : ""}`}>
       <img
         src={project.image}
-        alt={project.title}
+        alt={alt}
         className={styles.cardImg}
+        loading="lazy"
+        decoding="async"
       />
     </div>
   );
 }
 
-/* =================================
-   FALLBACK
-================================= */
-
 function PlaceholderVisual({ project }) {
   return (
     <div className={styles.cardVisual}>
-      <div className={styles.cardPlaceholder}>
+      <div className={styles.cardPlaceholder} aria-hidden="true">
         <span>{project.title?.charAt(0)}</span>
       </div>
     </div>
   );
 }
 
-/* =================================
-   MAIN
-================================= */
-
-export default function ProjectVisual({ project, lang }) {
-  const CustomVisual = project.visual
-    ? VISUALS[project.visual]
-    : null;
-
-  if (CustomVisual) {
-    return <CustomVisual lang={lang} />;
+export default function ProjectVisual({ project, lang = "fr", preferImage = false }) {
+  if (preferImage && project.image) {
+    return <ImageVisual project={project} lang={lang} />;
   }
 
-  if (project.image) {
-    return <ImageVisual project={project} />;
-  }
+  const CustomVisual = project.visual ? VISUALS[project.visual] : null;
+
+  if (CustomVisual) return <CustomVisual lang={lang} />;
+  if (project.image) return <ImageVisual project={project} lang={lang} />;
 
   return <PlaceholderVisual project={project} />;
 }
